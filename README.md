@@ -1,16 +1,14 @@
 # Team5
 
-### 1. Einleitung
-Im Rahmen des Moduls Anwendungsentwicklung mit Python widmen wir uns dem Erstellen von einem Anwendungsszenarios eines Hotelreservierungssystems.
-Dieses Modul beinhaltet projektbasiertes Lernen von Programmierkonzepten mit der Programmiersprache Python.
-Zuerst haben wir die Klassen definiert.
+### 1. Introduction
+As part of the Application Development with Python module, we focus on creating an application scenario for a hotel reservation system. This module includes project-based learning of programming concepts with the Python programming language. First we defined the classes.
 
-Hier ist der Link zu unserem Deepnote Project ...
+Here is the link to our Deepnote Project ...
 
-Des weiteren ist hier das Project Board ... verlinkt.
+Furthermore, here is the Project Board ... is linked here.
 
-#### 1.1 Kontext
+#### 1.1 Context
 
-### 2. Methologie
-#### 2.1 Programmierkonzepte
+### 2. Methology
+#### 2.1 Programmingconcepts
 
