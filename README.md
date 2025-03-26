@@ -3,11 +3,8 @@ During the spring semester, we were assigned to develop an application scenario 
 
 As outlined in the project guidelines, we are using several tools to support our development process:
 - Visual Paradigm for system modeling
-
 - SQLite for the database
-
 - DeepNote for documentation
-
 - GitHub for version control and project management
 
 In addition, we have been using Visual Studio Code (and Pycharm) to execute, push and pull codes into our repository.
@@ -15,6 +12,7 @@ In addition, we have been using Visual Studio Code (and Pycharm) to execute, pus
 You can access our DeepNote project via the following link: [enter link here].
 
 ### methodology/project management
+*gotta ask coaches what they mean by that*
 
 ### Project members and their roles
 role1 - Chirakkal Fenlin
@@ -71,18 +69,19 @@ role1 - Chirakkal Fenlin
 abhängen.
 
 ### User stories with DB schema change
-
+(choose min. 2 User Story on Page 4)
 
 ### User stories with data visualization
-
+(choose only one User Story on Page 4)
 
 ### optional user stories
 *can be removed if wished*
 
 ## Documentation
-*only document the milestones*
+(only document the milestones)
 
 ### Class Diagram
+[picture of finished Class diagram]
 
 ### Reflection
 
