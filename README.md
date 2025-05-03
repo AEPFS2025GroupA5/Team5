@@ -15,13 +15,10 @@ You can access our DeepNote project via the following link: [enter link here].
 *gotta ask coaches what they mean by that*
 
 ### Project members and their roles
-documenter - Chirakkal Fenlin
-<br>coder - Dieng Saliou
-<br>coder - Müller Anna
-<br>documenter - Seidel Ivan
-
-#### Role description
-*only if needed*
+Documenter - Chirakkal Fenlin
+<br>Coder - Dieng Saliou
+<br>Coder - Müller Anna
+<br>Documenter - Seidel Ivan
 
 ## User Stories
 ### minimal user stories
@@ -78,10 +75,11 @@ abhängen.
 *can be removed if wished*
 
 ## Documentation
+03.05. started with coding
 (only document the milestones)
 
 ### Class Diagram
-[picture of finished Class diagram]
+![image](https://github.com/user-attachments/assets/36cdc1f8-5d7e-4562-be27-18b6bcd21edf)
 
 ### Reflection
 
