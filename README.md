@@ -15,10 +15,10 @@ You can access our DeepNote project via the following link: [enter link here].
 *gotta ask coaches what they mean by that*
 
 ### Project members and their roles
-role1 - Chirakkal Fenlin
-<br>role2 - Dieng Saliou
-<br>role3 - Müller Anna
-<br>role4 - Seidel Ivan
+documenter - Chirakkal Fenlin
+<br>coder - Dieng Saliou
+<br>coder - Müller Anna
+<br>documenter - Seidel Ivan
 
 #### Role description
 *only if needed*
