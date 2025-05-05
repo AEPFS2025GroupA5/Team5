@@ -1,4 +1,4 @@
-from data_access.base_data_access import BaseDataAccess
+from data_access.base_data_access import BaseDataAccess 
 
 class RoomTypeAccess(BaseDataAccess):
     def get_all(self):
