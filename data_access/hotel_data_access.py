@@ -1,12 +1,15 @@
-# data_access/hotel_data_access.py
-from __future__ import annotations        # erste Zeile!
+from unittest import result
+
+import pandas as pd
+
 import model
 from data_access.base_data_access import BaseDataAccess
 
 
+
 class HotelDataAccess(BaseDataAccess):
     def __init__(self, db_path: str | None = None):
-        super().__init__(db_path)    # übernimmt DB_FILE aus ENV, falls db_path=None
+        super().__init__(db_path)    
 
     def read_all_hotels(self) -> list[model.Hotel]:
         sql = """
