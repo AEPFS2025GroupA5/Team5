@@ -1,6 +1,8 @@
 # data_access/hotel_data_access.py
+from __future__ import annotations        # erste Zeile!
 import model
-from data_access.base_data_access import BaseDataAccess   # verbindet sich & liefert fetchall() :contentReference[oaicite:0]{index=0}:contentReference[oaicite:1]{index=1}
+from data_access.base_data_access import BaseDataAccess
+
 
 class HotelDataAccess(BaseDataAccess):
     def __init__(self, db_path: str | None = None):
