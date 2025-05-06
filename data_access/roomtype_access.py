@@ -1,4 +1,5 @@
-from data_access.base_data_access import BaseDataAccess 
+import sqlite3
+from .base_data_access import BaseDataAccess
 
 class RoomTypeAccess(BaseDataAccess):
     def get_all(self):

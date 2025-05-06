@@ -15,10 +15,10 @@ class BaseDataAccess:
         return sqlite3.connect(self.__connection_str, detect_types=sqlite3.PARSE_DECLTYPES)
 
     def fetchone(self, sql: str, params: tuple = None):
-        if params is None:i
+        if params is None:
 
             # leeres tuple für sql parameter wenn params None ist
-        params = ()
+         params = ()
         with self._connect() as conn:
             try:
                 cursor = conn.execute(sql, params)
