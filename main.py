@@ -1,12 +1,8 @@
+# main.py
 import os
-from data_access.roomtype_access import RoomTypeAccess
+from data_access.hotel_data_access import HotelDataAccess
 
-if __name__ == "__main__":
-    # Absoluter Pfad zur Datenbank
-    db_path = os.path.join(os.path.dirname(__file__), "hotel_reservation_sample.db")
-    roomtype_access = RoomTypeAccess(db_path)
-
-    print("Verfügbare Zimmertypen:\n")
-    roomtypes = roomtype_access.get_all()
-    for rt in roomtypes:
-        print(f"ID: {rt[0]}, Beschreibung: {rt[1]}, Max Gäste: {rt[2]}")
+os.environ["DB_FILE"] = "database/hotel_reservation_sample.db"
+hotels = HotelDataAccess().read_all_hotels()
+for h in hotels:
+    print(h)
