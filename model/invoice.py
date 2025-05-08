@@ -4,7 +4,7 @@ from datetime import date
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from guest import Guest
+    from model.guest import Guest
 
 class Invoice:
     def __str__(self):

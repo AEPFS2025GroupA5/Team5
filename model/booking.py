@@ -1,5 +1,5 @@
-from invoice import Invoice
-from guest import Guest
+from model.invoice import Invoice
+from model.guest import Guest
 from datetime import date
 #from hotel import Hotel
 #from room import Room
