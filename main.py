@@ -44,10 +44,10 @@ for f in facilities:
 #     print("Keine Facility mit diesem Namen gefunden")
 
 ### Create new
-Beispiel_1 = Verbindung.create_new_facility("Beispiel 3")
-facilities = Verbindung.read_all_facilities()
-for f in facilities:
-     print(f"{f.facility_id}: {f.name}")
+# 'Beispiel_1 = Verbindung.create_new_facility("Beispiel 3")
+# facilities = Verbindung.read_all_facilities()
+# for f in facilities:
+#      print(f"{f.facility_id}: {f.name}")'
 
 ### Delete by ID
 # Verbindung.delete_facility_by_id(7)
@@ -63,4 +63,5 @@ for f in facilities:
 # for f in facilities:
 #     print(f"{f.facility_id}: {f.name}")
 
-print("hallo")
+print("hello, was geht")
+print("hilfe")
