@@ -13,20 +13,44 @@ V2 = data_access.RoomTypeDataAccess()
 
 ## /// RoomType
 
+## Read all
 # rooms = V2.read_all_room_types()
 # for r in rooms:
 #     print(f"ID: {r.type_id} max guests: {r.max_guests} description: {r.description}")
 
+## Read by id
 # byid = V2.read_room_type_by_id(5)
 # if byid:
 #     print(f"Gefunden wurde ID: {byid.type_id} max: {byid.max_guests} description: {byid.description}")
 # else:
 #     print(f"Nüt")
 
+## Create new
+# new_type = V2.create_new_room_type("Groß", 10)
+# rooms = V2.read_all_room_types()
+# for r in rooms:
+#     print(f"ID: {r.type_id} max guests: {r.max_guests} description: {r.description}")
+
+## Update Roomtype
+# update = V2.read_room_type_by_id(6)
+# update.description = "Doch nicht groß"
+# update.max_guests = 8
+# V2.update_room_type(update)
+# rooms = V2.read_all_room_types()
+# for r in rooms:
+#     print(f"ID: {r.type_id} max guests: {r.max_guests} description: {r.description}")
+
+## Delete Roomtyp
+
+delete = V2.read_room_type_by_id(5)
+V2.delete_room_type_by_id(delete)
+rooms = V2.read_all_room_types()
+for r in rooms:
+    print(f"ID: {r.type_id} | max guests: {r.max_guests} | description: {r.description}")
 ###Read all
-facilities = Verbindung.read_all_facilities()
-for f in facilities:
-    print(f"{f.facility_id}: {f.name}")
+# facilities = Verbindung.read_all_facilities()
+# for f in facilities:
+#     print(f"{f.facility_id}: {f.name}")
 
 ###Read by ID
 # fac = Verbindung.read_facility_by_id(6)
@@ -62,6 +86,3 @@ for f in facilities:
 # facilities = Verbindung.read_all_facilities()
 # for f in facilities:
 #     print(f"{f.facility_id}: {f.name}")
-
-print("hello, was geht")
-print("hilfe")
