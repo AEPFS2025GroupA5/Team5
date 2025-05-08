@@ -1,12 +1,12 @@
+from __future__ import annotations
+
 from model.facility import Facility
 
 class RoomType:
     def __init__(
         self,
         type_id: int,
-        name: str,
         max_guests: int,
-        amenities: list = None,
         description: str = None,
         facility_ids:Facility = None
 

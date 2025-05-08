@@ -8,5 +8,5 @@ class RoomTypeDataAccess(BaseDataAccess):
         SELECT type_id, description, max_guests
         FROM room_type
         """
-        rows = self.fetchall(sql)
-        return [RoomType(*row) for row in rows]
+        var1 = self.fetchall(sql)
+        return [RoomType(*row) for row in var1]

@@ -3,11 +3,6 @@ import sqlite3
 from contextlib import closing
 from typing import Optional
 
-
-def test_hello():
-    print("✅ Alles funktioniert!")
-
-
 class BaseDataAccess:
     def __init__(self, db_connection_str: Optional[str] = None):
         if db_connection_str is None:
