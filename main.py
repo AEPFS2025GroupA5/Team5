@@ -2,8 +2,7 @@ import data_access
 import model
 
 import os
-os.environ["DB_FILE"] = "database/hotel_reservation_sample.db"
-
+os.environ["DB_FILE"] = os.path.abspath("database/hotel_reservation_sample.db")
 
 
 ### /// Test
