@@ -3,6 +3,7 @@ import sqlite3
 
 from .base_data_access import BaseDataAccess
 from .facility_data_access import FacilityDataAccess
+from .room_type_access import RoomTypeDataAccess
 
 
 

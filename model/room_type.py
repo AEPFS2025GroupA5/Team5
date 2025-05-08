@@ -6,15 +6,13 @@ class RoomType:
     def __init__(
         self,
         type_id: int,
-        max_guests: int,
-        description: str = None,
+        description: str,
+        max_guests: int = None,
         facility_ids:Facility = None
 
     ):
          self.type_id = type_id
-         self.name = name
          self.max_guests = max_guests
-         self.amenities = amenities
          self.description = description
 
 
@@ -23,12 +21,6 @@ class RoomType:
                raise TypeError("type_id must be a int")
          if not type_id:
                raise ValueError("type_id must be assigned")
-         
-         if not isinstance(name, str): 
-               raise TypeError("name must be a string")
-         if not name:
-               raise ValueError("name must be assigned")
-         
          if not isinstance(max_guests, int):
                raise TypeError("max_guests must be an int")
          if max_guests <= 0:
