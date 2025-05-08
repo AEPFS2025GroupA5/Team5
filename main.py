@@ -1,5 +1,6 @@
 import data_access
 import model
+from model.guest import Guest
 
 import os
 os.environ["DB_FILE"] = os.path.abspath("database/hotel_reservation_sample.db")
@@ -8,8 +9,8 @@ os.environ["DB_FILE"] = os.path.abspath("database/hotel_reservation_sample.db")
 ### /// Test
 
 ##Facility
-Verbindung = data_access.FacilityDataAccess()  
-V2 = data_access.RoomTypeDataAccess()
+# Verbindung = data_access.FacilityDataAccess()  
+# V2 = data_access.RoomTypeDataAccess()
 
 ## /// RoomType
 
@@ -85,4 +86,13 @@ for r in rooms:
 
 # facilities = Verbindung.read_all_facilities()
 # for f in facilities:
+<<<<<<< HEAD
 #     print(f"{f.facility_id}: {f.name}")
+=======
+#     print(f"{f.facility_id}: {f.name}")
+
+#====================================================================
+## Guest
+VG = data_access.guest_data_access
+guests = VG.read_all_guest()
+>>>>>>> 3ebaab86ce9c3b84da446c7aa675e3050c469cc7

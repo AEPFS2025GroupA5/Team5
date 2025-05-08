@@ -1,9 +1,9 @@
-from invoice import Invoice
-from address import Address
+from model.invoice import Invoice
+from model.address import Address
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from booking import Booking
+    from model.booking import Booking
 
 class Guest:
     def __str__(self):
