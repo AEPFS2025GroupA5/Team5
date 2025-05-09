@@ -91,6 +91,12 @@ os.environ["DB_FILE"] = os.path.abspath("database/hotel_reservation_sample.db")
 #     print(f"{f.facility_id}: {f.name}")
 
 #====================================================================
-## Guest
+## Guest Verbindung
 VG = GuestDataAccess()
-VG.read_all_guest()
+
+# Read all guests
+guests = VG.read_all_guest()
+for guest in guests:
+    print(f"Guest Id: {guest.guest_id} First Name: {guest.first_name} Last Name: {guest.last_name} email: {guest.email}")
+
+# Read 

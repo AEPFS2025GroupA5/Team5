@@ -1,5 +1,5 @@
-from model.invoice import Invoice
-from model.address import Address
+from .invoice import Invoice
+from .address import Address
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -10,7 +10,7 @@ class Guest:
         return  f"Guest Id: {self.guest_id}\n" \
                 f"Guest's Fullname: {self.first_name} {self.last_name}\n" \
                 f"Guest's E-Mail: {self.email}\n" \
-                f"Guest's Adress: {self.address}\n" 
+                f"Guest's Adress: {self.address_id}\n" 
 
     def __init__(
             self, 
@@ -18,7 +18,7 @@ class Guest:
             first_name:str, 
             last_name:str, 
             email:str , 
-            address:Address
+            address_id
         ):
 
         #Typprüfung
@@ -42,17 +42,17 @@ class Guest:
         if not isinstance(email, str):
             raise ValueError("E-Mail has to be a string")   
         
-        if not address:
-            raise ValueError("Address is required")
-        if not isinstance(address, Address):
-            raise ValueError("Address has to be an Address-object!")    
+        # if not address:
+        #     raise ValueError("Address is required")
+        # if not isinstance(address, Address):
+        #     raise ValueError("Address has to be an Address-object!")    
 
         self.__guest_id = guest_id
         self._first_name = first_name
         self._last_name = last_name
         self._email = email
         self.__invoice: list[Invoice] = [] #Aggregation Invoice
-        self.__address:Address = address   #Aggregation mit Address
+        self.__address_id = address_id    #Aggregation mit Address
         self.__bookings: list[Booking] = [] #Aggregation Booking leere Liste, wo man alle Buchungen vom Kunden sehen kann
 
     def get_details(self): 
@@ -83,8 +83,8 @@ class Guest:
     
     #Getter Funktion vom Address
     @property
-    def address(self):
-        return self.__address
+    def address_id(self):
+        return self.__address_id
 
     #Get vom Booking
     @property
