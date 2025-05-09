@@ -1,6 +1,7 @@
 import data_access
 import model
 from model.guest import Guest
+from data_access.guest_data_access import GuestDataAccess
 
 import os
 os.environ["DB_FILE"] = os.path.abspath("database/hotel_reservation_sample.db")
@@ -43,11 +44,11 @@ os.environ["DB_FILE"] = os.path.abspath("database/hotel_reservation_sample.db")
 
 ## Delete Roomtyp
 
-delete = V2.read_room_type_by_id(5)
-V2.delete_room_type_by_id(delete)
-rooms = V2.read_all_room_types()
-for r in rooms:
-    print(f"ID: {r.type_id} | max guests: {r.max_guests} | description: {r.description}")
+# delete = V2.read_room_type_by_id(5)
+# V2.delete_room_type_by_id(delete)
+# rooms = V2.read_all_room_types()
+# for r in rooms:
+#     print(f"ID: {r.type_id} | max guests: {r.max_guests} | description: {r.description}")
 ###Read all
 # facilities = Verbindung.read_all_facilities()
 # for f in facilities:
@@ -86,13 +87,10 @@ for r in rooms:
 
 # facilities = Verbindung.read_all_facilities()
 # for f in facilities:
-<<<<<<< HEAD
 #     print(f"{f.facility_id}: {f.name}")
-=======
 #     print(f"{f.facility_id}: {f.name}")
 
 #====================================================================
 ## Guest
-VG = data_access.guest_data_access
-guests = VG.read_all_guest()
->>>>>>> 3ebaab86ce9c3b84da446c7aa675e3050c469cc7
+VG = GuestDataAccess()
+VG.read_all_guest()
