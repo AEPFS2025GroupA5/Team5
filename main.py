@@ -3,6 +3,7 @@ import model
 from model.guest import Guest
 from data_access.guest_data_access import GuestDataAccess
 from data_access.invoice_data_access import InvoiceDataAccess
+from datetime import date
 
 import os
 os.environ["DB_FILE"] = os.path.abspath("database/hotel_reservation_sample.db")
@@ -132,9 +133,18 @@ os.environ["DB_FILE"] = os.path.abspath("database/hotel_reservation_sample.db")
 VI = InvoiceDataAccess()
 
 #Read all Invoices
+# invoices= VI.read_all_invoice()
+# for invoice in invoices:
+#     print(f"Invoice Id: {invoice.invoice_id} Booking Id: {invoice.booking_id} Issue Date: {invoice.issue_date} Total Amount: {invoice.total_amount:.2f}")
+
+# #Read one Invoice by their Id Hier bitte noch anschauen mit Saliou
+# invoices= VI.read_invoice_by_id(5)
+# print(invoices)
+
+#Create new Invoice
+newinvoice = VI.create_new_invoice(4, date(2025, 5, 10), 1009.99)
+print(newinvoice)
+
 invoices= VI.read_all_invoice()
 for invoice in invoices:
     print(f"Invoice Id: {invoice.invoice_id} Booking Id: {invoice.booking_id} Issue Date: {invoice.issue_date} Total Amount: {invoice.total_amount:.2f}")
-
-
-

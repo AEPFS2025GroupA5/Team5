@@ -3,8 +3,10 @@
 from datetime import date
 from typing import TYPE_CHECKING
 
+
 if TYPE_CHECKING:
     from model.guest import Guest
+    from model.booking import Booking
 
 class Invoice:
     def __str__(self):
@@ -16,7 +18,8 @@ class Invoice:
         self, 
         invoice_id: int, 
         issue_date: date, 
-        inv_amount: float, 
+        total_amount: float, 
+        booking_id: int, 
         is_paid: bool = False, 
         guest:"Guest" = None
     ):
@@ -27,27 +30,28 @@ class Invoice:
         if not isinstance(invoice_id, int):
             raise ValueError("Invoice Id has to be a integer")
         
-        if not issue_date:
-            raise ValueError("Issue Date is required")
-        if not isinstance(issue_date, date):
-            raise ValueError("Issue date has to be a date")
+        # if not issue_date:
+        #     raise ValueError("Issue Date is required")
+        # if not isinstance(issue_date, date):
+        #     raise ValueError("Issue date has to be a date")
         
-        if not isinstance(inv_amount, float):
-            raise ValueError("Invoice Amount has to be a float")
-        if inv_amount < 0:
-            raise ValueError("Invoice has to be over CHF 0")
+        # if not isinstance(inv_amount, float):
+        #     raise ValueError("Invoice Amount has to be a float")
+        # if inv_amount < 0:
+        #     raise ValueError("Invoice has to be over CHF 0")
 
-        if not isinstance(is_paid, bool):
-            raise ValueError("Invoice has to be a bool")
-        if is_paid:
-            raise ValueError("Invoice has to be unpaid")
+        # if not isinstance(is_paid, bool):
+        #     raise ValueError("Invoice has to be a bool")
+        # if is_paid:
+        #     raise ValueError("Invoice has to be unpaid")
         
         # if not isinstance(guest, Guest):
         #     raise ValueError("guest has to be a Guest-object!")
 
         self.__invoice_id = invoice_id
         self._issue_date = issue_date
-        self._inv_amount = inv_amount
+        self._total_amount = total_amount
+        self.booking_id = booking_id
         self._is_paid = is_paid
         self.__guest:Guest = guest
     
@@ -56,9 +60,9 @@ class Invoice:
     #Funktionen
     def get_details(self):
         return  f"Invoicenumber: {self.invoice_id}\n" \
-                f"{self.guest}\n" \
+                f"Booking Id: {self.booking_id}\n" \
                 f"Issue Date: {self.issue_date}\n" \
-                f"Total Amount: CHF {self.inv_amount:.2f}\n" \
+                f"Total Amount: CHF {self.total_amount}\n" \
                 f"Paid Status: {self.is_paid}\n"
 
     # def get_unpaid(self):
@@ -87,17 +91,17 @@ class Invoice:
         return self._issue_date
 
     @property
-    def inv_amount(self):
-        return self._inv_amount
+    def total_amount(self):
+        return self._total_amount
 
-    @inv_amount.setter #Rabatt als optionale UserStory
-    def inv_amount(self, new:float):
+    @total_amount.setter #Rabatt als optionale UserStory
+    def total_amount(self, new:float):
         if not isinstance(new, float):
             raise ValueError("The new amount has to be a float")
         if new <0:
             raise ValueError("new invoice amount has to be greater than 0")
         else:
-            self._inv_amount= new
+            self._total_amount= new
             #Hier möglicherweise noch im Guest ändern die Liste (vllt. mit pop() und sagen self.__invoiceId == list mit der gleichen ID?)
 
     @property
