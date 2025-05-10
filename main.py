@@ -135,16 +135,29 @@ VI = InvoiceDataAccess()
 #Read all Invoices
 # invoices= VI.read_all_invoice()
 # for invoice in invoices:
-#     print(f"Invoice Id: {invoice.invoice_id} Booking Id: {invoice.booking_id} Issue Date: {invoice.issue_date} Total Amount: {invoice.total_amount:.2f}")
+#     print(f"Invoice Id: {invoice.invoice_id} Booking Id: {invoice.booking_id} Issue Date: {invoice.issue_date} Total Amount: {invoice.total_amount}")
 
 # #Read one Invoice by their Id Hier bitte noch anschauen mit Saliou
 # invoices= VI.read_invoice_by_id(5)
 # print(invoices)
 
-#Create new Invoice
-newinvoice = VI.create_new_invoice(4, date(2025, 5, 10), 1009.99)
-print(newinvoice)
+# #Create new Invoice
+# newinvoice = VI.create_new_invoice(4, date(2025, 5, 10), 1009.99)
+# print(newinvoice)
 
-invoices= VI.read_all_invoice()
-for invoice in invoices:
-    print(f"Invoice Id: {invoice.invoice_id} Booking Id: {invoice.booking_id} Issue Date: {invoice.issue_date} Total Amount: {invoice.total_amount:.2f}")
+# invoices= VI.read_all_invoice()
+# for invoice in invoices:
+#     print(f"Invoice Id: {invoice.invoice_id} Booking Id: {invoice.booking_id} Issue Date: {invoice.issue_date} Total Amount: {invoice.total_amount}")
+
+# #Update Invoice by total amount
+# update_invoice= VI.update_invoice_by_total_amount(6, 1200.99)
+
+# invoices= VI.read_all_invoice()
+# for invoice in invoices:
+#     print(f"Invoice Id: {invoice.invoice_id} Booking Id: {invoice.booking_id} Issue Date: {invoice.issue_date} Total Amount: {invoice.total_amount}")
+
+# #Delete Invoice by Invoice Id
+# delete_invoice = VI.delete_invoice_by_id(6)
+# invoices= VI.read_all_invoice()
+# for invoice in invoices:
+#     print(f"Invoice Id: {invoice.invoice_id} Booking Id: {invoice.booking_id} Issue Date: {invoice.issue_date} Total Amount: {invoice.total_amount}")

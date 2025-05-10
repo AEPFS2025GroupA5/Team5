@@ -8,17 +8,19 @@ class InvoiceDataAccess(BaseDataAccess):
                  db_path: str = None
         ):
         super().__init__(db_path)
-
+    
     def read_all_invoice(self) -> list[Invoice]:
         sql = """
         SELECT invoice_id, booking_id, issue_date, total_amount FROM invoice
         """
-        rows= self.fetchall(sql)
-        all_invoices=[]
+        rows = self.fetchall(sql)
+        all_invoices = []
 
         for row in rows:
             invoice_id, booking_id, issue_date, total_amount = row
-            invoice = Invoice(invoice_id, booking_id, issue_date, float(total_amount))
+            # Stelle sicher, dass total_amount ein Float mit zwei Dezimalstellen ist
+            total_amount = float(f"{total_amount:.2f}")
+            invoice = Invoice(invoice_id, booking_id, issue_date, total_amount)
             all_invoices.append(invoice)
 
         return all_invoices
@@ -58,16 +60,16 @@ class InvoiceDataAccess(BaseDataAccess):
 
         return Invoice(invoice_id=last_row_id, booking_id=booking_id, issue_date=issue_date, total_amount=total_amount)
 
+    def update_invoice_by_total_amount(self, 
+                        invoice_id:int,
+                        new_total_amount:float
+        )-> None:
+        sql = "UPDATE invoice SET total_amount = ? WHERE invoice_id = ?"
+        params = (new_total_amount, invoice_id)
+        self.execute(sql, params)
 
-
-    # def update_guest_by_last_name(self,
-    #                   guest_id:int, 
-    #                   new_last_name:str
-    #     ) -> None:
-    #   sql = "UPDATE guest SET last_name = ? WHERE guest_id = ?"
-    #   params = (new_last_name, guest_id)
-    #   self.execute(sql, params)
-
-    # def delete_guest_by_id(self, guest_id: int) -> None:
-    #     sql = "DELETE FROM guest WHERE guest_id = ?"
-    #     self.execute(sql, (guest_id,))
+    def delete_invoice_by_id(self, 
+                        invoice_id:int
+        ) -> None:
+        sql = "DELETE FROM invoice WHERE invoice_id = ?"
+        self.execute(sql, (invoice_id,))

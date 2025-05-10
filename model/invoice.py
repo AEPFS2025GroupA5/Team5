@@ -17,9 +17,9 @@ class Invoice:
     def __init__(
         self, 
         invoice_id: int, 
+        booking_id: int, 
         issue_date: date, 
         total_amount: float, 
-        booking_id: int, 
         is_paid: bool = False, 
         guest:"Guest" = None
     ):
