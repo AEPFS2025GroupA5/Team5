@@ -2,6 +2,7 @@ import data_access
 import model
 from model.guest import Guest
 from data_access.guest_data_access import GuestDataAccess
+from data_access.invoice_data_access import InvoiceDataAccess
 
 import os
 os.environ["DB_FILE"] = os.path.abspath("database/hotel_reservation_sample.db")
@@ -125,3 +126,15 @@ os.environ["DB_FILE"] = os.path.abspath("database/hotel_reservation_sample.db")
 # guests= VG.read_all_guest()
 # for guest in guests:
 #     print(f"Guest Id: {guest.guest_id} First Name: {guest.first_name} Last Name: {guest.last_name} email: {guest.email} address id: {guest.address_id}")
+
+#============================================
+# Invoice Verbindung
+VI = InvoiceDataAccess()
+
+#Read all Invoices
+invoices= VI.read_all_invoice()
+for invoice in invoices:
+    print(f"Invoice Id: {invoice.invoice_id} Booking Id: {invoice.booking_id} Issue Date: {invoice.issue_date} Total Amount: {invoice.total_amount:.2f}")
+
+
+

@@ -5,6 +5,7 @@ from .base_data_access import BaseDataAccess
 from .facility_data_access import FacilityDataAccess
 from .room_type_access import RoomTypeDataAccess
 from .guest_data_access import GuestDataAccess
+from .invoice_data_access import InvoiceDataAccess
 
 
 
