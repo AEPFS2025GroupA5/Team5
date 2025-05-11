@@ -1,84 +1,106 @@
 from __future__ import annotations
-
+from typing import TYPE_CHECKING
 from model.facility import Facility
 
 class RoomType:
-    def __init__(
-        self,
+    def __init__(self,
         type_id: int,
         description: str,
-        max_guests: int = None,
-        facility_ids:Facility = None
-
-    ):
-         self.type_id = type_id
-         self.max_guests = max_guests
-         self.description = description
-
-
-#Prüfungen // Type_id müssen wir klären wie das vergeben wird.
-         if not isinstance(type_id, int):
-               raise TypeError("type_id must be a int")
-         if not type_id:
-               raise ValueError("type_id must be assigned")
-         if not isinstance(max_guests, int):
-               raise TypeError("max_guests must be an int")
-         if max_guests <= 0:
-               raise ValueError("max_guests must be greater than 0")     
-            
-
-         #if not isinstance(description, str):
-               #raise TypeError("description must be a string")
+        max_guests: int,
+        facility_ids: list[Facility] = None
+        ):
         
+        # Prüfungen
+        if not isinstance(type_id, int):
+            raise TypeError("type_id must be an int")
+        if not type_id:
+            raise ValueError("type_id is required")
 
-        # // Facility Verknüpfung //None → leere Liste 
-         facility_ids = facility_ids or []
-         if not all(isinstance(fid, int) for fid in facility_ids):
-            raise TypeError("facility_ids must be ints") 
-         
-         self.facilities = []
-         missing = []
-         for fid in facility_ids:
-            try:
-                self.facilities.append(Facility.get(fid))
-            except KeyError:               # ID nicht bekannt
-                missing.append(fid)
+        if not isinstance(description, str):
+            raise TypeError("description must be a string")
+        if not description:
+            raise ValueError("description must not be empty")
 
-         if missing:
-            raise ValueError(f"Unknown Facility IDs: {missing}")
+        if not isinstance(max_guests, int):
+            raise TypeError("max_guests must be an int")
+        if max_guests <= 0:
+            raise ValueError("max_guests must be greater than 0")
 
+        facility_ids = facility_ids or []
+        if not all(isinstance(fid, int) for fid in facility_ids):
+            raise TypeError("All facility_ids must be integers")
+     
+        self.__type_id = type_id
+        self._description = description
+        self._max_guests = max_guests
 
-#Funktionen // get für User story 2-2.1 // update info User Story 10
-    def get_details(self):
-            return f"Name: {self.name}\n" \
-                   f"Max Guests: {self.max_guests}\n" \
-                   f"Facilities: {', '.join(facility.name for facility in self.facilities)}\n" \
-                   f"Description: {self.description}\n"
+        # Facilities Verbinden
+        self.__facilities: list[Facility] = []
+        if facility_ids is not None:
+            for id in facility_ids:
+             facility = Facility.get(id)
+             self.__facilities.append(facility)
+             
+    def __repr__(self):
+        facility_names = ", ".join(f.name for f in self.__facilities) if self.__facilities else "None"
+        return (
+        f"RoomType(\n"
+        f"  ID: {self.__type_id}\n"
+        f"  Beschreibung: {self._description}\n"
+        f"  Max Gäste: {self._max_guests}\n"
+        f"  Facilities: {facility_names}\n"
+        f")"
+    )
+
     
-    def update_info(
-        self,
-        name: str = None,
-        max_guests: int = None,
-        description: str = None,
-        amenities: list = None,
-    ):
-        if name is not None:
-            if not isinstance(name, str):
-                raise TypeError("name must be a string")
-            if not name.strip():
-                raise ValueError("name cannot be empty")
-            self.name = name
+    ##Getter
+    @property
+    def type_id(self) -> int:
+        return self.__type_id
 
-        if max_guests is not None:
-            if not isinstance(max_guests, int):
-                raise TypeError("max_guests must be an integer")
-            if max_guests < 1:
-                raise ValueError("max_guests must be at least 1")
-            self.max_guests = max_guests
+    @property
+    def description(self) -> str:
+        return self._description
+    
+    @property
+    def max_guests(self) -> int:
+        return self._max_guests
+    
+    @property
+    def facilities(self) -> list[Facility]:
+        return self.__facilities.copy()
+    
+    #Setter
+    @description.setter
+    def description(self, description: str):
+        if not isinstance(description, str):
+            raise TypeError("description must be a string")
+        if not description:
+            raise ValueError("description can't be empty")
+        self._description = description
 
-        if description is not None:
-            if not isinstance(description, str):
-                raise TypeError("description must be a string")
-            if not description.strip():
-                raise ValueError("description cannot be empty")
-            self.description = description
+    @max_guests.setter
+    def max_guests(self, max_guests: int):
+        if not isinstance(max_guests, int):
+            raise TypeError("max_guests must be an int")
+        if max_guests <= 0:
+            raise ValueError("max_guests must be greater than 0")
+        self._max_guests = max_guests
+
+    def facilities(self) -> list[Facility]:
+        return self.__facilities.copy()
+
+    def add_facility(self, facility: Facility):
+        if not isinstance(facility, Facility):
+            raise TypeError("facility must be a Facility instance")
+        if facility not in self.__facilities:
+            self.__facilities.append(facility)
+
+    def remove_facility(self, facility: Facility):
+        if facility in self.__facilities:
+            self.__facilities.remove(facility)
+
+    
+
+
+  
