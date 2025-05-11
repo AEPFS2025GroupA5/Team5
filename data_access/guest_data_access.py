@@ -1,6 +1,5 @@
 from data_access.base_data_access import BaseDataAccess
-from model.guest import Guest
-from model.address import Address
+import model
 
 class GuestDataAccess(BaseDataAccess):
     def __init__(self, 
@@ -8,36 +7,36 @@ class GuestDataAccess(BaseDataAccess):
         ):
         super().__init__(db_path)
 
-    def read_all_guest(self) -> list[Guest]:
+    def read_all_guest(self) -> list[model.Guest]:
         sql = """
         SELECT guest_id, first_name, last_name, email, address_id FROM guest
         """
         rows = self.fetchall(sql)
-        return [Guest(*row) for row in rows]
+        return [model.Guest(*row) for row in rows]
     
     def read_guest_by_id(self,
                             guest_id:int
-        ) -> Guest:
+        ) -> model.Guest:
           sql = "SELECT guest_id, first_name, last_name, email, address_id FROM guest WHERE guest_id = ?"
           row = self.fetchone(sql, (guest_id,))
           if row:
-            return Guest(*row)
+            return model.Guest(*row)
           return None
     
     def read_guest_by_name(self, 
                               last_name:str
-        ) -> Guest:
+        ) -> model.Guest:
         sql = "SELECT guest_id, first_name, last_name, email, address_id FROM guest WHERE last_name LIKE ?"
         params = tuple([f"%{last_name}%"])
         rows = self.fetchall(sql,params)
-        return [Guest(*row) for row in rows]
+        return [model.Guest(*row) for row in rows]
 
     def create_new_guest(self,
                             first_name: str,
                             last_name: str,
                             email: str,
                             address_id: int
-        ) -> Guest:
+        ) -> model.Guest:
       if not isinstance(first_name, str):
         raise TypeError("firstname has to be a str")
       if not first_name:
@@ -61,7 +60,7 @@ class GuestDataAccess(BaseDataAccess):
       sql= "INSERT INTO guest (first_name, last_name, email, address_id) VALUES (?, ?, ?, ?)"
       params = tuple([first_name, last_name, email, address_id])
       last_row_id, _ = self.execute(sql, params)
-      return Guest(guest_id=last_row_id, first_name=first_name, last_name=last_name, email=email, address_id=address_id)
+      return model.Guest(guest_id=last_row_id, first_name=first_name, last_name=last_name, email=email, address_id=address_id)
     
     def update_guest_by_last_name(self,
                       guest_id:int, 

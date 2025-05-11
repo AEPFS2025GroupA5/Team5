@@ -1,7 +1,7 @@
 from data_access.base_data_access import BaseDataAccess
 from datetime import datetime
 from datetime import date
-from model.invoice import Invoice
+import model
 
 class InvoiceDataAccess(BaseDataAccess):
     def __init__(self, 
@@ -9,7 +9,7 @@ class InvoiceDataAccess(BaseDataAccess):
         ):
         super().__init__(db_path)
     
-    def read_all_invoice(self) -> list[Invoice]:
+    def read_all_invoice(self) -> list[model.Invoice]:
         sql = """
         SELECT invoice_id, booking_id, issue_date, total_amount FROM invoice
         """
@@ -20,25 +20,25 @@ class InvoiceDataAccess(BaseDataAccess):
             invoice_id, booking_id, issue_date, total_amount = row
             # Stelle sicher, dass total_amount ein Float mit zwei Dezimalstellen ist
             total_amount = float(f"{total_amount:.2f}")
-            invoice = Invoice(invoice_id, booking_id, issue_date, total_amount)
+            invoice = model.Invoice(invoice_id, booking_id, issue_date, total_amount)
             all_invoices.append(invoice)
 
         return all_invoices
     
     def read_invoice_by_id(self,
                             invoice_id:int
-        ) -> Invoice:
+        ) -> model.Invoice:
           sql = "SELECT invoice_id, booking_id, issue_date, total_amount FROM invoice WHERE invoice_id = ?"
           row = self.fetchone(sql, (invoice_id,))
           if row:
-            return Invoice(*row)
+            return model.Invoice(*row)
           return None
     
     def create_new_invoice(self,
                            booking_id: int,
                            issue_date: date,
                            total_amount: float
-        ) -> Invoice:
+        ) -> model.Invoice:
         
         if not isinstance(booking_id, int):
             raise TypeError("booking_id must be an integer")
@@ -58,7 +58,7 @@ class InvoiceDataAccess(BaseDataAccess):
         
         last_row_id, _ = self.execute(sql, params)
 
-        return Invoice(invoice_id=last_row_id, booking_id=booking_id, issue_date=issue_date, total_amount=total_amount)
+        return model.Invoice(invoice_id=last_row_id, booking_id=booking_id, issue_date=issue_date, total_amount=total_amount)
 
     def update_invoice_by_total_amount(self, 
                         invoice_id:int,
