@@ -1,5 +1,8 @@
 from __future__ import annotations
-#from room import Room
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from model.room import Room
 
 
 class Hotel:
@@ -10,29 +13,42 @@ class Hotel:
                 adress_id:int
          ):
         
-        self._hotel_id = hotel_id
+        #Prüfungen
+        if not isinstance(hotel_id, int):
+            raise TypeError("hotel_id must be an integer")
+        if not hotel_id:
+            raise ValueError("hotel_id is required")
+        if not isinstance(name, str):
+            raise TypeError("name must be a string")
+        if not name:
+            raise ValueError("name is required")
+        if not isinstance(stars, int):
+            raise TypeError("stars must be an integer")
+        if not isinstance(adress_id, int):
+            raise TypeError("address_id must be an integer")
+        
+        self.__hotel_id = hotel_id
         self._name = name
         self._stars = stars
-        self.adress_id = adress_id
+        self.__adress_id = adress_id
+        self.__rooms: list["Room"] = []
     
-        # Prüfungen
-        if not isinstance (hotel_id, int):
-            raise TypeError("hotel_id has to be int")
-        if not hotel_id:
-            raise ValueError("Hotel Id is required")
-        if not isinstance(name, str):
-            raise TypeError("Hotel name has to be str")
-        if not name:
-            raise ValueError("Hotel name is required")
-        if not isinstance(stars, int):
-            raise TypeError("Stars have to be int")
-        
-       
-       
-# @Getter
+
+    def __repr__(self):
+        return (
+            f"Hotel(\n"
+            f"  ID: {self.__hotel_id}\n"
+            f"  Name: {self._name}\n"
+            f"  Stars: {self._stars}\n"
+            f"  Address ID: {self.__adress_id}\n"
+            f"  Rooms: {len(self.__rooms)}\n"
+            f")"
+        )
+    
+    #Getter    
     @property
     def hotelid(self):
-        return self._hotelid
+        return self.__hotel_id
 
     @property
     def name(self):
@@ -41,45 +57,25 @@ class Hotel:
     @property
     def stars(self):
         return self._stars
+    @property
+    def address_id(self) -> int:
+        return self.__address_id
+
+    @property
+    def rooms(self) -> list[Room]:
+        return self.__rooms.copy()
     
     
+#Funktionen
+    def add_room(self,
+                room:"Room"
+        ): 
+        if room not in self.__rooms:
+            self.__rooms.append(room)
 
-##Funktionen
+    def remove_room(self,
+                    room: "Room"
+        ):
+        if room in self.__rooms:
+            self.__rooms.remove(room)
 
-    # def show_hotelinfo(self):
-    #     return f"Hotel ID: {self.hotelid} \nName: {self.name} \nStars: {self.stars} \nRooms: {self._rooms}:"
-
-    # def update_info(self, name=None, stars=None):
-    #     if name is not None:
-    #         if not isinstance(name, str):
-    #             raise TypeError("name must be a string")
-    #         if not name:
-    #             raise ValueError("name cannot be empty")
-    #         self._name = name
-
-    #     if stars is not None:
-    #         if not isinstance(stars, int):
-    #             raise TypeError("stars must be an integer")
-    #         if not (0 <= stars <= 5):
-    #             raise ValueError("stars must be between 0 and 5")
-    #         self._stars = stars
-
-    #     ##Adresse wäre auch
-
-    # def add_room(self, room):
-    #     if not isinstance(room, Room):
-    #         raise TypeError("room must be a Room instance")
-    #     self._rooms.append(room)
-
-
-##Testdaten
-# single1 = RoomType(1, "Single Suite", 2, "Schönes Einzelzimmer mit Meerblick")
-
-# raum1 = Room(1, "ER 1.OG", single1, 49.99)
-
-# hotel1 = Hotel(100, "Testhotel", 4, None)
-# print(hotel1.show_hotelinfo())
-
-# hotel1.update_info("Saliou", 5)
-
-# print(hotel1.show_hotelinfo())

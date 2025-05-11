@@ -12,11 +12,14 @@ os.environ["DB_FILE"] = os.path.abspath("database/hotel_reservation_sample.db")
 
 ### Verbindungen zur DB
 # V1 = data_access.FacilityDataAccess()  
-V2 = data_access.RoomTypeDataAccess()
-V3 = data_access.RoomDataAccess()
-# # # V4 = data_access.HotelDataAccess()
+# V2 = data_access.RoomTypeDataAccess()
+# V3 = data_access.RoomDataAccess()
+# V4 = data_access.HotelDataAccess()
 
-# # ##Test
+# # # ##Test
 
-all = V3.read_rooms_by_hotel_id(3)
-print(all)
+# test = V4.read_hotel_by_id(2)
+# test.add_room(V2.read_room_type_by_id(2))
+# print(test)
+
+
