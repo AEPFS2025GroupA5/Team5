@@ -1,5 +1,7 @@
 from data_access.base_data_access import BaseDataAccess
 import model
+import data_access.room_type_access
+import model.room 
 
 class RoomDataAccess(BaseDataAccess):
     def __init__(self, 
@@ -12,7 +14,15 @@ class RoomDataAccess(BaseDataAccess):
         SELECT room_id, hotel_id, room_number, type_id, price_per_night FROM room
         """
         rows = self.fetchall(sql)
-        return [model.Room(*row) for row in rows]
+        rooms = []
+        room_type_dao = data_access.room_type_access.RoomTypeDataAccess()
+        # Dafür das man auch den ganzen RoomType hat
+        for row in rows:
+            room_id, hotel_id, room_number, type_id, price = row
+            room_type = room_type_dao.read_room_type_by_id(type_id)
+            room = model.Room(room_id, hotel_id, room_number, room_type, price)
+            rooms.append(room)
+        return rooms
     
     def read_room_by_id(self,
                         room_id:int
@@ -20,15 +30,28 @@ class RoomDataAccess(BaseDataAccess):
           sql = "SELECT room_id, hotel_id, room_number, type_id, price_per_night FROM room WHERE room_id = ?"
           row = self.fetchone(sql, (room_id,))
           if row:
-            return model.Room(*row)
+                room_id, hotel_id, room_number, type_id, price = row
+                room_type_dao = data_access.room_type_access.RoomTypeDataAccess()
+                room_type = room_type_dao.read_room_type_by_id(type_id)
+                return model.Room(room_id, hotel_id, room_number, room_type, price)
+    
           return None
+
     
     def read_rooms_by_hotel_id(self,
                             hotel_id:int
         ) -> list[model.Room]:
           sql = "SELECT room_id, hotel_id, room_number, type_id, price_per_night FROM room WHERE hotel_id = ?"
           rows = self.fetchall(sql, (hotel_id,))
-          return [model.Room(*row) for row in rows]
+          rooms = []
+          room_type_da = data_access.room_type_access.RoomTypeDataAccess()
+
+          for row in rows:
+             room_id, hotel_id, room_number, type_id, price = row
+             room_type = room_type_da.read_room_type_by_id(type_id)
+             room = model.Room(room_id, hotel_id, room_number, room_type, price)
+             rooms.append(room)
+          return rooms
     
     def update_room(self,
                 room: model.Room
