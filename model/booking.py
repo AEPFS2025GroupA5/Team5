@@ -1,19 +1,25 @@
-from model.invoice import Invoice
-from model.guest import Guest
+from .invoice import Invoice
+from .guest import Guest
 from datetime import date
 #from hotel import Hotel
 #from room import Room
 
+
+
 class Booking:
     all_bookings: list["Booking"] = [] #Klassenvariable für die gesamte Booking Klasse und nicht für jede Instanz
 
-    def __str__(self):
-        return f"Bookingnumber: {self.booking_id}\n" \
-                f"{self.guest}\n" \
-                f"{self.hotel}\n" \
-                f"Checked in from {self.check_in_date} to {self.check_out_date}\n" \
-                f"Total Amount: CHF {self.total_amount:.2f}\n" \
-                f"Active Booking: {self.is_cancelled}\n" 
+    def __repr__(self):
+        return (
+            f"Booking(\n"
+            f"  ID: {self.__booking_id}\n"
+            f"  Check In Date: {self.check_in_date}\n"
+            f"  Check Out Date: {self.check_out_date}\n"
+            f"  Total Amount of the Booking: {self.__total_amount}\n"
+            f"  Guest ID: {self.__guest}\n"
+            f"  Is cancelled: {self.__is_cancelled}\n"
+            f")"
+        )
 
     def __init__(
         self, 
