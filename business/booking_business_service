@@ -1,0 +1,10 @@
+# Ich habe hier angefangen, den booking business layer einzufügen. Gruss Ivan
+
+# dao = Data Access Object
+
+from booking_data_access import BookingDataAccess
+
+booking_dao = BookingDataAccess("./hotel_reservation_sample.db")  # or default path
+booking_data = booking_dao.get_booking_by_id(1)
+
+print(booking_data)  # Nur zum testen
