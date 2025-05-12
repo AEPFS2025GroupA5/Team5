@@ -7,7 +7,7 @@ class Room:
     def __init__(       
         self,
         room_id: int,
-        hotel_id: int,
+        hotel_id: Hotel,
         room_number: str,
         room_type: RoomType,      
         price_per_night: float
