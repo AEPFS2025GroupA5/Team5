@@ -1,11 +1,16 @@
 class Address:
-    def __str__(self):
-        return  f"Street: {self.street}\n" \
-                f"City: {self.city}\n" \
-                f"zipcode: {self.zipcode}\n" \
+    def __repr__(self):
+        return (
+            f"Address(\n"
+            f"  ID: {self.__addressid}\n"
+            f"  Street: {self._street}\n"
+            f"  City: {self._city}\n"
+            f"  Zipcode: {self._zipcode}\n"
+            f")"
+        )
 
     def __init__(self, addressid:int, street:str, city:str, zipcode:str):
-        self.__addressid = addressid #ID soll mit den ersten drei Buchstaben der Strasse sein und dann mit der Hausnummer
+        self.__addressid = addressid
         self._street = street
         self._city = city
         self._zipcode = zipcode
@@ -43,6 +48,3 @@ class Address:
             print("Success")
         else:
             print("Invalid zipcode")
-
-    def show_addressinfo(self):
-        return f"Address ID: {self.addressid} \nStreet: {self.street} \nCity: {self.city} \nZipcode: {self.zipcode}"
