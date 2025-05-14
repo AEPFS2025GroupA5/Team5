@@ -6,11 +6,15 @@ if TYPE_CHECKING:
     from model.booking import Booking
 
 class Guest:
-    def __str__(self):
-        return  f"Guest Id: {self.guest_id}\n" \
-                f"Guest's Fullname: {self.first_name} {self.last_name}\n" \
-                f"Guest's E-Mail: {self.email}\n" \
-                f"Guest's Adress Id: {self.address_id}\n" 
+    def __repr__(self):
+        return (
+        f"Guest \n"
+        f"  ID: {self.guest_id}\n"
+        f"  Guest's fullname: {self.first_name} {self.last_name}\n"
+        f"  Guest's E-Mail: {self.email}\n"
+        f"  Guest's Address ID: {self.address_id}\n"
+        f")"
+    )
 
     def __init__(
             self, 
@@ -40,12 +44,12 @@ class Guest:
         if not email:
             raise ValueError("E-Mail is required")
         if not isinstance(email, str):
-            raise ValueError("E-Mail has to be a string")   
+            raise ValueError("E-Mail has to be a string")     
         
-        # if not address:
-        #     raise ValueError("Address is required")
-        # if not isinstance(address, Address):
-        #     raise ValueError("Address has to be an Address-object!")    
+        if not address_id:
+            raise ValueError("Address Id is required")
+        if not isinstance(address_id, int):
+            raise ValueError("Adress Id has to be an integer")
 
         self.__guest_id = guest_id
         self._first_name = first_name
@@ -55,26 +59,26 @@ class Guest:
         self.__address_id = address_id    #Aggregation mit Address
         self.__bookings: list[Booking] = [] #Aggregation Booking leere Liste, wo man alle Buchungen vom Kunden sehen kann
 
-    def get_details(self): 
-        return  f"Your Guest's information: \n" \
-                f"Guest Id: {self.guest_id} \n" \
-                f"First Name: {self.first_name} \n" \
-                f"Last Name: {self.last_name} \n" \
-                f"email: {self.email} \n" 
+    # def get_details(self): 
+    #     return  f"Your Guest's information: \n" \
+    #             f"Guest Id: {self.guest_id} \n" \
+    #             f"First Name: {self.first_name} \n" \
+    #             f"Last Name: {self.last_name} \n" \
+    #             f"email: {self.email} \n" 
     
-    def get_bookings(self):
-        print(f"{self.first_name} hat {len(self.bookings)} Buchung(en):")
-        for b in self.bookings:
-            print(b.get_details())
+    # def get_bookings(self):
+    #     print(f"{self.first_name} hat {len(self.bookings)} Buchung(en):")
+    #     for b in self.bookings:
+    #         print(b.get_details())
 
-    def get_invoices(self):
-        print(f"{self.first_name} hat {len(self.invoice)} Rechnung(en):")
-        for i in self.invoice:
-            print(i)
+    # def get_invoices(self):
+    #     print(f"{self.first_name} hat {len(self.invoice)} Rechnung(en):")
+    #     for i in self.invoice:
+    #         print(i)
 
-    #Funktionen zur Abrufung und Appenden aller Rechnungen von einem Kunden
-    def add_invoice(self, invoice:Invoice):
-         self.__invoice.append(invoice)
+    # #Funktionen zur Abrufung und Appenden aller Rechnungen von einem Kunden -> würde es eher in BL rein getan
+    # def add_invoice(self, invoice:Invoice):
+    #      self.__invoice.append(invoice)
 
     #Getter Funktion vom Invoices
     @property
