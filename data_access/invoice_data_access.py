@@ -18,7 +18,6 @@ class InvoiceDataAccess(BaseDataAccess):
 
         for row in rows:
             invoice_id, booking_id, issue_date, total_amount = row
-            # Stelle sicher, dass total_amount ein Float mit zwei Dezimalstellen ist
             total_amount = float(f"{total_amount:.2f}")
             invoice = model.Invoice(invoice_id, booking_id, issue_date, total_amount)
             all_invoices.append(invoice)
@@ -41,35 +40,57 @@ class InvoiceDataAccess(BaseDataAccess):
         ) -> model.Invoice:
         
         if not isinstance(booking_id, int):
-            raise TypeError("booking_id must be an integer")
-        if not booking_id:
-            raise ValueError("booking_id is mandatory")
+            raise TypeError("Booking Id must be an integer")
+        if booking_id is None:
+            raise ValueError("Booking Id is mandatory")
 
         if not isinstance(issue_date, date):
-            raise TypeError("issue_date must be a date")
+            raise ValueError("Issue Date must be a date")
+        if issue_date is None:
+            raise ValueError("Issue Date is mandatory")
         
         if not isinstance(total_amount, (int, float)):
-            raise TypeError("total_amount must be a number")
+            raise ValueError("Total amount must be a number (int or float)")
         if total_amount <= 0:
-            raise ValueError("total_amount must be greater than 0")
+            raise ValueError("Total Amount must be greater than 0")
+        if total_amount is None:
+            raise ValueError("Totale Amount is mandatory")
 
-        sql = "INSERT INTO invoice (booking_id, issue_date, total_amount) VALUES (?, ?, ?)"
-        params = tuple([booking_id, issue_date, total_amount])
-        
-        last_row_id, _ = self.execute(sql, params)
+        else:
+            sql = "INSERT INTO invoice (booking_id, issue_date, total_amount) VALUES (?, ?, ?)"
+            params = tuple([booking_id, issue_date, total_amount])
+            
+            last_row_id, _ = self.execute(sql, params)
 
-        return model.Invoice(invoice_id=last_row_id, booking_id=booking_id, issue_date=issue_date, total_amount=total_amount)
+            return model.Invoice(invoice_id=last_row_id, booking_id=booking_id, issue_date=issue_date, total_amount=total_amount)
 
     def update_invoice_by_total_amount(self, 
                         invoice_id:int,
                         new_total_amount:float
         )-> None:
-        sql = "UPDATE invoice SET total_amount = ? WHERE invoice_id = ?"
-        params = (new_total_amount, invoice_id)
-        self.execute(sql, params)
+        if not isinstance(invoice_id, int):
+            raise ValueError("Invoice Id has to be an integer")
+        if invoice_id is None:
+            raise ValueError("In order to change the total amount you need to give an Invoice ID")
+        
+        if not isinstance(new_total_amount, float):
+            raise ValueError("The new total amount has to be a float")
+        if new_total_amount is None:
+            raise ValueError(f"In order to change the total amount of this invoice ID {invoice_id} you need to put in a total amount")
+
+        else:
+            sql = "UPDATE invoice SET total_amount = ? WHERE invoice_id = ?"
+            params = (new_total_amount, invoice_id)
+            self.execute(sql, params)
 
     def delete_invoice_by_id(self, 
                         invoice_id:int
         ) -> None:
-        sql = "DELETE FROM invoice WHERE invoice_id = ?"
-        self.execute(sql, (invoice_id,))
+        if not isinstance(invoice_id, int):
+            raise ValueError("Invoice Id has to be an integer")
+        if invoice_id is None:
+            raise ValueError("In order to delete a whole invoice you need to give an invoice ID")
+        
+        else:
+            sql = "DELETE FROM invoice WHERE invoice_id = ?"
+            self.execute(sql, (invoice_id,))

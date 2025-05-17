@@ -26,27 +26,27 @@ class Guest:
         ):
 
         #Typprüfung
-        if not guest_id:
+        if guest_id is None:
             raise ValueError("Guest Id is required")
         if not isinstance(guest_id, int):
             raise ValueError("Guest Id has to be an integer")
         
-        if not first_name:
+        if first_name is None:
             raise ValueError("First name is required")
         if not isinstance(first_name, str):
             raise ValueError("First name has to be a string")
 
-        if not last_name:
+        if last_name is None:
             raise ValueError("Last name is required")
         if not isinstance(last_name, str):
             raise ValueError("Last name has to be a string")        
 
-        if not email:
+        if email is None:
             raise ValueError("E-Mail is required")
         if not isinstance(email, str):
             raise ValueError("E-Mail has to be a string")     
         
-        if not address_id:
+        if address_id is None:
             raise ValueError("Address Id is required")
         if not isinstance(address_id, int):
             raise ValueError("Adress Id has to be an integer")

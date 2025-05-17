@@ -56,20 +56,39 @@ class GuestDataAccess(BaseDataAccess):
         raise TypeError("address_id has to be a int")
       if not address_id:
         raise ValueError("address_id name is mandatory")
-    
-      sql= "INSERT INTO guest (first_name, last_name, email, address_id) VALUES (?, ?, ?, ?)"
-      params = tuple([first_name, last_name, email, address_id])
-      last_row_id, _ = self.execute(sql, params)
-      return model.Guest(guest_id=last_row_id, first_name=first_name, last_name=last_name, email=email, address_id=address_id)
+      
+      else:
+        sql= "INSERT INTO guest (first_name, last_name, email, address_id) VALUES (?, ?, ?, ?)"
+        params = tuple([first_name, last_name, email, address_id])
+        last_row_id, _ = self.execute(sql, params)
+        return model.Guest(guest_id=last_row_id, first_name=first_name, last_name=last_name, email=email, address_id=address_id)
     
     def update_guest_by_last_name(self,
                       guest_id:int, 
                       new_last_name:str
         ) -> None:
-      sql = "UPDATE guest SET last_name = ? WHERE guest_id = ?"
-      params = (new_last_name, guest_id)
-      self.execute(sql, params)
+      
+      if not isinstance(guest_id, int):
+         raise ValueError("Guest ID has to be an integer")
+      if guest_id is None:
+         raise ValueError("Guest ID is required")
+      
+      if not isinstance(new_last_name, str):
+         raise ValueError("The new last name has to be a string")
+      if new_last_name is None:
+         raise ValueError("In order to change the last name you need to type in the new last name")
+
+      else:
+        sql = "UPDATE guest SET last_name = ? WHERE guest_id = ?"
+        params = (new_last_name, guest_id)
+        self.execute(sql, params)
 
     def delete_guest_by_id(self, guest_id: int) -> None:
+      if not isinstance(guest_id, int):
+        raise ValueError("Guest ID has to be an integer")
+      if guest_id is None:
+        raise   ValueError("In order to delete a guest you need to type in the Guest ID")
+
+      else:
         sql = "DELETE FROM guest WHERE guest_id = ?"
         self.execute(sql, (guest_id,))

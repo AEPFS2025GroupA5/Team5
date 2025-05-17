@@ -1,5 +1,3 @@
-# address_data_access.py
-
 from data_access.base_data_access import BaseDataAccess
 import model
 
@@ -9,7 +7,7 @@ class AddressDataAccess(BaseDataAccess):
 
     def read_all_addresses(self) -> list[model.Address]:
         sql = """
-        SELECT address_id, street, city, zipcode FROM address
+        SELECT address_id, street, city, zip_code FROM address
         """
         rows = self.fetchall(sql)
         return [model.Address(*row) for row in rows]

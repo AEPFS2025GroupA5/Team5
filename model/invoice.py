@@ -25,25 +25,25 @@ class Invoice:
     ):
 
         #Typprüfung
-        if not invoice_id:
+        if invoice_id is None:
             raise ValueError("Invoice Id is required")
         if not isinstance(invoice_id, int):
             raise ValueError("Invoice Id has to be an integer")
         
-        if not booking_id:
+        if booking_id is None:
             raise ValueError("Booking Id is required")
         if not isinstance(booking_id, int):
             raise ValueError("Booking Id has to be an integer")
         
-        if not issue_date:
+        if issue_date is None:
             raise ValueError("Issue Date is required")
         if not isinstance(issue_date, date):
             raise ValueError("Issue Date has to be a date")
         
-        if not total_amount:
+        if total_amount is None:
             raise ValueError("Total Amount is required")
-        if not isinstance(total_amount, float):
-            raise ValueError("Total Amount has to be a float")
+        if not isinstance(total_amount, (int, float)):
+            raise ValueError("Total amount must be a number (int or float)")
 
         self.__invoice_id = invoice_id
         self._issue_date = issue_date

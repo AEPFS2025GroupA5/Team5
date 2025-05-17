@@ -9,31 +9,31 @@ class Address:
             f")"
         )
 
-    def __init__(self, addressid:int, street:str, city:str, zipcode:int):
+    def __init__(self, addressid:int, street:str, city:str, zipcode:str):
         self.__address_id = addressid
         self._street = street
         self._city = city
         self._zipcode = zipcode
 
-        if not addressid:
+        if addressid is None:
             raise ValueError("Address Id is required")
         if not isinstance(addressid, int):
             raise ValueError("Address Id has to be an integer")
         
-        if not street:
+        if street is None:
             raise ValueError("Street is required")
         if not isinstance(street, str):
             raise ValueError("Street has to be a string")
 
-        if not city:
+        if city is None:
             raise ValueError("City is required")
         if not isinstance(city, str):
             raise ValueError("City has to be a string")
         
-        if not zipcode:
+        if zipcode is None:
             raise ValueError("Zipcode is required")
-        if not isinstance(zipcode, int):
-            raise ValueError("Zipcode has to be an integer")
+        if not isinstance(zipcode, str):
+            raise ValueError("Zipcode has to be a string")
 
     @property
     def addressid(self):
@@ -72,13 +72,13 @@ class Address:
         return self._zipcode
 
     @zipcode.setter
-    def zipcode(self, new_zipcode:int):
+    def zipcode(self, new_zipcode:str):
         if not len(new_zipcode) >= 4:
             raise ValueError("A Zipcode has to be longer than 4 characters")
         if not new_zipcode:
             raise ValueError("A new zipcode is required")
-        if not isinstance(new_zipcode, int):
-            raise ValueError("A new zipcode has to be an integer") 
+        if not isinstance(new_zipcode, str):
+            raise ValueError("A new zipcode has to be a string") 
         else: 
             self._zipcode = new_zipcode
             print("You have changed the zipcode into {new_zipcode}")
