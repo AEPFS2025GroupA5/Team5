@@ -22,14 +22,14 @@ class Guest:
             first_name:str, 
             last_name:str, 
             email:str , 
-            address_id
+            address_id:int
         ):
 
         #Typprüfung
         if not guest_id:
             raise ValueError("Guest Id is required")
         if not isinstance(guest_id, int):
-            raise ValueError("Guest Id has to be a integer")
+            raise ValueError("Guest Id has to be an integer")
         
         if not first_name:
             raise ValueError("First name is required")
@@ -58,27 +58,6 @@ class Guest:
         self.__invoice: list[Invoice] = [] #Aggregation Invoice
         self.__address_id = address_id    #Aggregation mit Address
         self.__bookings: list[Booking] = [] #Aggregation Booking leere Liste, wo man alle Buchungen vom Kunden sehen kann
-
-    # def get_details(self): 
-    #     return  f"Your Guest's information: \n" \
-    #             f"Guest Id: {self.guest_id} \n" \
-    #             f"First Name: {self.first_name} \n" \
-    #             f"Last Name: {self.last_name} \n" \
-    #             f"email: {self.email} \n" 
-    
-    # def get_bookings(self):
-    #     print(f"{self.first_name} hat {len(self.bookings)} Buchung(en):")
-    #     for b in self.bookings:
-    #         print(b.get_details())
-
-    # def get_invoices(self):
-    #     print(f"{self.first_name} hat {len(self.invoice)} Rechnung(en):")
-    #     for i in self.invoice:
-    #         print(i)
-
-    # #Funktionen zur Abrufung und Appenden aller Rechnungen von einem Kunden -> würde es eher in BL rein getan
-    # def add_invoice(self, invoice:Invoice):
-    #      self.__invoice.append(invoice)
 
     #Getter Funktion vom Invoices
     @property
