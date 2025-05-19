@@ -1,8 +1,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from model.room import Room
+import model
 
 
 class Hotel:
@@ -10,7 +9,7 @@ class Hotel:
                 hotel_id:int,
                 name:str,
                 stars:int,
-                adress_id:int
+                address:model.Address,
          ):
         
         #Prüfungen
@@ -24,14 +23,14 @@ class Hotel:
             raise ValueError("name is required")
         if not isinstance(stars, int):
             raise TypeError("stars must be an integer")
-        if not isinstance(adress_id, int):
+        if not isinstance(address, model.Address):
             raise TypeError("address_id must be an integer")
         
         self.__hotel_id = hotel_id
         self._name = name
         self._stars = stars
-        self.__adress_id = adress_id
-        self.__rooms: list["Room"] = []
+        self.__address: model.Address = address
+        self.__rooms: list[model.Room] = []
     
 
     def __repr__(self):
@@ -40,14 +39,14 @@ class Hotel:
             f"  ID: {self.__hotel_id}\n"
             f"  Name: {self._name}\n"
             f"  Stars: {self._stars}\n"
-            f"  Address ID: {self.__adress_id}\n"
+            f"  Address ID: {self.__address}\n"
             f"  Rooms: {len(self.__rooms)}\n"
             f")"
         )
     
     #Getter    
     @property
-    def hotelid(self):
+    def hotel_id(self):
         return self.__hotel_id
 
     @property
@@ -58,23 +57,23 @@ class Hotel:
     def stars(self):
         return self._stars
     @property
-    def address_id(self) -> int:
-        return self.__address_id
+    def address(self) -> model.Address:
+        return self.__address
 
     @property
-    def rooms(self) -> list[Room]:
+    def rooms(self) -> list[model.Room]:
         return self.__rooms.copy()
     
     
 #Funktionen
     def add_room(self,
-                room:"Room"
+                room: model.Room
         ): 
         if room not in self.__rooms:
             self.__rooms.append(room)
 
     def remove_room(self,
-                    room: "Room"
+                    room: model.Room
         ):
         if room in self.__rooms:
             self.__rooms.remove(room)

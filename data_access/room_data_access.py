@@ -9,6 +9,8 @@ class RoomDataAccess(BaseDataAccess):
         ):
         super().__init__(db_path)
 
+        self.__room_type_dao = data_access.room_type_access.RoomTypeDataAccess()
+
     def read_all_rooms(self) -> list[model.Room]:
         sql = """
         SELECT room_id, hotel_id, room_number, type_id, price_per_night FROM room
@@ -44,11 +46,10 @@ class RoomDataAccess(BaseDataAccess):
           sql = "SELECT room_id, hotel_id, room_number, type_id, price_per_night FROM room WHERE hotel_id = ?"
           rows = self.fetchall(sql, (hotel_id,))
           rooms = []
-          room_type_da = data_access.room_type_access.RoomTypeDataAccess()
 
           for row in rows:
              room_id, hotel_id, room_number, type_id, price = row
-             room_type = room_type_da.read_room_type_by_id(type_id)
+             room_type = self.__room_type_dao.read_room_type_by_id(type_id)
              room = model.Room(room_id, hotel_id, room_number, room_type, price)
              rooms.append(room)
           return rooms

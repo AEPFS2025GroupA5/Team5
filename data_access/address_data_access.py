@@ -21,6 +21,16 @@ class AddressDataAccess(BaseDataAccess):
         if row:
             return model.Address(*row)
         return None
+    
+    def get_address_id_by_city(self, city: str) -> int:
+        if not city:
+            raise ValueError("city is required")
+
+        sql = "SELECT address_id FROM address WHERE city = ?"
+        row = self.fetchall(sql, (city,))
+        if row:
+            return row[0]
+        return None
 
     def create_new_address(self, street: str, city: str, zipcode: str) -> model.Address:
         if not all(isinstance(x, str) for x in [street, city, zipcode]):

@@ -10,10 +10,20 @@ class HotelDataAccess(BaseDataAccess):
         
         def read_all_hotels(self) -> list[model.Hotel]:
                 sql = """
-                SELECT hotel_id, name, stars, address_id FROM hotel
+                SELECT h.hotel_id, h.name, h.stars, a.address_id, a.street, a.city, a.zip_code FROM hotel as h
+                JOIN address as a ON h.address_id = a.address_id
                 """
                 rows = self.fetchall(sql)
-                return [model.Hotel(*row) for row in rows]
+                
+                return [
+                        model.Hotel(
+                                hotel_id, 
+                                name, 
+                                stars, 
+                                model.Address(address_id, street, city, zipcode)
+                        ) 
+                        for hotel_id, name, stars, address_id, street, city, zipcode in rows
+                ]
         
         def read_hotel_by_id(self,
                             hotel_id:int
