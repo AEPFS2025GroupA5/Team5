@@ -44,6 +44,13 @@ class Hotel:
             f")"
         )
     
+    def show_user_friendly(self):
+        return (
+            f"Name: {self._name}\n"
+            f"{self.__address.show_user_friendly()}"
+            f"Stars: {self._stars}\n"
+            
+        )
     #Getter    
     @property
     def hotel_id(self):

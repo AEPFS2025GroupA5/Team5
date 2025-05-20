@@ -82,3 +82,9 @@ class Address:
         else: 
             self._zipcode = new_zipcode
             print("You have changed the zipcode into {new_zipcode}")
+
+    def show_user_friendly(self):
+        return (
+            f"Street: {self._street}\n"
+            f"City: {self._city}\n"
+        )

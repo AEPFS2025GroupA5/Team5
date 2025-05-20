@@ -68,6 +68,10 @@ class Room:
     @property
     def room_type(self) -> RoomType:
         return self.__room_type
+    
+    @property
+    def max_guests(self) -> int:
+        return self.__room_type.max_guests
 
  #Setter    
     @room_number.setter
@@ -86,13 +90,13 @@ class Room:
             raise ValueError("hotel is required")
         self.__hotel = hotel
 
-    # @room_type.setter
-    # def type_id(self,
-    #             room_type: RoomType
-    #     ) -> None:
-    #     if not room_type:
-    #         raise ValueError("room_type is required")
-    #     self.__room_type = room_type
+    @room_type.setter
+    def type_id(self,
+                 room_type: RoomType
+        ) -> None:
+        if not room_type:
+             raise ValueError("room_type is required")
+        self.__room_type = room_type
 
     # @price_per_night.stetter
     # def base_price(

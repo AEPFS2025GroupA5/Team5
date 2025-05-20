@@ -27,6 +27,11 @@ class HotelManager:
     
     def read_all_hotels(self) -> list[model.Hotel]:
         return self.__hotel_da.read_all_hotels()   
+    
+    def read_hotel_userfriendly(self,) -> list[model.Hotel]:
+         all_hotels = self.__hotel_da.read_all_hotels()
+         return [hotel.show_user_friendly() for hotel in all_hotels]
+
                 
         
     def read_hotel_by_id(self,
@@ -60,6 +65,22 @@ class HotelManager:
         ]
         if not matching_hotels:
              return f"No hotels found in {city} with {stars} stars"
+        
+        return matching_hotels
+    
+    def get_hotels_by_city_and_max_guests(self, city: str, max_guests: int) -> list[model.Hotel]:
+        if not city:
+            raise ValueError("City must be provided")
+        if not max_guests or max_guests <= 0:
+            raise ValueError("Max guests must be a positive integer")
+        
+        all_hotels = self.__hotel_da.read_all_hotels()
+        matching_hotels = [
+        hotel for hotel in all_hotels if hotel.address.city.lower() == city.lower() 
+        and any(room.max_guests >= max_guests for room in hotel.rooms)
+        ]
+        if not matching_hotels:
+             return f"No hotels found in {city} with a maximum of {max_guests} guests"
         
         return matching_hotels
       
