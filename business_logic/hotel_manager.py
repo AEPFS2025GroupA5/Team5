@@ -33,6 +33,20 @@ class HotelManager:
                             hotel_id:int
         ) -> model.Hotel:
           return self.__hotel_da.read_hotel_by_id(hotel_id)
+    
+    def get_hotels_by_city(self, city: str) -> list[model.Hotel]:
+        if not city:
+            raise ValueError("City must be provided")
+        
+        all_hotels = self.__hotel_da.read_all_hotels()
+        matching_hotels = [
+        hotel for hotel in all_hotels if hotel.address.city.lower() == city.lower()
+        ]
+        if not matching_hotels:
+            return f"No hotels found in {city}"
+        
+        return matching_hotels
+      
                 
 
         
