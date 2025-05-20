@@ -14,7 +14,6 @@ class HotelDataAccess(BaseDataAccess):
                 JOIN address as a ON h.address_id = a.address_id
                 """
                 rows = self.fetchall(sql)
-                
                 return [
                         model.Hotel(
                                 hotel_id, 

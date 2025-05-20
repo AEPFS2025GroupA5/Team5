@@ -43,7 +43,23 @@ class HotelManager:
         hotel for hotel in all_hotels if hotel.address.city.lower() == city.lower()
         ]
         if not matching_hotels:
-            return f"No hotels found in {city}"
+             return f"No hotels found in {city}"
+        
+        return matching_hotels
+    
+    def get_hotels_by_city_and_stars(self, city: str, stars: int) -> list[model.Hotel]:
+        if not city:
+            raise ValueError("City must be provided")
+        if not stars or stars <= 0:
+            raise ValueError("Stars must be a positive integer")
+        
+        all_hotels = self.__hotel_da.read_all_hotels()
+        matching_hotels = [
+        hotel for hotel in all_hotels if hotel.address.city.lower() == city.lower() 
+        and hotel.stars >= stars
+        ]
+        if not matching_hotels:
+             return f"No hotels found in {city} with {stars} stars"
         
         return matching_hotels
       
