@@ -2,6 +2,7 @@ from __future__ import annotations
 from datetime import date
 from model.room_type import RoomType
 from model.hotel import Hotel
+from model.booking import Booking
 
 class Room:
     def __init__(       
@@ -10,7 +11,8 @@ class Room:
         hotel_id: Hotel,
         room_number: str,
         room_type: RoomType,      
-        price_per_night: float
+        price_per_night: float,
+        bookings: list[Booking] = None
     ):
         # Prüfungen
         if not isinstance(room_id, int):
@@ -37,6 +39,7 @@ class Room:
         self.__price_per_night = price_per_night
         self._room_number = room_number
         self.__hotel_id = hotel_id
+        self.bookings:list [Booking] = bookings
        
     def __repr__(self):
         return (
@@ -46,8 +49,16 @@ class Room:
             f"  Room Number: {self._room_number}\n"
             f"  Type ID: {self.__room_type}\n"
             f"  Price per night: {self.__price_per_night:.2f}\n"
+            f"  Bookings: {self.bookings}\n"
             f")"
         )
+    
+    def add_booking(self, booking:Booking) -> None:
+        if not booking:
+            raise ValueError("You must enter a valid booking")
+        else:
+            self.bookings.append(booking)
+
     #Getters
     @property
     def room_id(self):
