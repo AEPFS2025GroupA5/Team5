@@ -38,7 +38,7 @@ class BookingDataAccess(BaseDataAccess):
             "FROM booking WHERE booking_id = ?"
         )
         row = self.fetchone(sql, (booking_id,))
-        return self._row_to_booking(row) if row else None
+        return self.row_to_booking(row) if row else None
 
     def create_new_booking(
         self,
@@ -106,7 +106,7 @@ class BookingDataAccess(BaseDataAccess):
         sql = "DELETE FROM booking WHERE booking_id = ?"
         self.execute(sql, (booking_id,))
 
-    def _row_to_booking(self, row: tuple) -> model.Booking:
+    def row_to_booking(self, row: tuple) -> model.Booking:
         """
         Map a SQL row tuple to a Booking model instance.
         """
