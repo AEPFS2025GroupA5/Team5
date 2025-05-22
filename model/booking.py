@@ -2,6 +2,10 @@ from .invoice import Invoice
 from .guest import Guest
 from datetime import date
 from hotel import Hotel
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from room import Room
 
 class Booking:
 
@@ -12,7 +16,9 @@ class Booking:
             f"  Check In Date: {self.check_in_date}\n"
             f"  Check Out Date: {self.check_out_date}\n"
             f"  Total Amount of the Booking: {self.__total_amount}\n"
+            f"  Hotel ID: {self.__hotel}\n"
             f"  Guest ID: {self.__guest}\n"
+            f"  Room ID: {self.__room}\n"
             f"  Is cancelled: {self.__is_cancelled}\n"
             f")"
         )
@@ -25,6 +31,7 @@ class Booking:
         total_amount: float, 
         hotel:Hotel, 
         guest:Guest,
+        room: Room,
         is_cancelled: bool = False,  
         invoice:Invoice =None
     ):
@@ -56,6 +63,9 @@ class Booking:
         if not isinstance(guest, Guest):
             raise ValueError("guest has to be a Guest-object!")
         
+        if not isinstance(room, Room):
+            raise ValueError("room has to be a Room-object")
+
         if is_cancelled:
             raise ValueError("is cancelled has to be false")        
         if not isinstance(is_cancelled, bool):
@@ -67,6 +77,7 @@ class Booking:
         self.__total_amount = total_amount
         self.__hotel:Hotel = hotel #Aggregation mit Hotel
         self.__guest:Guest = guest #Aggregation mit Guest
+        self.__room:Room = room
         self.__is_cancelled = is_cancelled
         self.__invoice: Invoice = None #Komposition mit Invoice
 
@@ -108,6 +119,11 @@ class Booking:
     @property
     def hotel(self):
         return self.__hotel
+    
+    #Getter für Zugriff auf Room
+    @property
+    def room(self):
+        return self.__room
 
     #Getter and Setter für Zugriff auf Booking relevante Attribute
     @property

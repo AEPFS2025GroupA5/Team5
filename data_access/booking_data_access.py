@@ -2,6 +2,7 @@ from datetime import date
 from data_access.base_data_access import BaseDataAccess
 from data_access.guest_data_access import GuestDataAccess
 import model
+from model.room import Room
 
 
 class BookingDataAccess(BaseDataAccess):
@@ -42,10 +43,12 @@ class BookingDataAccess(BaseDataAccess):
 
     def create_new_booking(
         self,
+        guest_id: int,
+        room_id:Room,
         check_in_date: date,
         check_out_date: date,
         total_amount: float,
-        guest_id: int
+        is_cancelled=False
     ) -> model.Booking:
         """
         Insert a new booking and return the created Booking object.
@@ -61,19 +64,22 @@ class BookingDataAccess(BaseDataAccess):
             raise TypeError("guest_id must be an integer")
 
         sql = (
-            "INSERT INTO booking (check_in_date, check_out_date, total_amount, guest_id) "
-            "VALUES (?, ?, ?, ?)"
+            "INSERT INTO booking (guest_id, room_id, check_in_date, check_out_date, total_amount, is_cancelled)"
+            "VALUES (?, ?, ?, ?, ?, ?)"
         )
-        params = (check_in_date, check_out_date, float(total_amount), guest_id)
+        params = (guest_id, room_id, check_in_date, check_out_date, float(total_amount), )
         booking_id, _ = self.execute(sql, params)
 
         guest = GuestDataAccess(self._db_connection_str if hasattr(self, '_BaseDataAccess__db_connection_str') else None).read_guest_by_id(guest_id)
+        Room.add_booking()
         return model.Booking(
             booking_id=booking_id,
+            guest_id = guest_id,
+            room_id = room_id,
             check_in_date=check_in_date,
             check_out_date=check_out_date,
-            total_amount=float(total_amount),
-            guest=guest
+            total_amount=total_amount,
+            is_cancelled= is_cancelled
         )
 
     def update_booking(self, booking: model.Booking) -> None:

@@ -12,7 +12,7 @@ class Room:
         room_number: str,
         room_type: RoomType,      
         price_per_night: float,
-        bookings: list[Booking] = None
+        bookings: list[Booking.booking_id] = None
     ):
         # Prüfungen
         if not isinstance(room_id, int):
@@ -39,7 +39,7 @@ class Room:
         self.__price_per_night = price_per_night
         self._room_number = room_number
         self.__hotel_id = hotel_id
-        self.bookings:list [Booking] = bookings
+        self.bookings:list [Booking.booking_id] = bookings
        
     def __repr__(self):
         return (
@@ -53,11 +53,11 @@ class Room:
             f")"
         )
     
-    def add_booking(self, booking:Booking) -> None:
-        if not booking:
+    def add_booking(self, booking_id) -> None:
+        if not booking_id:
             raise ValueError("You must enter a valid booking")
         else:
-            self.bookings.append(booking)
+            self.bookings.append(booking_id)
 
     #Getters
     @property
