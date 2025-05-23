@@ -25,8 +25,8 @@ class BookingDataAccess(BaseDataAccess):
             "FROM booking"
         )
         rows = self.fetchall(sql)
-        return [self._row_to_booking(row) for row in rows]
-
+        return [model.Address(*row) for row in rows]
+    
     def read_booking_by_id(self, booking_id: int) -> model.Booking | None:
         """
         Retrieve a single booking by its ID; returns None if not found.
@@ -44,7 +44,7 @@ class BookingDataAccess(BaseDataAccess):
     def create_new_booking(
         self,
         guest_id: int,
-        room_id:Room,
+        room:Room,
         check_in_date: date,
         check_out_date: date,
         total_amount: float,
@@ -55,32 +55,35 @@ class BookingDataAccess(BaseDataAccess):
         """
         # Validate inputs
         if not isinstance(check_in_date, date) or not isinstance(check_out_date, date):
-            raise TypeError("check_in_date and check_out_date must be date objects")
+            raise ValueError("check_in_date and check_out_date must be date objects")
         if check_out_date <= check_in_date:
             raise ValueError("check_out_date must be after check_in_date")
         if not isinstance(total_amount, (int, float)) or total_amount < 0:
             raise ValueError("total_amount must be a non-negative number")
         if not isinstance(guest_id, int):
-            raise TypeError("guest_id must be an integer")
+            raise ValueError("guest_id must be an integer")
+        if not isinstance(room, Room):
+            raise ValueError("Room has to be an object of Rooms")
 
         sql = (
             "INSERT INTO booking (guest_id, room_id, check_in_date, check_out_date, total_amount, is_cancelled)"
-            "VALUES (?, ?, ?, ?, ?, ?)"
+            "VALUES (?, ?, ?, ?, ?, ?, ?)"
         )
-        params = (guest_id, room_id, check_in_date, check_out_date, float(total_amount), )
+        params = (guest_id, room, check_in_date, check_out_date, float(total_amount),)
         booking_id, _ = self.execute(sql, params)
 
         guest = GuestDataAccess(self._db_connection_str if hasattr(self, '_BaseDataAccess__db_connection_str') else None).read_guest_by_id(guest_id)
-        Room.add_booking()
-        return model.Booking(
+        booking= model.Booking(
             booking_id=booking_id,
             guest_id = guest_id,
-            room_id = room_id,
+            room_id = room,
             check_in_date=check_in_date,
             check_out_date=check_out_date,
             total_amount=total_amount,
             is_cancelled= is_cancelled
         )
+        room.add_booking(booking) # eher BL als DAL 
+        return booking
 
     def update_booking(self, booking: model.Booking) -> None:
         """
