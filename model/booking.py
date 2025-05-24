@@ -1,14 +1,12 @@
-from .invoice import Invoice
-from .guest import Guest
+from model.invoice import Invoice
+from model.guest import Guest
 from datetime import date
 #from hotel import Hotel
-#from room import Room
+from model.room import Room
 
 
 
 class Booking:
-    all_bookings: list["Booking"] = [] #Klassenvariable für die gesamte Booking Klasse und nicht für jede Instanz
-
     def __repr__(self):
         return (
             f"Booking(\n"
@@ -16,7 +14,7 @@ class Booking:
             f"  Check In Date: {self.check_in_date}\n"
             f"  Check Out Date: {self.check_out_date}\n"
             f"  Total Amount of the Booking: {self.__total_amount}\n"
-            f"  Guest ID: {self.__guest}\n"
+            f"  Guest ID: {self.__guest_id}\n"
             f"  Is cancelled: {self.__is_cancelled}\n"
             f")"
         )
@@ -24,13 +22,14 @@ class Booking:
     def __init__(
         self, 
         booking_id: int, 
+        room_id:Room,
         check_in_date: date, 
         check_out_date: date, 
         total_amount: float, 
         #hotel:Hotel, 
-        guest:Guest,
+        guest_id:Guest,
         is_cancelled: bool = False,  
-        invoice:Invoice =None
+        #invoice:Invoice =None
     ):
         
         #Typprüfung
@@ -54,55 +53,53 @@ class Booking:
         if not isinstance(total_amount, float):
             raise ValueError("total amount has to be a float")
         
-        # if not isinstance(hotel, Hotel):
-        #     raise ValueError("hotel has to be a Hotel-object!")
+        if not isinstance(guest_id, int):
+            raise ValueError("guest id has to be an integer")
         
-        if not isinstance(guest, Guest):
-            raise ValueError("guest has to be a Guest-object!")
+        if not isinstance(room_id, int):
+            raise ValueError("room id has to be an integer")
         
-        if is_cancelled:
-            raise ValueError("is cancelled has to be false")        
+        # if is_cancelled:
+        #     raise ValueError("is cancelled has to be false")        
         if not isinstance(is_cancelled, bool):
             raise ValueError("is cancelled has to be a boolean")
 
         self.__booking_id = booking_id
+        self.__room_id = room_id
         self.__check_in_date = check_in_date
         self.__check_out_date = check_out_date
         self.__total_amount = total_amount
-        # self.__hotel:Hotel = hotel #Aggregation mit Hotel
-        self.__guest:Guest = guest #Aggregation mit Guest
+        #self.__hotel:Hotel =  #Aggregation mit Hotel
+        self.__guest_id:Guest = guest_id #Aggregation mit Guest
         self.__is_cancelled = is_cancelled
         self.__invoice: Invoice = None #Komposition mit Invoice
-        Booking.all_bookings.append(self) # Erstellung der Booking er soll dann in der Klassenvariable appenden
         
-        self.__guest.bookings.append(self) #Booking wird nach der Erstellung beim Guest in der leeren Liste eingefügt
-
     #Funktion, wo man den Total Amount berechnet mit Nebenkosten (mit Room verbinden und base price nutzen)
 
 
 
-    #Funktion, womit man die Rechnung nach Check-Out Datum erzeugt -> Funktioniert nicht wie ich es eigentlich will. Die Rechnung wird dann nicht noch beim Kunden beigefügt in der leeren Liste :(
-    def create_invoice(self):
-        if not isinstance(self.__total_amount, float):
-            raise ValueError("Total amount must be a float.")
+    # #Funktion, womit man die Rechnung nach Check-Out Datum erzeugt -> Funktioniert nicht wie ich es eigentlich will. Die Rechnung wird dann nicht noch beim Kunden beigefügt in der leeren Liste :(
+    # def create_invoice(self):
+    #     if not isinstance(self.__total_amount, float):
+    #         raise ValueError("Total amount must be a float.")
         
-        if not self.__total_amount >0:
-            raise ValueError("Total amount has to be over CHF 0")
+    #     if not self.__total_amount >0:
+    #         raise ValueError("Total amount has to be over CHF 0")
         
-        if self.__is_cancelled:
-            raise ValueError("Booking is cancelled. Cannot create invoice.")
+    #     if self.__is_cancelled:
+    #         raise ValueError("Booking is cancelled. Cannot create invoice.")
 
-        # if self.__check_out_date > date.today():
-        #     raise ValueError("Client is still in the hotel. Try invoicing after checkout.")
+    #     # if self.__check_out_date > date.today():
+    #     #     raise ValueError("Client is still in the hotel. Try invoicing after checkout.")
 
-        #Invoice erzeugen lassen
-        self.__invoice = Invoice(self.__booking_id, self.__check_out_date, self.__total_amount, False, self.__guest)
-        print(f"Invoice with the Id {self.__invoice.invoice_id} has been created.\n")
+    #     #Invoice erzeugen lassen
+    #     self.__invoice = Invoice(self.__booking_id, self.__check_out_date, self.__total_amount, False, self.__guest_id)
+    #     print(f"Invoice with the Id {self.__invoice.invoice_id} has been created.\n")
     
-        #Rechnung wird mit dem Kunden verknüpft (Aggregation)
-        if self.__guest:
-            self.__guest.add_invoice(self.__invoice)
-            print(self.__invoice.get_details())
+    #     #Rechnung wird mit dem Kunden verknüpft (Aggregation)
+    #     if self.__guest:
+    #         self.__guest.add_invoice(self.__invoice)
+    #         print(self.__invoice.get_details())
 
     #Funktion mit get_Details (Wer ist der Guest, usw.)    
     # def get_details(self):
@@ -120,13 +117,18 @@ class Booking:
     
     # Getter für Zugriff auf den Gast
     @property
-    def guest(self):
-        return self.__guest
+    def guest_id(self):
+        return self.__guest_id
     
     #Getter für Zugriff auf Hotel
     # @property
     # def hotel(self):
     #     return self.__hotel
+
+    #Getter für Zugriff auf Room
+    @property
+    def room_id(self):
+        return self.__room_id
 
     #Getter and Setter für Zugriff auf Booking relevante Attribute
     @property
