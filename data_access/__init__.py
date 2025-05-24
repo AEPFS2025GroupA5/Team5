@@ -9,7 +9,7 @@ from .invoice_data_access import InvoiceDataAccess
 from .room_data_access import RoomDataAccess
 from .hotel_data_access import HotelDataAccess
 from .address_data_access import AddressDataAccess
-
+from .booking_data_access import BookingDataAccess
 
 
 # Adapter: Date → String

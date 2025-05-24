@@ -8,11 +8,11 @@ if TYPE_CHECKING:
 class Guest:
     def __repr__(self):
         return (
-        f"Guest \n"
+        f" \n"
         f"  ID: {self.guest_id}\n"
         f"  Guest's fullname: {self.first_name} {self.last_name}\n"
         f"  Guest's E-Mail: {self.email}\n"
-        f"  Guest's Address ID: {self.address_id}\n"
+        f"  Guest's Address ID: {self.address}\n"
         f")"
     )
 
@@ -22,7 +22,7 @@ class Guest:
             first_name:str, 
             last_name:str, 
             email:str , 
-            address_id:int
+            address:Address
         ):
 
         #Typprüfung
@@ -46,17 +46,17 @@ class Guest:
         if not isinstance(email, str):
             raise ValueError("E-Mail has to be a string")     
         
-        if address_id is None:
+        if address is None:
             raise ValueError("Address Id is required")
-        if not isinstance(address_id, int):
-            raise ValueError("Adress Id has to be an integer")
+        if not isinstance(address, Address):
+            raise ValueError("Adress has to be an object")
 
         self.__guest_id = guest_id
         self._first_name = first_name
         self._last_name = last_name
         self._email = email
         self.__invoice: list[Invoice] = [] #Aggregation Invoice
-        self.__address_id = address_id    #Aggregation mit Address
+        self.__address:Address = address    #Aggregation mit Address
         self.__bookings: list[Booking] = [] #Aggregation Booking leere Liste, wo man alle Buchungen vom Kunden sehen kann
 
     #Getter Funktion vom Invoices
@@ -66,8 +66,8 @@ class Guest:
     
     #Getter Funktion vom Address
     @property
-    def address_id(self):
-        return self.__address_id
+    def address(self):
+        return self.__address
 
     #Get vom Booking
     @property

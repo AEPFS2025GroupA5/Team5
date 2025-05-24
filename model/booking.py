@@ -1,7 +1,7 @@
 from model.invoice import Invoice
 from model.guest import Guest
 from datetime import date
-#from hotel import Hotel
+from model.hotel import Hotel
 from model.room import Room
 
 
@@ -11,23 +11,24 @@ class Booking:
         return (
             f"Booking(\n"
             f"  ID: {self.__booking_id}\n"
+            f"  Room: {self.room}\n"
             f"  Check In Date: {self.check_in_date}\n"
             f"  Check Out Date: {self.check_out_date}\n"
             f"  Total Amount of the Booking: {self.__total_amount}\n"
-            f"  Guest ID: {self.__guest_id}\n"
+            f"  Guest: {self.__guest}\n"
             f"  Is cancelled: {self.__is_cancelled}\n"
             f")"
         )
-
+    
     def __init__(
         self, 
         booking_id: int, 
-        room_id:Room,
+        room:Room,
         check_in_date: date, 
         check_out_date: date, 
         total_amount: float, 
         #hotel:Hotel, 
-        guest_id:Guest,
+        guest:Guest,
         is_cancelled: bool = False,  
         #invoice:Invoice =None
     ):
@@ -53,10 +54,10 @@ class Booking:
         if not isinstance(total_amount, float):
             raise ValueError("total amount has to be a float")
         
-        if not isinstance(guest_id, int):
-            raise ValueError("guest id has to be an integer")
+        if not isinstance(guest, Guest):
+            raise ValueError("guest has to be an integer")
         
-        if not isinstance(room_id, int):
+        if not isinstance(room, Room):
             raise ValueError("room id has to be an integer")
         
         # if is_cancelled:
@@ -65,18 +66,44 @@ class Booking:
             raise ValueError("is cancelled has to be a boolean")
 
         self.__booking_id = booking_id
-        self.__room_id = room_id
+        self.__room = room
         self.__check_in_date = check_in_date
         self.__check_out_date = check_out_date
         self.__total_amount = total_amount
-        #self.__hotel:Hotel =  #Aggregation mit Hotel
-        self.__guest_id:Guest = guest_id #Aggregation mit Guest
+        #self.__hotel:Hotel = None #Aggregation mit Hotel
+        self.__guest:Guest = guest #Aggregation mit Guest
         self.__is_cancelled = is_cancelled
         self.__invoice: Invoice = None #Komposition mit Invoice
         
+    # def print_booking_summary(self, bookings):
+    #     guest = self.guest
+    #     room = self.room
+        
+    #     print("📘 Buchungsdetails:\n")
+    #     print(f"🔖 Buchungsnummer   : {self.booking_id}")
+    #     print(f"🛏️  Zimmernummer    : {room.room_number}")
+    #     print(f"🏷️  Zimmertyp        : Typ {room.room_type}")
+    #     print(f"💰 Preis/Nacht       : {room.price_per_night:.2f} CHF")
+        
+    #     #Hotel.show_user_friendly()
+        
+    #     print(f"📅 Check-In          : {self.check_in_date}")
+    #     print(f"📅 Check-Out         : {self.check_out_date}")
+    #     print(f"💵 Gesamtbetrag      : {self.total_amount:.2f} CHF")
+        
+    #     # print(f"🙍 Gast              : {guest.first_name} {guest.last_name}")
+    #     # if hasattr(guest, 'email'):
+    #     #     print(f"📧 E-Mail            : {guest.email}")
+    #     # if hasattr(guest, 'address'):
+    #     #     guest_address = guest.address
+    #     #     print(f"🏠 Adresse Gast      : {guest_address.street}, {guest_address.zip_code} {guest_address.city}")
+        
+    #     print(f"📌 Status            : {'❌ Storniert' if self.is_cancelled else '✅ Aktiv'}")
+    #     print("-" * 80)
+    
+
+
     #Funktion, wo man den Total Amount berechnet mit Nebenkosten (mit Room verbinden und base price nutzen)
-
-
 
     # #Funktion, womit man die Rechnung nach Check-Out Datum erzeugt -> Funktioniert nicht wie ich es eigentlich will. Die Rechnung wird dann nicht noch beim Kunden beigefügt in der leeren Liste :(
     # def create_invoice(self):
@@ -117,8 +144,8 @@ class Booking:
     
     # Getter für Zugriff auf den Gast
     @property
-    def guest_id(self):
-        return self.__guest_id
+    def guest(self):
+        return self.__guest
     
     #Getter für Zugriff auf Hotel
     # @property
@@ -127,8 +154,8 @@ class Booking:
 
     #Getter für Zugriff auf Room
     @property
-    def room_id(self):
-        return self.__room_id
+    def room(self):
+        return self.__room
 
     #Getter and Setter für Zugriff auf Booking relevante Attribute
     @property
