@@ -24,7 +24,7 @@ class Hotel:
         if not isinstance(stars, int):
             raise TypeError("stars must be an integer")
         if not isinstance(address, model.Address):
-            raise TypeError("address_id must be an integer")
+            raise TypeError("address_id must a Adress onject")
         
         self.__hotel_id = hotel_id
         self._name = name

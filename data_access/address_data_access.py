@@ -16,10 +16,11 @@ class AddressDataAccess(BaseDataAccess):
         if not address_id:
             raise ValueError("address_id is required")
 
-        sql = "SELECT address_id, street, city, zipcode FROM address WHERE address_id = ?"
-        row = self.fetchone(sql, (address_id,))
-        if row:
-            return model.Address(*row)
+        sql = "SELECT address_id, street, city, zip_code FROM address WHERE address_id = ?"
+        result = self.fetchone(sql, (address_id,))
+        if result:
+           address_id, street, city, zipcode = result
+           return model.Address(address_id, street, city, zipcode)
         return None
     
     def get_address_id_by_city(self, city: str) -> int:

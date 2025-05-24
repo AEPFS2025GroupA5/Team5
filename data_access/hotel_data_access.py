@@ -1,11 +1,13 @@
 from data_access.base_data_access import BaseDataAccess
+from data_access.address_data_access import AddressDataAccess
 import model
 
 class HotelDataAccess(BaseDataAccess):
         def __init__(self, 
-                 db_path: str = None
+                 db_path: str = None               
         ):
                 super().__init__(db_path)
+                self._address_data_access = AddressDataAccess(db_path)
 
         
         def read_all_hotels(self) -> list[model.Hotel]:
@@ -44,32 +46,64 @@ class HotelDataAccess(BaseDataAccess):
                         raise ValueError("Stars have to be positiv")
                 if not address_id:
                         raise ValueError("Address ID has to be defined")
+                
+                address = self._address_data_access.read_address_by_id(address_id)
+                if not address:
+                        raise ValueError(f"No Address found with ID {address_id}")
+
                 sql = """
                 INSERT INTO hotel (name, stars, address_id) VALUES (?, ?, ?)
                 """     
                 params = (name, stars, address_id)
                 last_row_id, _ = self.execute(sql, params)
-                return model.Hotel(last_row_id, name, stars, address_id)
+
+                return model.Hotel(last_row_id, name, stars, address)
         
-        def update_hotel(self,
+        def update_hotel_by_object(self,
                         hotel: model.Hotel
                 ) -> None:
                 if hotel is None:
                         raise ValueError("Hotel has to be defined")
+                
                 sql = """
                 UPDATE hotel SET name = ?, stars = ?, address_id = ? WHERE hotel_id = ?
                 """     
                 params = (
                 hotel.name,
                 hotel.stars,
-                hotel.address_id,
+                hotel.address.addressid,
                 hotel.hotel_id
                 )
                 self.execute(sql, params)
 
+        def update_hotel_by_data(self,
+                hotel_id: int,
+                name: str,
+                stars: int,
+                address_id: int
+                ) -> None:
+                if not hotel_id:
+                        raise ValueError("Hotel ID must be provided")
+                if not name:
+                        raise ValueError("Hotel name must be provided")
+                if not isinstance(stars, int) or stars <= 0:
+                        raise ValueError("Stars must be a positive integer")
+                if not address_id:
+                        raise ValueError("Address ID must be provided")
+
+                address = self._address_data_access.read_address_by_id(address_id)
+                if not address:
+                        raise ValueError(f"Address with ID {address_id} not found")
+
+                hotel = model.Hotel(hotel_id, name, stars, address)
+                self.update_hotel_by_object(hotel)
+
         def delete_hotel_by_id(self,
                             hotel_id:int
                 ) -> None:
+                if not hotel_id:
+                        raise ValueError("Hotel ID is required")
+               
                 sql = "DELETE FROM hotel WHERE hotel_id = ?"
                 self.execute(sql, (hotel_id,))
 
