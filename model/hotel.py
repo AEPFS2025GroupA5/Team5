@@ -40,7 +40,7 @@ class Hotel:
             f"  Name: {self._name}\n"
             f"  Stars: {self._stars}\n"
             f"  Address ID: {self.__address}\n"
-            f"  Rooms: {len(self.__rooms)}\n"
+            f"  Rooms: {self.__rooms}\n"
             f")"
         )
     
@@ -76,6 +76,8 @@ class Hotel:
     def add_room(self,
                 room: model.Room
         ): 
+        if room.__hotel is not self:
+            raise ValueError("Room does not belong to this hotel")
         if room not in self.__rooms:
             self.__rooms.append(room)
 

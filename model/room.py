@@ -62,7 +62,7 @@ class Room:
         return self.__price_per_night
     
     @property
-    def hotel_id(self) -> Hotel:
+    def hotel_id(self) -> int:
         return self.__hotel_id
     
     @property

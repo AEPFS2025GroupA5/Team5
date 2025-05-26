@@ -13,7 +13,9 @@ class RoomDataAccess(BaseDataAccess):
 
     def read_all_rooms(self) -> list[model.Room]:
         sql = """
-        SELECT room_id, hotel_id, room_number, type_id, price_per_night FROM room
+        SELECT r.room_id, h.hotel_id, r.room_number, r.type_id, r.price_per_night 
+        FROM room as r
+        JOIN hotel as h ON r.hotel_id = h.hotel_id
         """
         rows = self.fetchall(sql)
         rooms = []
