@@ -27,7 +27,6 @@ class Booking:
         check_in_date: date, 
         check_out_date: date, 
         total_amount: float, 
-        #hotel:Hotel, 
         guest:Guest,
         is_cancelled: bool = False,  
         #invoice:Invoice =None
@@ -70,7 +69,6 @@ class Booking:
         self.__check_in_date = check_in_date
         self.__check_out_date = check_out_date
         self.__total_amount = total_amount
-        #self.__hotel:Hotel = None #Aggregation mit Hotel
         self.__guest:Guest = guest #Aggregation mit Guest
         self.__is_cancelled = is_cancelled
         self.__invoice: Invoice = None #Komposition mit Invoice
