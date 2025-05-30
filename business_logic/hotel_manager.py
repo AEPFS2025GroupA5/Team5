@@ -44,7 +44,13 @@ class HotelManager:
          all_hotels = self.__hotel_da.read_all_hotels()
          return [hotel.show_user_friendly() for hotel in all_hotels]
 
-                
+    def read_hotel_by_name(self, name:str) -> model.Hotel:
+        if not name:
+             raise ValueError("Name must be provided")
+        if not isinstance(name, str):
+             raise ValueError("Name has to be a string") 
+        else:     
+            return self.__hotel_da.read_hotel_by_name(name)        
         
     def read_hotel_by_id(self,
                             hotel_id:int

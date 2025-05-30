@@ -35,6 +35,25 @@ class HotelDataAccess(BaseDataAccess):
                         return model.Hotel(*row)
                 return None
        
+        def read_hotel_by_name(self, name:str) -> model.Hotel:
+                sql = """
+                SELECT h.hotel_id, h.name, h.stars, a.address_id, a.street, a.city, a.zip_code
+                FROM hotel h
+                JOIN address a ON h.address_id = a.address_id
+                WHERE h.name LIKE ?
+                """
+                like= f"%{name}%"
+                rows = self.fetchall(sql, (like,))
+                hotels= []
+                
+                for (hotel_id, name, stars, address_id, street, city, zip_code) in rows:
+                        address = model.Address(address_id, street, city, zip_code)
+                        hotel = model.Hotel(hotel_id, name, stars, address)
+
+                        hotels.append(hotel)               
+                                
+                return hotels
+
         def create_new_hotel(self,
                             name: str,
                             stars: int,

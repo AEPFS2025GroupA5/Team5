@@ -26,3 +26,11 @@ class BookingManager:
             raise ValueError("Room is not available in the selected period")
         else:
             return self.__guest_da.create_new_booking(room_id, check_in_date, check_out_date, guest_id)
+        
+    def read_booking_by_id(self, booking_id: int) -> model.Booking:
+        if not booking_id:
+            raise ValueError("Booking Id is required")
+        if not isinstance(booking_id, int):
+            raise ValueError("Booking ID has to be an integer")
+
+        return self.__guest_da.read_booking_by_id(booking_id)

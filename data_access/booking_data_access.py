@@ -54,6 +54,57 @@ class BookingDataAccess(BaseDataAccess):
         # for bookinge in all_bookings:
         #     booking.print_booking_summary(bookinge)
 
+    def read_booking_by_id(self, booking_id: int) -> model.Booking:
+        sql = """
+        SELECT 
+            b.booking_id, b.check_in_date, b.check_out_date, b.total_amount, b.is_cancelled,
+            g.guest_id, g.first_name, g.last_name, g.email,
+            ga.address_id, ga.street, ga.city, ga.zip_code,
+            r.room_id, r.room_number, r.type_id, r.price_per_night,
+            h.hotel_id, h.name, h.stars,
+            ha.address_id, ha.street, ha.city, ha.zip_code
+        FROM booking b
+        JOIN guest g ON b.guest_id = g.guest_id
+        JOIN address ga ON g.address_id = ga.address_id
+        JOIN room r ON b.room_id = r.room_id
+        JOIN hotel h ON r.hotel_id = h.hotel_id
+        JOIN address ha ON h.address_id = ha.address_id
+        WHERE b.booking_id = ?
+        """
+        row = self.fetchone(sql, (booking_id,))
+        if not row:
+            raise ValueError(f"No booking found with ID {booking_id}")
+
+        (
+            booking_id, check_in, check_out, total_amount, is_cancelled,
+            guest_id, first_name, last_name, email,
+            guest_addr_id, guest_street, guest_city, guest_zip,
+            room_id, room_number, room_type_id, price_per_night,
+            hotel_id, hotel_name, hotel_stars,
+            hotel_addr_id, hotel_street, hotel_city, hotel_zip
+        ) = row
+
+        # Objekte aufbauen
+        guest_address = model.Address(guest_addr_id, guest_street, guest_city, guest_zip)
+        guest = model.Guest(guest_id, first_name, last_name, email, guest_address)
+
+        hotel_address = model.Address(hotel_addr_id, hotel_street, hotel_city, hotel_zip)
+        hotel = model.Hotel(hotel_id, hotel_name, hotel_stars, hotel_address)
+
+        room = model.Room(room_id, hotel, room_number, room_type_id, price_per_night)
+
+        booking = model.Booking(
+            booking_id=booking_id,
+            room=room,
+            check_in_date=check_in,
+            check_out_date=check_out,
+            total_amount=total_amount,
+            guest=guest,
+            is_cancelled=bool(is_cancelled)
+        )
+
+        return booking
+
     def read_all_av_rooms(self, hotel_id:int, check_out_date:date, check_in_date:date) -> list[model.room]:
         sql = """
         SELECT r.room_id, r.hotel_id, r.room_number, r.type_id, r.price_per_night
