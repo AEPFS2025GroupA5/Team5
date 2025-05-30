@@ -41,7 +41,24 @@ class RoomDataAccess(BaseDataAccess):
     
           return None
 
-    
+    def read_hotel_by_roomId(self, room_id: int) -> model.Hotel:
+        sql = """
+        SELECT h.hotel_id, h.name, h.stars,
+            a.address_id, a.street, a.city, a.zip_code
+        FROM room r
+        JOIN hotel h ON r.hotel_id = h.hotel_id
+        JOIN address a ON h.address_id = a.address_id
+        WHERE r.room_id = ?
+        """
+        row = self.fetchone(sql, (room_id,))
+        if not row:
+            raise ValueError(f"No hotel found for room ID {room_id}")
+
+        hotel_id, name, stars, address_id, street, city, zip_code = row
+        address = model.Address(address_id, street, city, zip_code)
+        hotel = model.Hotel(hotel_id, name, stars, address)
+        return hotel
+
     def read_rooms_by_hotel_id(self,
                             hotel_id:int
         ) -> list[model.Room]:

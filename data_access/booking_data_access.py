@@ -4,6 +4,9 @@ from datetime import date
 import model
 from model.booking import Booking
 from model.room import Room
+from model.hotel import Hotel
+from data_access import RoomDataAccess
+from data_access import GuestDataAccess
 
 class BookingDataAccess(BaseDataAccess):
     def __init__(self, 
@@ -11,7 +14,7 @@ class BookingDataAccess(BaseDataAccess):
         ):
         super().__init__(db_path)
 
-        
+
     def read_all_bookings(self) -> list[model.Booking]:
         sql = """
         SELECT 
@@ -70,37 +73,40 @@ class BookingDataAccess(BaseDataAccess):
         
         return all_av_rooms
 
-    # def create_new_booking(self, room:model.Room, check_in_date:date, check_out_date:date, total_amount:int, guest:model.Guest) -> model.Booking:
-    #     if not guest:
-    #         raise ValueError("Guest has to be defined")
-    #     if not room:
-    #         raise ValueError("Room has to be defined")
-    #     if not isinstance(total_amount, (int, float)):
-    #         raise TypeError("total amount must be an integer or float")
-    #     if total_amount < 0:
-    #         raise ValueError("total amount has to be positiv")
-    #     if not isinstance(check_in_date, date):
-    #         raise ValueError("Check in Date has to be a date")
-    #     if not isinstance(check_out_date, date):
-    #         raise ValueError("Check out Date has to be a date")
-    #     if check_out_date <= check_in_date:
-    #         raise ValueError("Check-out date must be after check-in date")
+    def create_new_booking(self, room_id:int, check_in_date:date, check_out_date:date, guest_id:int) -> model.Booking:
+        if not guest_id:
+            raise ValueError("Guest has to be defined")
+        if not room_id:
+            raise ValueError("Room has to be defined")
+        if not isinstance(check_in_date, date):
+            raise ValueError("Check in Date has to be a date")
+        if not isinstance(check_out_date, date):
+            raise ValueError("Check out Date has to be a date")
+        if check_out_date <= check_in_date:
+            raise ValueError("Check-out date must be after check-in date")
+
+        room_mo = data_access.RoomDataAccess()
+        guest_mo = data_access.GuestDataAccess()
+
+        room_dao = room_mo.read_room_by_id(room_id)
+        hotel_dao = room_mo.read_hotel_by_roomId(room_id)
+        guest_dao = guest_mo.read_guest_by_id(guest_id)
+
+
+        available_rooms = self.read_all_av_rooms(hotel_dao.hotel_id, check_out_date, check_in_date)
+        available_room_ids = [room_id for room in available_rooms]
+        if room_id not in available_room_ids:
+            raise ValueError("Room is not available in the selected period")
+
+        sql = """
+        INSERT INTO booking (guest_id, room_id, check_in_date, check_out_date, total_amount) VALUES (?, ?, ?, ?, ?)             
+        """
         
-    #     available_rooms = self.read_all_av_rooms(room.hotel_id, check_out_date, check_in_date)
-    #     available_room_ids = [r.room_id for r in available_rooms]
-    #     if room.room_id not in available_room_ids:
-    #         raise ValueError("Room is not available in the selected period")
+        num_nights = (check_out_date - check_in_date).days
+        total_amount = float(num_nights * room_dao.price_per_night)
+        
+        params = (guest_id, room_id, check_in_date, check_out_date, total_amount)
+        last_row_id, _ = self.execute(sql, params)
 
-    #     sql = """
-    #     INSERT INTO booking (guest_id, room_id, check_in_date, check_out_date, total_amount) VALUES (?, ?, ?, ?, ?)             
-    #     """
-    #     params = (guest.guest_id, room.room_id, check_in_date, check_out_date, total_amount)
-    #     last_row_id, _ = self.execute(sql, params)
-
-    #     guest_mo = data_access.GuestDataAccess.read_guest_by_id(guest)
-    #     room_mo = data_access.RoomDataAccess.read_room_by_id(room)
-
-
-    #     return model.Booking(booking_id=last_row_id, room=room_mo, check_in_date=check_in_date, check_out_date=check_out_date, total_amount=total_amount, guest=guest_mo, is_cancelled=False)
-    
-
+        return model.Booking(booking_id=last_row_id, room=room_dao, check_in_date=check_in_date, check_out_date=check_out_date, total_amount=total_amount, guest=guest_dao, is_cancelled=False)
+        

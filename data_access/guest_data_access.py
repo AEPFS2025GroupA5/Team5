@@ -14,14 +14,21 @@ class GuestDataAccess(BaseDataAccess):
         rows = self.fetchall(sql)
         return [model.Guest(*row) for row in rows]
     
-    def read_guest_by_id(self,
-                            guest_id:int
-        ) -> model.Guest:
-          sql = "SELECT guest_id, first_name, last_name, email, address_id FROM guest WHERE guest_id = ?"
-          row = self.fetchone(sql, (guest_id,))
-          if row:
-            return model.Guest(*row)
-          return None
+    def read_guest_by_id(self, guest_id: int) -> model.Guest:
+        sql = """
+        SELECT g.guest_id, g.first_name, g.last_name, g.email,
+              a.address_id, a.street, a.city, a.zip_code
+        FROM guest g
+        JOIN address a ON g.address_id = a.address_id
+        WHERE g.guest_id = ?
+        """
+        row = self.fetchone(sql, (guest_id,))
+        # if not row:
+        #     raise ValueError(f"No guest found with ID {guest_id}")
+
+        guest_id, first_name, last_name, email, address_id, street, city, zip_code = row
+        address = model.Address(address_id, street, city, zip_code)
+        return model.Guest(guest_id, first_name, last_name, email, address)
     
     def read_guest_by_name(self, 
                               last_name:str
