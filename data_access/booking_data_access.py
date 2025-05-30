@@ -61,6 +61,7 @@ class BookingDataAccess(BaseDataAccess):
             g.guest_id, g.first_name, g.last_name, g.email,
             ga.address_id, ga.street, ga.city, ga.zip_code,
             r.room_id, r.room_number, r.type_id, r.price_per_night,
+            Hotel
             h.hotel_id, h.name, h.stars,
             ha.address_id, ha.street, ha.city, ha.zip_code
         FROM booking b

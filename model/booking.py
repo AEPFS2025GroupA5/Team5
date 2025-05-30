@@ -29,7 +29,6 @@ class Booking:
         total_amount: float, 
         guest:Guest,
         is_cancelled: bool = False,  
-        #invoice:Invoice =None
     ):
         
         #Typprüfung
@@ -58,9 +57,7 @@ class Booking:
         
         if not isinstance(room, Room):
             raise ValueError("room id has to be an integer")
-        
-        # if is_cancelled:
-        #     raise ValueError("is cancelled has to be false")        
+            
         if not isinstance(is_cancelled, bool):
             raise ValueError("is cancelled has to be a boolean")
 
@@ -125,15 +122,6 @@ class Booking:
     #     if self.__guest:
     #         self.__guest.add_invoice(self.__invoice)
     #         print(self.__invoice.get_details())
-
-    #Funktion mit get_Details (Wer ist der Guest, usw.)    
-    # def get_details(self):
-    #         return  f"Bookingnumber: {self.booking_id}\n" \
-    #                 f"{self.guest}\n" \
-    #                 f"{self.hotel}\n" \
-    #                 f"Checked in from {self.check_in_date} to {self.check_out_date}\n" \
-    #                 f"Total Amount of the whole Booking: CHF {self.total_amount:.2f}\n" \
-    #                 f"Active Booking: {self.is_cancelled}\n" \
 
     # Getter für Zugriff auf die Rechnung
     @property

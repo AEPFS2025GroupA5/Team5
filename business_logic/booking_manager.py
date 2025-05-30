@@ -1,8 +1,10 @@
 import os
 
 import model
+from model.invoice import Invoice
 import data_access
 from datetime import date
+from business_logic.invoice_manager import InvoiceManager
 
 class BookingManager:
     def __init__(self):
@@ -34,3 +36,26 @@ class BookingManager:
             raise ValueError("Booking ID has to be an integer")
 
         return self.__guest_da.read_booking_by_id(booking_id)
+    
+
+    def billing(self):
+        bookings = self.read_all_bookings()
+        today = date.today()
+        billed_bookings = []
+
+        for b in bookings:
+            if b.is_cancelled:
+                continue
+            if b.check_out_date > today:
+                continue
+            if b.invoice is not None:
+                continue  
+
+            inv= InvoiceManager()
+            invoice= inv.create_new_invoice(booking_id=b.booking_id, issue_date=today, total_amount=b.total_amount)
+
+
+            print(f"Rechnung erstellt für Buchung {b.booking_id} (CHF {b.total_amount:.2f})")
+            billed_bookings.append(b)
+
+        return billed_bookings
