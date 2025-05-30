@@ -8,6 +8,7 @@ class RoomManager:
     def __init__(self):
         self.__room_da = data_access.room_data_access.RoomDataAccess()
         self.__room_facility_dao = data_access.room_facility_data_access.RoomFacilityDataAccess()
+        self.__hotel_da = data_access.hotel_data_access.HotelDataAccess()
 
     def get_all_rooms(self) -> list[model.Room]:
         return self.__room_da.read_all_rooms()
@@ -38,6 +39,23 @@ class RoomManager:
                 ### Rechnung mit Nächte * Preis pro nacht
                 
             }
+            room_info.append(info)
+        return room_info
+    
+    def get_rooms_for_admin(self) -> list[dict]:
+        rooms = self.get_all_rooms()
+        room_info = []
+
+        for room in rooms:
+            hotel = self.__hotel_da.read_hotel_by_id(room.hotel_id)
+            hotel_name = hotel.name if hotel else "Unknown Hotel"
+            facilities = self.get_facilities_for_room(room.room_id)
+            info = {
+                "Hotel": hotel_name,
+                "Room Number": room.room_number,
+                "Room Type": room.room_type._description,
+                "Facilities": [facility.name for facility in facilities],
+                }
             room_info.append(info)
         return room_info
    

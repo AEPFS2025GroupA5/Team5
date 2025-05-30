@@ -32,7 +32,10 @@ class HotelDataAccess(BaseDataAccess):
                 sql = "SELECT hotel_id, name, stars, address_id FROM hotel WHERE hotel_id = ?"
                 row = self.fetchone(sql, (hotel_id,))
                 if row:
-                        return model.Hotel(*row)
+                        hotel_id, name, stars, address_id = row
+                        # Adresse laden
+                        address = self._address_data_access.read_address_by_id(address_id)
+                        return model.Hotel(hotel_id, name, stars, address)
                 return None
        
         def read_hotel_by_name(self, name:str) -> model.Hotel:
