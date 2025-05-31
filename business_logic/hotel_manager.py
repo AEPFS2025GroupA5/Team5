@@ -10,6 +10,7 @@ class HotelManager:
         self.__room_da = data_access.RoomDataAccess()
         self.__booking_da = data_access.BookingDataAccess()
         self.__room_manager = business_logic.RoomManager()
+        self.__booking_manager = business_logic.BookingManager()
 
         self._all_hotels = self.__hotel_da.read_all_hotels()
 
@@ -122,32 +123,36 @@ class HotelManager:
                                    check_in_date: date =None,
                                    check_out_date: date = None
         ) -> list[model.Hotel]:
-    
-        if city is not None:
-            all_hotels = [hotel for hotel in all_hotels if hotel.address.city.lower() == city.lower()]
+        hotels = self._all_hotels
 
-        if min_stars is not None:
-            all_hotels = [hotel for hotel in all_hotels if hotel.stars >= min_stars]
+        # Stadt filtern
+        if city:
+            hotels = [hotel for hotel in hotels if city.lower() in hotel.address.city.lower()]
 
-        if max_guests is not None:
+        #Sterne filtern
+        if min_stars:
+            hotels = [hotel for hotel in hotels if hotel.stars >= min_stars]
+
+        # Max Gäste filtern
+        if max_guests:
             hotels_with_rooms = []
-            for hotel in all_hotels:
-                if self.__room_manager.get_room_details_for_hotel(hotel):
-                    if any(room.max_guests >= max_guests for room in hotel.rooms):
-                        hotels_with_rooms.append(hotel)
-            all_hotels = hotels_with_rooms
+            for hotel in hotels:
+                rooms = self.__room_manager.get_room_details_for_hotel(hotel.hotel_id)
+                av_rooms = [room for room in rooms if room.max_guests >= max_guests]
+                if av_rooms:
+                    hotel.__rooms = av_rooms
+                    hotels_with_rooms.append(hotel)
+            hotels = hotels_with_rooms
 
-        if check_in_date is not None and check_out_date is not None:
-                av_hotels = []
-                for hotel in all_hotels:
-                    if self.__booking_da.read_all_av_rooms(hotel.hotel_id, check_out_date, check_in_date):
-                        av_hotels.append(hotel)
-                all_hotels = av_hotels
-
-        if not all_hotels:
-            return f"No hotels found matching your criteria"
+        # Check-in und Check-out Daten filtern
+        if check_in_date and check_out_date:
+            av = []
+            for hotel in hotels:
+                if self.__booking_manager.read_all_av_rooms(hotel.hotel_id, check_in_date, check_out_date):
+                    av.append(hotel)
+            hotels = av
         
-        return all_hotels 
+        return hotels 
     
 ## Output Funktionen
 

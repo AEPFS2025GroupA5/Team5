@@ -3,7 +3,6 @@ from typing import TYPE_CHECKING
 
 import model
 
-
 class Hotel:
     def __init__(self,
                 hotel_id:int,
@@ -40,7 +39,6 @@ class Hotel:
             f"  Name: {self._name}\n"
             f"  Stars: {self._stars}\n"
             f"  Address ID: {self.__address}\n"
-            f"  Rooms: {self.__rooms}\n"
             f")"
         )
     
