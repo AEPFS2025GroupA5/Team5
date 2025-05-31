@@ -30,7 +30,14 @@ class InvoiceDataAccess(BaseDataAccess):
         sql = "SELECT invoice_id, booking_id, issue_date, total_amount FROM invoice WHERE invoice_id = ?"
         row = self.fetchone(sql, (invoice_id,))
         if row:
-            return model.Invoice(*row)
+            inv= model.Invoice(*row)
+            total_amount= float(inv.total_amount)
+            sub_total= float(round(total_amount/108.1*100,2))
+            mwst_betrag= total_amount - sub_total
+            print(f"   Subtotal of Invoice: {sub_total:.2f}")
+            print(f"   🧾 MwSt (8.1%): CHF {mwst_betrag:.2f} ")
+            print(f"   💵 Gesamtbetrag: CHF {total_amount:.2f} ")
+
         return None
     
     def create_new_invoice(self,
