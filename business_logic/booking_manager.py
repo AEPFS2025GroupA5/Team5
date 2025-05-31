@@ -34,9 +34,23 @@ class BookingManager:
             raise ValueError("Booking Id is required")
         if not isinstance(booking_id, int):
             raise ValueError("Booking ID has to be an integer")
-
-        return self.__guest_da.read_booking_by_id(booking_id)
+        else:
+            return self.__guest_da.read_booking_by_id(booking_id)
     
+    def read_av_rooms_city(self, city: str, check_out_date: date, check_in_date: date) -> list[model.Room]:
+        if not city:
+            raise ValueError("City is required")
+        if not isinstance(city, str):
+            raise ValueError("The city das to be a string")
+        if not isinstance(check_in_date, date):
+            raise ValueError("Check in Date has to be a date")
+        if not isinstance(check_out_date, date):
+            raise ValueError("Check out Date has to be a date")
+        if check_out_date <= check_in_date:
+            raise ValueError("Check-out date must be after check-in date")
+        else:
+            return self.__guest_da.read_av_rooms_city(city, check_out_date, check_in_date)
+
 
     def billing(self):
         bookings = self.read_all_bookings()

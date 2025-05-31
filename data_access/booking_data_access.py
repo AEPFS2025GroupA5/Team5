@@ -125,6 +125,36 @@ class BookingDataAccess(BaseDataAccess):
         
         return all_av_rooms
 
+    def read_av_rooms_city(self, city: str, check_out_date: date, check_in_date: date) -> list[model.Room]:
+        sql = """
+        SELECT r.room_id, r.room_number, r.type_id, r.price_per_night,
+            h.hotel_id, h.name, h.stars,
+            a.address_id, a.street, a.city, a.zip_code
+        FROM Room r
+        JOIN Hotel h ON h.hotel_id = r.hotel_id
+        JOIN Address a ON a.address_id = h.address_id
+        LEFT JOIN Booking b ON r.room_id = b.room_id
+            AND b.check_in_date <= ? AND b.check_out_date >= ?
+        WHERE a.city LIKE ?
+        AND b.room_id IS NULL
+        """
+        like = f"%{city}%"
+        rows = self.fetchall(sql, (check_out_date, check_in_date, like))
+        if not rows:
+            raise ValueError(f"There are no rooms available from {check_in_date} to {check_out_date}. Please enter either another city or another check in/check out date")
+        all_av_rooms = []
+
+        for (room_id, room_number, type_id, price_per_night,
+            hotel_id, name, stars,
+            address_id, street, city, zip_code) in rows:
+
+            address = model.Address(address_id=address_id, street=street, city=city, zip_code=zip_code)
+            hotel = model.Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address)
+            av_room = model.Room(room_id=room_id, hotel_id=hotel, room_number=room_number, room_type=type_id, price_per_night=price_per_night)
+            all_av_rooms.append(av_room)
+        
+        return all_av_rooms
+
     def create_new_booking(self, room_id:int, check_in_date:date, check_out_date:date, guest_id:int) -> model.Booking:
         if not guest_id:
             raise ValueError("Guest has to be defined")

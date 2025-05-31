@@ -21,9 +21,9 @@ class HotelDataAccess(BaseDataAccess):
                                 hotel_id, 
                                 name, 
                                 stars, 
-                                model.Address(address_id, street, city, zipcode)
+                                model.Address(address_id, street, city, zip_code)
                         ) 
-                        for hotel_id, name, stars, address_id, street, city, zipcode in rows
+                        for hotel_id, name, stars, address_id, street, city, zip_code in rows
                 ]
         
         def read_hotel_by_id(self,
@@ -93,7 +93,7 @@ class HotelDataAccess(BaseDataAccess):
                 params = (
                 hotel.name,
                 hotel.stars,
-                hotel.address.addressid,
+                hotel.address.address_id,
                 hotel.hotel_id
                 )
                 self.execute(sql, params)

@@ -19,8 +19,8 @@ class AddressDataAccess(BaseDataAccess):
         sql = "SELECT address_id, street, city, zip_code FROM address WHERE address_id = ?"
         result = self.fetchone(sql, (address_id,))
         if result:
-           address_id, street, city, zipcode = result
-           return model.Address(address_id, street, city, zipcode)
+           address_id, street, city, zip_code = result
+           return model.Address(address_id, street, city, zip_code)
         return None
     
     def get_address_id_by_city(self, city: str) -> int:
@@ -33,23 +33,23 @@ class AddressDataAccess(BaseDataAccess):
             return row[0]
         return None
 
-    def create_new_address(self, street: str, city: str, zipcode: str) -> model.Address:
-        if not all(isinstance(x, str) for x in [street, city, zipcode]):
+    def create_new_address(self, street: str, city: str, zip_code: str) -> model.Address:
+        if not all(isinstance(x, str) for x in [street, city, zip_code]):
             raise TypeError("street, city, and zipcode must be strings")
-        if not all([street, city, zipcode]):
+        if not all([street, city, zip_code]):
             raise ValueError("All fields must be filled")
 
         sql = "INSERT INTO address (street, city, zipcode) VALUES (?, ?, ?)"
-        params = (street, city, zipcode)
+        params = (street, city, zip_code)
         last_row_id, _ = self.execute(sql, params)
 
-        return model.Address(addressid=last_row_id, street=street, city=city, zipcode=zipcode)
+        return model.Address(address_id=last_row_id, street=street, city=city, zip_code=zip_code)
 
-    def update_address(self, address: model.Address) -> None:
+    def update_address(self, street:str, city:str, zip_code:int, address_id) -> None:
         sql = """
-        UPDATE address SET street = ?, city = ?, zipcode = ? WHERE address_id = ?
+        UPDATE address SET street = ?, city = ?, zip_code = ? WHERE address_id = ?
         """
-        params = (address.street, address.city, address.zipcode, address.addressid)
+        params = (street, city, zip_code, address_id)
         self.execute(sql, params)
 
     def delete_address_by_id(self, address_id: int) -> None:

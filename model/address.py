@@ -2,22 +2,22 @@ class Address:
     def __repr__(self):
         return (
             f"Address(\n"
-            f"  ID: {self.addressid}\n"
+            f"  ID: {self.address_id}\n"
             f"  Street: {self.street}\n"
             f"  City: {self.city}\n"
-            f"  Zipcode: {self.zipcode}\n"
+            f"  Zipcode: {self.zip_code}\n"
             f")"
         )
 
-    def __init__(self, addressid:int, street:str, city:str, zipcode:str):
-        self.__address_id = addressid
+    def __init__(self, address_id:int, street:str, city:str, zip_code:str):
+        self.__address_id = address_id
         self._street = street
         self._city = city
-        self._zipcode = zipcode
+        self._zip_code = zip_code
 
-        if addressid is None:
+        if address_id is None:
             raise ValueError("Address Id is required")
-        if not isinstance(addressid, int):
+        if not isinstance(address_id, int):
             raise ValueError("Address Id has to be an integer")
         
         if street is None:
@@ -30,13 +30,13 @@ class Address:
         if not isinstance(city, str):
             raise ValueError("City has to be a string")
         
-        if zipcode is None:
+        if zip_code is None:
             raise ValueError("Zipcode is required")
-        if not isinstance(zipcode, str):
+        if not isinstance(zip_code, str):
             raise ValueError("Zipcode has to be a string")
 
     @property
-    def addressid(self):
+    def address_id(self):
         return self.__address_id
 
     @property
@@ -68,20 +68,20 @@ class Address:
             print("You have changed the city into {new_city}")
 
     @property
-    def zipcode(self):
-        return self._zipcode
+    def zip_code(self):
+        return self._zip_code
 
-    @zipcode.setter
-    def zipcode(self, new_zipcode:str):
-        if not len(new_zipcode) >= 4:
+    @zip_code.setter
+    def zip_code(self, new_zip_code:str):
+        if not len(new_zip_code) >= 4:
             raise ValueError("A Zipcode has to be longer than 4 characters")
-        if not new_zipcode:
+        if not new_zip_code:
             raise ValueError("A new zipcode is required")
-        if not isinstance(new_zipcode, str):
+        if not isinstance(new_zip_code, str):
             raise ValueError("A new zipcode has to be a string") 
         else: 
-            self._zipcode = new_zipcode
-            print("You have changed the zipcode into {new_zipcode}")
+            self._zip_code = new_zip_code
+            print("You have changed the zipcode into {new_zip_code}")
 
     def show_user_friendly(self):
         return (
