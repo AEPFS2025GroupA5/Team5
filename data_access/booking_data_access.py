@@ -182,10 +182,24 @@ class BookingDataAccess(BaseDataAccess):
         sql = """
         INSERT INTO booking (guest_id, room_id, check_in_date, check_out_date, total_amount) VALUES (?, ?, ?, ?, ?)             
         """
-        
+        #Berechnung von MWST und Verwaltungskosten
         num_nights = (check_out_date - check_in_date).days
-        total_amount = float(num_nights * room_dao.price_per_night)
+        base_price = float(num_nights * room_dao.price_per_night)
         
+        mwst_satz= 0.081
+        verwaltungskosten_satz= 0.1
+
+        mwst_betrag= base_price*mwst_satz
+        verwaltungskosten= base_price*verwaltungskosten_satz
+
+        total_amount= round(mwst_betrag+verwaltungskosten+base_price, 2)
+
+        print(f"   Buchungskosten-Zusammenfassung:")
+        print(f"   🛏 Basispreis ({num_nights:.2f} Nächte à {room_dao.price_per_night:.2f} CHF): {base_price:.2f} CHF")
+        print(f"   🧾 MwSt (8.1%): {mwst_betrag:.2f} CHF")
+        print(f"   🛠 Verwaltungskosten: {verwaltungskosten:.2f} CHF")
+        print(f"   💵 Gesamtbetrag: {total_amount:.2f} CHF")
+
         params = (guest_id, room_id, check_in_date, check_out_date, total_amount)
         last_row_id, _ = self.execute(sql, params)
 
