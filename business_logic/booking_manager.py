@@ -13,7 +13,7 @@ class BookingManager:
     def read_all_bookings(self):
         return self.__guest_da.read_all_bookings()
 
-    def read_all_av_rooms(self, hotel_id:int, check_out_date:date, check_in_date:date) -> list[model.room]:
+    def read_all_av_rooms(self, hotel_id:int, check_out_date:date, check_in_date:date) -> list[model.Room]:
         return self.__guest_da.read_all_av_rooms(hotel_id, check_out_date, check_in_date)
 
     def create_new_booking(self, room_id:int, check_in_date:date, check_out_date:date, guest_id:int):

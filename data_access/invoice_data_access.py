@@ -27,11 +27,11 @@ class InvoiceDataAccess(BaseDataAccess):
     def read_invoice_by_id(self,
                             invoice_id:int
         ) -> model.Invoice:
-          sql = "SELECT invoice_id, booking_id, issue_date, total_amount FROM invoice WHERE invoice_id = ?"
-          row = self.fetchone(sql, (invoice_id,))
-          if row:
+        sql = "SELECT invoice_id, booking_id, issue_date, total_amount FROM invoice WHERE invoice_id = ?"
+        row = self.fetchone(sql, (invoice_id,))
+        if row:
             return model.Invoice(*row)
-          return None
+        return None
     
     def create_new_invoice(self,
                            booking_id: int,
