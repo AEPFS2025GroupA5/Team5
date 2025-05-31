@@ -71,6 +71,15 @@ class Hotel:
     def rooms(self) -> list[model.Room]:
         return self.__rooms.copy()
     
+    ##Setter
+    @rooms.setter
+    def rooms(self, new_rooms: list[model.Room]):
+        if not isinstance(new_rooms, list):
+            raise TypeError("Rooms must be a list of Room objects")
+        if not all(isinstance(room, model.Room) for room in new_rooms):
+            raise TypeError("All items in the list must be Room objects")
+        self.__rooms = new_rooms
+    
     
 #Funktionen
     def add_room(self,
