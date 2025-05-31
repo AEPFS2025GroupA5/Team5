@@ -32,7 +32,6 @@ class RoomType:
              
     def __repr__(self):
         return (
-        f"RoomType(\n"
         f"  ID: {self.__type_id}\n"
         f"  Description: {self._description}\n"
         f"  Max Guests: {self._max_guests}\n"

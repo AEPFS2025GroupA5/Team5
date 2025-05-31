@@ -7,6 +7,7 @@ import data_access
 class RoomManager:
     def __init__(self):
         self.__room_da = data_access.room_data_access.RoomDataAccess()
+        self.__room_type_da = data_access.room_type_access.RoomTypeDataAccess()
         self.__room_facility_dao = data_access.room_facility_data_access.RoomFacilityDataAccess()
         self.__hotel_da = data_access.hotel_data_access.HotelDataAccess()
 
@@ -58,6 +59,13 @@ class RoomManager:
                 }
             room_info.append(info)
         return room_info
+    
+## Room Type Management
+    def read_all_room_types(self) -> list[model.RoomType]:
+        return self.__room_type_da.read_all_room_types()
+    
+    def create_new_room_type(self, description: str, max_guests: int) -> model.RoomType:
+        return self.__room_type_da.create_new_room_type(description, max_guests)
    
     
     
