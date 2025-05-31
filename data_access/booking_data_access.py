@@ -61,7 +61,6 @@ class BookingDataAccess(BaseDataAccess):
             g.guest_id, g.first_name, g.last_name, g.email,
             ga.address_id, ga.street, ga.city, ga.zip_code,
             r.room_id, r.room_number, r.type_id, r.price_per_night,
-            Hotel
             h.hotel_id, h.name, h.stars,
             ha.address_id, ha.street, ha.city, ha.zip_code
         FROM booking b
@@ -192,3 +191,25 @@ class BookingDataAccess(BaseDataAccess):
 
         return model.Booking(booking_id=last_row_id, room=room_dao, check_in_date=check_in_date, check_out_date=check_out_date, total_amount=total_amount, guest=guest_dao, is_cancelled=False)
         
+    def cancell_booking(self, booking_id:int)-> None:
+        if not booking_id:
+            raise ValueError("Booking ID is required.")
+        
+        today = date.today()
+
+        booking= self.read_booking_by_id(booking_id)
+        if booking.check_in_date <= today:
+            raise ValueError("This Booking cannot be cancelled.")
+        if booking.is_cancelled:
+            raise ValueError("This Booking has already been cancelled")
+
+        else:
+            sql = """
+            UPDATE booking
+            SET is_cancelled = 1
+            WHERE booking_id = ?
+            """
+            self.execute(sql, (booking_id,))
+            print(f"❌ Buchung mit ID {booking_id} wurde storniert.")
+
+

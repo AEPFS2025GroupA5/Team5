@@ -73,3 +73,10 @@ class BookingManager:
             billed_bookings.append(b)
 
         return billed_bookings
+    
+
+    def cancell_booking(self, booking_id:int)-> None:
+        if not booking_id:
+            raise ValueError("Booking ID is required.")
+        else:
+            return self.__guest_da.cancell_booking(booking_id)
