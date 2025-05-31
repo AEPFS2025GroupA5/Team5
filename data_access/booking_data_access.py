@@ -105,7 +105,7 @@ class BookingDataAccess(BaseDataAccess):
 
         return booking
 
-    def read_all_av_rooms(self, hotel_id:int, check_out_date:date, check_in_date:date) -> list[model.room]:
+    def read_all_av_rooms(self, hotel_id:int, check_out_date:date, check_in_date:date) -> list[model.Room]:
         sql = """
         SELECT r.room_id, r.hotel_id, r.room_number, r.type_id, r.price_per_night
         FROM Room r
