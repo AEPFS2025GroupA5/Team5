@@ -98,54 +98,15 @@ class Room:
              raise ValueError("room_type is required")
         self.__room_type = room_type
 
-    # @price_per_night.stetter
-    # def base_price(
-    #     self,
-    #     new_price: float
-    #     ) -> None:
-    #     if not isinstance(new_price, float):
-    #         raise TypeError("price per night must be a float")
-    #     if new_price < 0:
-    #         raise ValueError("price per night must be >= 0")
-    #     else:
-    #         self.__price_per_night = new_price
-
-    #Funktionen // Maybe schlauer in die Booking Klasse
-
-    # def is_available(
-    #     self,
-    #     check_in:date,
-    #     check_out:date
-    #     ) -> bool:
-    #     #mit der Booking klasse checken ob er Raum verfügbar ist
-    #     for (start, end) in self.__bookings:
-    #         if not (check_out <= start or check_in >= end):
-    #             return False
-    #     return True
-            
-
-    # def book(
-    #         self,
-    #         check_in:date,
-    #         check_out:date,
-    #         guest_count:int      
-    # ) -> None: 
-    #     if not isinstance(check_in, date) or not isinstance(check_out, date):
-    #         raise TypeError("check_in and check_out must be date-objekts")
-    #     if check_out <= check_in:
-    #         raise ValueError("check_out must be after check_in")
-    #     if not isinstance(guest_count, int) or guest_count < 1:
-    #         raise ValueError("guest_count must be positiv")
-        
-    #     #Max-Gäste prüfugen
-    #     if guest_count > self._roomtype.max_guests:
-    #         raise ValueError("Too many Guests for this Roomtype")
-    #     #Verfügbarkeit prüfen
-    #     if not self.is_available(check_in,check_out):
-    #         raise ValueError("Room is not available in this Timeframe")
-        
-    #     self._bookings.append((check_in, check_out))
-    #     print("Room was booked!")
+    @price_per_night.setter
+    def price_per_night(self, 
+                        price_per_night: float
+        ) -> None:
+        if not isinstance(price_per_night, (int, float)):
+            raise TypeError("price_per_night must be a number")
+        if price_per_night <= 0:
+            raise ValueError("price_per_night must be greater than 0")
+        self.__price_per_night = price_per_night
    
    
  

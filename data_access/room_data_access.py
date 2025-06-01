@@ -83,10 +83,10 @@ class RoomDataAccess(BaseDataAccess):
         UPDATE room SET hotel_id = ?, room_number = ?, type_id = ?, price_per_night = ? WHERE room_id = ?
         """
         params = (
-        room._hotel_id,
+        room.hotel_id,
         room.room_number,
-        room._type_id,
-        room._price_per_night,
+        room.room_type.type_id,
+        room.price_per_night,
         room.room_id
         )
 

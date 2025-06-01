@@ -25,7 +25,14 @@ class HotelManager:
                         stars: int,
                         address_id: int      
         )-> model.Hotel:
-            return self.__hotel_da.create_new_hotel(name, stars, address_id)
+        if not name:
+            raise ValueError("Hotel name must be provided")
+        if not isinstance(stars, int) or stars <= 0:
+            raise ValueError("Stars must be a positive integer")
+        if not address_id:
+            raise ValueError("Address ID must be provided")
+        
+        return self.__hotel_da.create_new_hotel(name, stars, address_id)
     
     def update_hotel(self,
                     hotel_id :int,
