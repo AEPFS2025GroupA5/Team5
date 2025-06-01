@@ -40,6 +40,7 @@ class BookingDataAccess(BaseDataAccess):
             guest_id, guest_first_name, guest_last_name,guest_email,
             cancelled
         ) in rows:
+            #objekte aufbauen
             is_cancelled = bool(cancelled)
             address = model.Address(address_id, street, city, zip_code)
             hotel = model.Hotel(hotel_id, hotel_name, hotel_stars, address)
@@ -47,7 +48,7 @@ class BookingDataAccess(BaseDataAccess):
             guest = model.Guest(guest_id, guest_first_name, guest_last_name,guest_email, address)
                        
             booking = model.Booking(booking_id=booking_id, room=room, check_in_date=check_in, check_out_date=check_out, total_amount=total_amount, guest=guest, is_cancelled=is_cancelled)
-        
+            #erstelltes Objekt in der leeren Liste appenden
             all_bookings.append(booking)
 
         return all_bookings
@@ -72,6 +73,7 @@ class BookingDataAccess(BaseDataAccess):
         WHERE b.booking_id = ?
         """
         row = self.fetchone(sql, (booking_id,))
+        #Prüfen, ob die Buchungs ID existiert
         if not row:
             raise ValueError(f"No booking found with ID {booking_id}")
 
@@ -93,6 +95,7 @@ class BookingDataAccess(BaseDataAccess):
 
         room = model.Room(room_id, hotel, room_number, room_type_id, price_per_night)
 
+        #Objekt Booking erstellen
         booking = model.Booking(
             booking_id=booking_id,
             room=room,
@@ -105,7 +108,41 @@ class BookingDataAccess(BaseDataAccess):
 
         return booking
 
-    def read_all_av_rooms(self, hotel_id:int, check_out_date:date, check_in_date:date) -> list[model.Room]:
+    def read_av_rooms(self, check_out_date: date, check_in_date: date) -> list[model.Room]:
+        sql = """
+        SELECT r.room_id, r.room_number, r.type_id, r.price_per_night,
+            h.hotel_id, h.name, h.stars,
+            a.address_id, a.street, a.city, a.zip_code
+        FROM Room r
+        JOIN Hotel h ON h.hotel_id = r.hotel_id
+        JOIN Address a ON a.address_id = h.address_id
+        LEFT JOIN Booking b ON r.room_id = b.room_id
+            AND b.check_in_date <= ? AND b.check_out_date >= ?
+        AND b.room_id IS NULL
+        """
+        rows = self.fetchall(sql, (check_out_date, check_in_date))
+        if not rows:
+            #Wenn man keine Ausgabe erhält, genau weil es keine verfügbaren Zimmer mehr gibt
+            raise ValueError(f"There are no rooms available from {check_in_date} to {check_out_date}. Please enter either another city or another check in/check out date")
+        all_av_rooms = []
+
+        for (room_id, room_number, type_id, price_per_night,
+            hotel_id, name, stars,
+            address_id, street, city, zip_code) in rows:
+
+            # Preis dynamisch anpassen:
+            room= RoomDataAccess()
+            price_season= room.get_price_season(price_per_night)
+
+            #Objekte erstellen, um die verfügbaren Zimmer in der Liste zu appenden
+            address = model.Address(address_id=address_id, street=street, city=city, zip_code=zip_code)
+            hotel = model.Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address)
+            av_room = model.Room(room_id=room_id, hotel_id=hotel, room_number=room_number, room_type=type_id, price_per_night=price_season)
+            all_av_rooms.append(av_room)
+        
+        return all_av_rooms
+
+    def read_all_av_rooms_by_hotel(self, hotel_id:int, check_out_date:date, check_in_date:date) -> list[model.Room]:
         sql = """
         SELECT r.room_id, r.hotel_id, r.room_number, r.type_id, r.price_per_night
         FROM Room r
@@ -116,10 +153,20 @@ class BookingDataAccess(BaseDataAccess):
         """
         params = (check_out_date, check_in_date, hotel_id)
         rows = self.fetchall(sql, params)
-        all_av_rooms= []
+        
+        if not rows:
+            #Wenn man keine Ausgabe erhält, genau weil es keine verfügbaren Zimmer mehr gibt
+            raise ValueError(f"There are no rooms available from {check_in_date} to {check_out_date}. Please enter either another city or another check in/check out date")
+        all_av_rooms = []
 
         for (room_id, hotel_id, room_number, type_id, price_per_night) in rows:
-            av_room = model.Room(room_id=room_id, hotel_id=hotel_id, room_number=room_number, room_type=type_id, price_per_night=price_per_night)
+            # Preis dynamisch anpassen:
+            room= RoomDataAccess()
+            price_season= room.get_price_season(price_per_night)
+            
+            #Objekt für verfügbare Zimmer erstellen
+            av_room = model.Room(room_id=room_id, hotel_id=hotel_id, room_number=room_number, room_type=type_id, price_per_night=price_season)
+            #verfügbare Zimmer in der leeren Liste appenden
             all_av_rooms.append(av_room)
         
         return all_av_rooms
@@ -140,6 +187,7 @@ class BookingDataAccess(BaseDataAccess):
         like = f"%{city}%"
         rows = self.fetchall(sql, (check_out_date, check_in_date, like))
         if not rows:
+            #Wenn man keine Ausgabe erhält, genau weil es keine verfügbaren Zimmer mehr gibt
             raise ValueError(f"There are no rooms available from {check_in_date} to {check_out_date}. Please enter either another city or another check in/check out date")
         all_av_rooms = []
 
@@ -147,9 +195,14 @@ class BookingDataAccess(BaseDataAccess):
             hotel_id, name, stars,
             address_id, street, city, zip_code) in rows:
 
+            # Preis dynamisch anpassen:
+            room= RoomDataAccess()
+            price_season= room.get_price_season(price_per_night)
+
+            #Objekte erstellen, um die verfügbaren Zimmer in der Liste zu appenden
             address = model.Address(address_id=address_id, street=street, city=city, zip_code=zip_code)
             hotel = model.Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address)
-            av_room = model.Room(room_id=room_id, hotel_id=hotel, room_number=room_number, room_type=type_id, price_per_night=price_per_night)
+            av_room = model.Room(room_id=room_id, hotel_id=hotel, room_number=room_number, room_type=type_id, price_per_night=price_season)
             all_av_rooms.append(av_room)
         
         return all_av_rooms
@@ -166,6 +219,7 @@ class BookingDataAccess(BaseDataAccess):
         if check_out_date <= check_in_date:
             raise ValueError("Check-out date must be after check-in date")
 
+        #Connection with Data Acess Layer
         room_mo = data_access.RoomDataAccess()
         guest_mo = data_access.GuestDataAccess()
 
@@ -173,8 +227,7 @@ class BookingDataAccess(BaseDataAccess):
         hotel_dao = room_mo.read_hotel_by_roomId(room_id)
         guest_dao = guest_mo.read_guest_by_id(guest_id)
 
-
-        available_rooms = self.read_all_av_rooms(hotel_dao.hotel_id, check_out_date, check_in_date)
+        available_rooms = self.read_all_av_rooms_by_hotel(hotel_dao.hotel_id, check_out_date, check_in_date)
         available_room_ids = [room_id for room in available_rooms]
         if room_id not in available_room_ids:
             raise ValueError("Room is not available in the selected period")
@@ -182,9 +235,12 @@ class BookingDataAccess(BaseDataAccess):
         sql = """
         INSERT INTO booking (guest_id, room_id, check_in_date, check_out_date, total_amount) VALUES (?, ?, ?, ?, ?)             
         """
+        # Preis dynamisch anpassen:
+        price_season= room_mo.get_price_season(room_dao.price_per_night)
+
         #Berechnung von MWST und Verwaltungskosten
         num_nights = (check_out_date - check_in_date).days
-        price = num_nights * room_dao.price_per_night
+        price = num_nights * price_season
         
         mwst_satz= 108.1
         verwaltungskosten_satz= 0.1
@@ -200,13 +256,14 @@ class BookingDataAccess(BaseDataAccess):
 
         sub_total= float(round(total_amount-mwst_betrag, 2))
 
-        print(f"   Buchungskosten-Zusammenfassung:")
-        print(f"   🛏 Basispreis ({num_nights:.2f} Nächte à CHF {room_dao.price_per_night:.2f} ): CHF {price:.2f} ")
-        print(f"   🛠 Verwaltungskosten: CHF {vr_kost:.2f} ")
+        #Userfriendly Ausgabe für die erstellte Buchung mit Auszug aller Kosten und MWST Betrag -> Aus simplen Gründen haben wir 8.1% genommen
+        print(f"   Thank you for your booking!")
+        print(f"   🛏 Base Price ({num_nights:.2f} nights at CHF {price_season:.2f} ): CHF {price:.2f} ")
+        print(f"   🛠 Administrative Fee: CHF {vr_kost:.2f} ")
         print(f"-------------------------------------------")
         print(f"   Subtotal: {sub_total:.2f}")
-        print(f"   🧾 MwSt (8.1%): CHF {mwst_betrag:.2f} ")
-        print(f"   💵 Gesamtbetrag: CHF {total_amount:.2f} ")
+        print(f"   🧾 VAT (8.1%): CHF {mwst_betrag:.2f} ")
+        print(f"   💵 Total Amount: CHF {total_amount:.2f} ")
 
         params = (guest_id, room_id, check_in_date, check_out_date, total_amount)
         last_row_id, _ = self.execute(sql, params)
@@ -220,11 +277,13 @@ class BookingDataAccess(BaseDataAccess):
         today = date.today()
 
         booking= self.read_booking_by_id(booking_id)
+        #In order to cancell a booking we need to check if the check In Date is in the past
         if booking.check_in_date <= today:
             raise ValueError("This Booking cannot be cancelled.")
+        #then we check if the booking has been cancelled before
         if booking.is_cancelled:
             raise ValueError("This Booking has already been cancelled")
-
+        
         else:
             sql = """
             UPDATE booking

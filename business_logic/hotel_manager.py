@@ -155,7 +155,7 @@ class HotelManager:
         if check_in_date and check_out_date:
             av = []
             for hotel in hotels:
-                if self.__booking_manager.read_all_av_rooms(hotel.hotel_id, check_in_date, check_out_date):
+                if self.__booking_manager.read_all_av_rooms_by_hotel(hotel.hotel_id, check_in_date, check_out_date):
                     av.append(hotel)
             hotels = av
         

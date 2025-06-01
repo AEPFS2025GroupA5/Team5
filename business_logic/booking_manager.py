@@ -13,8 +13,11 @@ class BookingManager:
     def read_all_bookings(self):
         return self.__guest_da.read_all_bookings()
 
-    def read_all_av_rooms(self, hotel_id:int, check_out_date:date, check_in_date:date) -> list[model.Room]:
-        return self.__guest_da.read_all_av_rooms(hotel_id, check_out_date, check_in_date)
+    def read_all_av_rooms_by_hotel(self, hotel_id:int, check_out_date:date, check_in_date:date) -> list[model.Room]:
+        return self.__guest_da.read_all_av_rooms_by_hotel(hotel_id, check_out_date, check_in_date)
+
+    def read_av_rooms(self, check_out_date: date, check_in_date: date) -> list[model.Room]:
+        return self.__guest_da.read_av_rooms(check_out_date=check_out_date, check_in_date=check_in_date)
 
     def create_new_booking(self, room_id:int, check_in_date:date, check_out_date:date, guest_id:int):
         room_mo = data_access.RoomDataAccess()
@@ -22,7 +25,7 @@ class BookingManager:
         room_dao = room_mo.read_room_by_id(room_id)
         hotel_dao = room_mo.read_hotel_by_roomId(room_id)
 
-        available_rooms = self.read_all_av_rooms(hotel_dao.hotel_id, check_out_date, check_in_date)
+        available_rooms = self.read_all_av_rooms_by_hotel(hotel_dao.hotel_id, check_out_date, check_in_date)
         available_room_ids = [room_id for room in available_rooms]
         if room_id not in available_room_ids:
             raise ValueError("Room is not available in the selected period")

@@ -2,6 +2,7 @@ from data_access.base_data_access import BaseDataAccess
 import model
 import data_access.room_type_access
 import model.room 
+from datetime import date
 
 class RoomDataAccess(BaseDataAccess):
     def __init__(self, 
@@ -24,7 +25,11 @@ class RoomDataAccess(BaseDataAccess):
         for row in rows:
             room_id, hotel_id, room_number, type_id, price = row
             room_type = room_type_dao.read_room_type_by_id(type_id)
-            room = model.Room(room_id, hotel_id, room_number, room_type, price)
+
+            # Preis dynamisch anpassen:
+            price_season= self.get_price_season(price)
+
+            room = model.Room(room_id, hotel_id, room_number, room_type, price_season)
             rooms.append(room)
         return rooms
     
@@ -62,16 +67,20 @@ class RoomDataAccess(BaseDataAccess):
     def read_rooms_by_hotel_id(self,
                             hotel_id:int
         ) -> list[model.Room]:
-          sql = "SELECT room_id, hotel_id, room_number, type_id, price_per_night FROM room WHERE hotel_id = ?"
-          rows = self.fetchall(sql, (hotel_id,))
-          rooms = []
+        sql = "SELECT room_id, hotel_id, room_number, type_id, price_per_night FROM room WHERE hotel_id = ?"
+        rows = self.fetchall(sql, (hotel_id,))
+        rooms = []
 
-          for row in rows:
-             room_id, hotel_id, room_number, type_id, price = row
-             room_type = self.__room_type_dao.read_room_type_by_id(type_id)
-             room = model.Room(room_id, hotel_id, room_number, room_type, price)
-             rooms.append(room)
-          return rooms
+        for row in rows:
+            room_id, hotel_id, room_number, type_id, price = row
+            room_type = self.__room_type_dao.read_room_type_by_id(type_id)
+
+            # Preis dynamisch anpassen:
+            price_season= self.get_price_season(price)
+
+            room = model.Room(room_id, hotel_id, room_number, room_type, price_season)
+            rooms.append(room)
+        return rooms
     
     def update_room(self,
                 room: model.Room
@@ -137,3 +146,19 @@ class RoomDataAccess(BaseDataAccess):
         DELETE FROM room WHERE hotel_id = ?
         """
         self.execute(sql, (hotel_id,))
+
+
+    def get_price_season(self, room_price) -> float:
+        month = date.today().month
+        base_price = room_price
+
+        if 6 <= month <= 9 or month == 12:  
+            percent = 2.0
+        elif 1 <= month <= 5:  
+            percent = 1.5
+        else:
+            percent = 1.0 
+
+        return round(base_price * percent, 2)
+
+        
