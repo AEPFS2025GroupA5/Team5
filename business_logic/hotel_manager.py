@@ -163,6 +163,7 @@ class HotelManager:
     
 ## Output Funktionen
 
+    
     def print_user_friendly_hotels(self, hotels: list[model.Hotel]) -> None:
         for hotel in hotels:
             print(hotel.show_user_friendly())
