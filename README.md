@@ -78,6 +78,54 @@ abhängen.
 03.05. started with coding
 (only document the milestones)
 
+Nein, nicht alles und noch nicht vollständig, gerade in Notizen-Form
+Basics Programmieren
+
+Conditions, loops, lists, tuples.
+ Common errors
+Error handling – Try/except
+· Object Oriented Thinking
+· OOP Basic - Class and objects
+· Class Diagram
+· Encapsulation – attributes and functions
+· Data Hiding (private/public)
+· Reference Project
+· Aggregation, Composition, Association
+
+TbA: Identify user stories and assign tasks 
+for the sprint
+TbA: Iteratively develop and adapt the user 
+stories
+
+- Class diagram for data model with relationships
+- Python classes with init, properties
+- Save classes in .py files inside models folder
+
+Implement business logic classes (Manager) 
+and data access classes for selected user 
+stories (Guest or Admin)
+
+SQLite Connection: Data access and manipulation 
+methods
+· Inheritance
+· Polymorphism
+o Method overriding
+o Functions with optional parameters
+o Return with type hint
+· Project Structure and documentation (DocString)
+
+((Raum ist eine Instanz. Bei Room Type anpassen und verbinden. Weil es ist praktischer, anstatt bei jedem Zimmer anzupassen, nur beim Roomtype anzupassen und es wird von allen übernommen.))
+
+Data Access Layer mit Business Layer verbinden.
+Mühsam.
+
+Data Access am 11.05.25 fertig.
+
+Repetition am 12.05.25.
+
+19.05. business layer, einfach Couaching um ob JOIN Funktion benötigt wird. Dict, verschachtlte Datenstrukturen und List Comprehention.
+
+
 ### Class Diagram
 ![image](https://github.com/user-attachments/assets/36cdc1f8-5d7e-4562-be27-18b6bcd21edf)
 
