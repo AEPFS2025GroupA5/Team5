@@ -43,4 +43,14 @@ def get_max_guests_input() -> int:
         except ValueError as e:
             print(f"Invalid input: {e}. Please enter a valid integer.")
 
+def get_user_frendly_hotel_info_short(hotel: model.Hotel) -> str:
+    return f"Name: {hotel.name}, Stars: {hotel.stars}, Address: {hotel.address.city}"
+
+def get_city_no_limit() -> str:
+    while True:
+        try:
+            return ui.input_helper.input_valid_string("Enter the city you want to search for hotels: ", 0, 10)
+        except ui.input_helper.StringLengthError:
+            print(f"Invalid input, give at most 15 characters.")
+
 

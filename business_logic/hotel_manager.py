@@ -159,6 +159,9 @@ class HotelManager:
          all_hotels = self.__hotel_da.read_all_hotels()
          return [hotel.show_user_friendly() for hotel in all_hotels]
     
+    def get_user_frendly_hotel_info_short(hotel: model.Hotel):
+        return f"Hotel ID: {hotel.hotel_id}, Name: {hotel.name}, Stars: {hotel.stars}, Address: {hotel.address.city}, {hotel.address.street}"
+    
                   
      
         
