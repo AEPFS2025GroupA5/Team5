@@ -6,7 +6,7 @@ import ui.input_helper
 def print_hotel(hotel: model.Hotel) -> None:
     if not isinstance(hotel, model.Hotel):
         raise TypeError("hotel must be a Hotel object")
-    print(hotel.name, hotel.stars)
+    print(hotel.name, hotel.stars, hotel.address.city)
 
 def print_hotel_with_address(hotel: model.Hotel) -> None:
     if not isinstance(hotel, model.Hotel):
@@ -52,5 +52,8 @@ def get_city_no_limit() -> str:
             return ui.input_helper.input_valid_string("Enter the city you want to search for hotels: ", 0, 10)
         except ui.input_helper.StringLengthError:
             print(f"Invalid input, give at most 15 characters.")
+
+def get_address_short(address: model.Address) -> str:
+    return f"{address.street}, {address.city}, {address.zip_code}"
 
 

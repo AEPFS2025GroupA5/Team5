@@ -34,16 +34,12 @@ class AddressDataAccess(BaseDataAccess):
         return None
 
     def create_new_address(self, street: str, city: str, zip_code: str) -> model.Address:
-        if not all(isinstance(x, str) for x in [street, city, zip_code]):
-            raise TypeError("street, city, and zipcode must be strings")
-        if not all([street, city, zip_code]):
-            raise ValueError("All fields must be filled")
-
-        sql = "INSERT INTO address (street, city, zipcode) VALUES (?, ?, ?)"
+        sql = "INSERT INTO address (street, city, zip_code) VALUES (?, ?, ?)"
         params = (street, city, zip_code)
         last_row_id, _ = self.execute(sql, params)
 
         return model.Address(address_id=last_row_id, street=street, city=city, zip_code=zip_code)
+        
 
     def update_address(self, street:str, city:str, zip_code:int, address_id) -> None:
         sql = """
