@@ -56,4 +56,17 @@ def get_city_no_limit() -> str:
 def get_address_short(address: model.Address) -> str:
     return f"{address.street}, {address.city}, {address.zip_code}"
 
+def get_room_type_short(room_type: model.RoomType) -> str:
+    return f"{room_type.description} (Max Guests: {room_type.max_guests})"
+
+def get_all_facilities_short(facility: model.Facility) -> str:
+    if not facility:
+        return "No facilities available."
+    return f"{facility.name}"
+
+def get_room_info_short(room: model.Room) -> str:
+    if not isinstance(room, model.Room):
+        raise TypeError("room must be a Room object")
+    return f"Room Number: {room.room_number}, Type: {get_room_type_short(room.room_type)}, Price: {room.price_per_night} "
+
 

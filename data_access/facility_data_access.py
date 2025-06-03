@@ -53,12 +53,17 @@ class FacilityDataAccess(BaseDataAccess):
      sql = "INSERT INTO facilities (facility_name) VALUES (?)"
      params = tuple([name])
      last_row_id, _ = self.execute(sql, params)
-     return model.Facility(facility_id=last_row_id, name=name)
+     new_fac = model.Facility(facility_id=last_row_id, name=name)
+     print(f"New facility created: {new_fac}")
+     print(f"Facilities in database: {self.read_all_facilities()}")
+     return new_fac
     
     def delete_facility_by_id(self, 
                               facility_id: int
         ) -> None:
      sql = "DELETE FROM facilities WHERE facility_id = ?"
+     print(f"Deleting facility with ID: {facility_id}")
+     print(f"Facilitys in database: {self.read_all_facilities()}")
      self.execute(sql, (facility_id,))
 
 
@@ -66,7 +71,13 @@ class FacilityDataAccess(BaseDataAccess):
     def update_facility(self, 
                         facility: model.Facility
         ) -> None:
-     sql = "UPDATE facilities SET facility_name = ? WHERE facility_id = ?"
-     params = tuple([facility.name, facility.facility_id])
-     last_row_id, row_count = self.execute(sql, params)
+       if not isinstance(facility, model.Facility):
+          raise TypeError("facility must be an instance of model.Facility")
+       sql = "UPDATE facilities SET facility_name = ? WHERE facility_id = ?"
+       params = tuple([facility.name, facility.facility_id])
+       last_row_id, row_count = self.execute(sql, params)
+       if row_count == 0:
+            raise ValueError(f"Facility with ID {facility.facility_id} not found")
+       print(f"Facility updated: {facility}")
+       print(f"Facilities in database: {self.read_all_facilities()}")
 

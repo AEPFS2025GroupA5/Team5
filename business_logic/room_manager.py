@@ -108,7 +108,7 @@ class RoomManager:
             room_info.append(info)
         return room_info
     
-    def get_rooms_for_admin(self) -> None:
+    def get_rooms_for_admin(self) -> list[model.Room]:
         rooms = self.get_all_rooms()
         
 
@@ -123,9 +123,25 @@ class RoomManager:
             print(f"Room Type: {room.room_type._description}")
             print(f"Max Guests: {room.room_type.max_guests}")
             print(f"Facilities: {[facility.name for facility in facilities]}")
+            print(f"Price per Night: {room.price_per_night}")
             print("-" * 40)
+        return rooms
                 
-
+    def change_price_per_night(self,
+                               room_id: int,
+                               new_price: float
+        ) -> None:
+        if not isinstance(room_id, int) or room_id <= 0:
+            raise ValueError("Room ID must be a positive integer")
+        if not isinstance(new_price, (int, float)) or new_price <= 0:
+            raise ValueError("New price must be a positive number")
+        
+        room = self.__room_da.read_room_by_id(room_id)
+        if not room:
+            raise ValueError(f"No room found with ID {room_id}")
+        
+        room.price_per_night = new_price
+        self.__room_da.update_room(room)
     
 ## Room Type Management
     def read_all_room_types(self) -> list[model.RoomType]:

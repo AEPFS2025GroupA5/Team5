@@ -100,6 +100,8 @@ class RoomDataAccess(BaseDataAccess):
         )
 
         self.execute(sql, params)
+        print(f"Room with ID {room.room_id} updated successfully.")
+        print(f"All Rooms in DB: {self.read_all_rooms()}")
 
     def create_new_room(self,
                         hotel_id: int,
