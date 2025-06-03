@@ -80,9 +80,6 @@ class HotelManager:
     def get_hotels_by_city(self,
                             city: str
         ) -> list[model.Hotel]:
-        if not city:
-            raise ValueError("City must be provided")
-        
         matching_hotels = [
         hotel for hotel in self._all_hotels if city.lower() in hotel.address.city.lower()
         ]
@@ -92,11 +89,6 @@ class HotelManager:
                                     city: str,
                                     stars: int
         ) -> list[model.Hotel]:
-        if not city:
-            raise ValueError("City must be provided")
-        if not stars or stars <= 0:
-            raise ValueError("Stars must be a positive integer")
-        
         matching_hotels = [
         hotel for hotel in self._all_hotels if city.lower() in hotel.address.city.lower() 
         and hotel.stars >= stars
@@ -107,11 +99,6 @@ class HotelManager:
                                            city: str, 
                                            max_guests: int
         ) -> list[tuple [model.Hotel, model.Room]]:
-        if not city:
-            raise ValueError("City must be provided")
-        if not max_guests or max_guests <= 0:
-            raise ValueError("Max guests must be a positive integer")
-    
         result = []
         for hotel in self._all_hotels:
             if city.lower() in hotel.address.city.lower():
