@@ -108,23 +108,24 @@ class RoomManager:
             room_info.append(info)
         return room_info
     
-    def get_rooms_for_admin(self) -> list[dict]:
+    def get_rooms_for_admin(self) -> None:
         rooms = self.get_all_rooms()
-        room_info = []
+        
 
         for room in rooms:
             hotel = self.__hotel_da.read_hotel_by_id(room.hotel_id)
             hotel_name = hotel.name if hotel else "Unknown Hotel"
             facilities = self.get_facilities_for_room(room.room_id)
-            info = {
-                "Hotel": hotel_name,
-                "Room ID": room.room_id,
-                "Room Number": room.room_number,
-                "Room Type": room.room_type._description,
-                "Facilities": [facility.name for facility in facilities],
-                }
-            room_info.append(info)
-        return room_info
+            
+            print(f"Hotel: {hotel_name}")
+            print(f"Room ID: {room.room_id}")
+            print(f"Room Number: {room.room_number}")
+            print(f"Room Type: {room.room_type._description}")
+            print(f"Max Guests: {room.room_type.max_guests}")
+            print(f"Facilities: {[facility.name for facility in facilities]}")
+            print("-" * 40)
+                
+
     
 ## Room Type Management
     def read_all_room_types(self) -> list[model.RoomType]:
