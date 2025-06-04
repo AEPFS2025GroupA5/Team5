@@ -4,42 +4,107 @@ import model
 from model.invoice import Invoice
 import data_access
 from datetime import date
+from business_logic.room_manager import RoomManager
 from business_logic.invoice_manager import InvoiceManager
 
 class BookingManager:
     def __init__(self):
-        self.__guest_da = data_access.BookingDataAccess()
+        self.__booking_da = data_access.BookingDataAccess()
+        self.__room_da = data_access.RoomDataAccess()
+        self.__room_manager = RoomManager()
+        self.__invoice_manager = InvoiceManager()
     
+    ## Admin
     def read_all_bookings(self):
-        return self.__guest_da.read_all_bookings()
+        bookings= self.__booking_da.read_all_bookings()
+        return bookings
+        #admin display
 
+    ## Guest Function
     def read_all_av_rooms_by_hotel(self, hotel_id:int, check_out_date:date, check_in_date:date) -> list[model.Room]:
-        return self.__guest_da.read_all_av_rooms_by_hotel(hotel_id, check_out_date, check_in_date)
+        if not hotel_id:
+            raise ValueError("Hotel Id has to be defined")
+        if not isinstance(hotel_id, int):
+            raise ValueError("Hotel Id has to be an integer")
+        rooms=  self.__booking_da.read_all_av_rooms_by_hotel(hotel_id, check_out_date, check_in_date)
+        
+        for room in rooms:
+            seasonal_price= self.__room_manager.get_price_season(room.price_per_night)
+            room.price_per_night = seasonal_price
+        return rooms
+        #userfriendly display()
 
     def read_av_rooms(self, check_out_date: date, check_in_date: date) -> list[model.Room]:
-        return self.__guest_da.read_av_rooms(check_out_date=check_out_date, check_in_date=check_in_date)
-
-    def create_new_booking(self, room_id:int, check_in_date:date, check_out_date:date, guest_id:int):
-        room_mo = data_access.RoomDataAccess()
-        
-        room_dao = room_mo.read_room_by_id(room_id)
-        hotel_dao = room_mo.read_hotel_by_roomId(room_id)
-
-        available_rooms = self.read_all_av_rooms_by_hotel(hotel_dao.hotel_id, check_out_date, check_in_date)
+        #Raise Value Errors
+        rooms= self.__booking_da.read_av_rooms(check_out_date=check_out_date, check_in_date=check_in_date)
+        for r in rooms:
+            seasonal_price = self.__room_manager.get_price_season(r.price_per_night)
+            r.price_per_night = seasonal_price
+        return rooms
+            
+    def create_new_booking(self, room_id:int, check_in_date:date, check_out_date:date, guest_id:int):      
+        available_rooms = self.read_all_av_rooms_by_hotel(self.__room_da.read_hotel_by_roomId(room_id).hotel_id, check_out_date, check_in_date)
         available_room_ids = [room_id for room in available_rooms]
         if room_id not in available_room_ids:
             raise ValueError("Room is not available in the selected period")
+        if not room_id:
+            raise ValueError("Room has to be defined")
+        if not isinstance(check_in_date, date):
+            raise ValueError("Check in Date has to be a date")
+        if not isinstance(check_out_date, date):
+            raise ValueError("Check out Date has to be a date")
+        if check_out_date <= check_in_date:
+            raise ValueError("Check-out date must be after check-in date")
+        if not guest_id:
+            raise ValueError("Guest has to be defined")
         else:
-            return self.__guest_da.create_new_booking(room_id, check_in_date, check_out_date, guest_id)
+            room= self.__room_da.read_room_by_id(room_id)
+            # Preis dynamisch anpassen:
+            seasonal_price = self.__room_manager.get_price_season(room.price_per_night)
+            room.price_per_night= seasonal_price
+
+            #Berechnung von MWST und Verwaltungskosten
+            num_nights = (check_out_date - check_in_date).days
+            price = num_nights * room.price_per_night
+            
+            mwst_satz= 108.1
+            verwaltungskosten_satz= 0.1
+
+            verwaltungskosten = price * verwaltungskosten_satz
+            base_price = verwaltungskosten + price
+
+            vr_kost= verwaltungskosten/mwst_satz*100
+
+            mwst_betrag= base_price - (base_price/mwst_satz*100)
+
+            total_amount= float(round(base_price, 2))
+
+            sub_total= float(round(total_amount-mwst_betrag, 2))
+
+            #Userfriendly Ausgabe für die erstellte Buchung mit Auszug aller Kosten und MWST Betrag -> Aus simplen Gründen haben wir 8.1% genommen
+            print(f"   Thank you for your booking!")
+            print(f"   🛏 Base Price ({num_nights:.2f} nights at CHF {room.price_per_night:.2f} ): CHF {price:.2f} ")
+            print(f"   🛠 Administrative Fee: CHF {vr_kost:.2f} ")
+            print(f"-------------------------------------------")
+            print(f"   Subtotal: {sub_total:.2f}")
+            print(f"   🧾 VAT (8.1%): CHF {mwst_betrag:.2f} ")
+            print(f"   💵 Total Amount: CHF {total_amount:.2f} ")
+
+            return self.__booking_da.create_new_booking(room_id, check_in_date, check_out_date, guest_id, total_amount)
         
     def read_booking_by_id(self, booking_id: int) -> model.Booking:
+        bookings = self.__booking_da.read_all_bookings()
+        booking_ids= [booking_id for booking in bookings]
+
+        if booking_id not in booking_ids:
+            raise ValueError(f"There is no booking id {booking_id}")
         if not booking_id:
             raise ValueError("Booking Id is required")
         if not isinstance(booking_id, int):
             raise ValueError("Booking ID has to be an integer")
         else:
-            return self.__guest_da.read_booking_by_id(booking_id)
-    
+            return self.__booking_da.read_booking_by_id(booking_id)
+            
     def read_av_rooms_city(self, city: str, check_out_date: date, check_in_date: date) -> list[model.Room]:
         if not city:
             raise ValueError("City is required")
@@ -52,9 +117,23 @@ class BookingManager:
         if check_out_date <= check_in_date:
             raise ValueError("Check-out date must be after check-in date")
         else:
-            return self.__guest_da.read_av_rooms_city(city, check_out_date, check_in_date)
+            return self.__booking_da.read_av_rooms_city(city, check_out_date, check_in_date)
 
+    def cancell_booking(self, booking_id:int)-> None:
+        if not booking_id:
+            raise ValueError("Booking ID is required.")
+        #Das Check In Datum soll in nicht in der Vergangenheit liegen
+        booking= self.__booking_da.read_booking_by_id(booking_id)
+        if booking.check_in_date <= date.today():
+            raise ValueError("This Booking cannot be cancelled.")
+        #Die Buchung soll nicht nochmals storniert werden
+        if booking.is_cancelled:
+            raise ValueError("This Booking has already been cancelled")
+        else:
+            self.__booking_da.cancell_booking(booking_id)
+            print (f"❌ Buchung mit ID {booking_id} wurde storniert.")
 
+    ## Fakturierung
     def billing(self):
         bookings = self.read_all_bookings()
         today = date.today()
@@ -77,9 +156,15 @@ class BookingManager:
 
         return billed_bookings
     
+    #Userfriendly Outputs
+    def print_userfriendly_booking(self, bookings: list[model.Booking]):
+        for booking in bookings:
+            print(model.Booking.show_userfriendly())
 
-    def cancell_booking(self, booking_id:int)-> None:
-        if not booking_id:
-            raise ValueError("Booking ID is required.")
-        else:
-            return self.__guest_da.cancell_booking(booking_id)
+    def print_userfriendly_room(self, rooms: list[model.Room]) -> None:
+        for room in rooms:
+            print(model.Room.userfriendly(room, room))
+        
+    def print_user_friendly_hotels(self, hotels: list[model.Hotel]) -> None:
+        for hotel in hotels:
+            print(model.Hotel.show_user_friendly(hotel))

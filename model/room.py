@@ -108,5 +108,11 @@ class Room:
             raise ValueError("price_per_night must be greater than 0")
         self.__price_per_night = price_per_night
    
-   
+    def userfriendly(self, room:Room):
+        return f"""
+            Room Details:
+            Zimmernummer: {self.room_number}
+            Zimmertyp-ID: {RoomType.userfriendly()}
+            Preis pro Nacht: {self.price_per_night:.2f} CHF
+            """
  

@@ -26,11 +26,9 @@ class RoomDataAccess(BaseDataAccess):
             room_id, hotel_id, room_number, type_id, price = row
             room_type = room_type_dao.read_room_type_by_id(type_id)
 
-            # Preis dynamisch anpassen:
-            price_season= self.get_price_season(price)
-
-            room = model.Room(room_id, hotel_id, room_number, room_type, price_season)
+            room = model.Room(room_id, hotel_id, room_number, room_type, price)
             rooms.append(room)
+            
         return rooms
     
     def read_room_by_id(self,
@@ -56,13 +54,13 @@ class RoomDataAccess(BaseDataAccess):
         WHERE r.room_id = ?
         """
         row = self.fetchone(sql, (room_id,))
-        if not row:
-            raise ValueError(f"No hotel found for room ID {room_id}")
-
-        hotel_id, name, stars, address_id, street, city, zip_code = row
-        address = model.Address(address_id, street, city, zip_code)
-        hotel = model.Hotel(hotel_id, name, stars, address)
-        return hotel
+        if row:
+            hotel_id, name, stars, address_id, street, city, zip_code = row
+            address = model.Address(address_id, street, city, zip_code)
+            hotel = model.Hotel(hotel_id, name, stars, address)
+            return hotel
+        
+        return None
 
     def read_rooms_by_hotel_id(self,
                             hotel_id:int
@@ -75,10 +73,7 @@ class RoomDataAccess(BaseDataAccess):
             room_id, hotel_id, room_number, type_id, price = row
             room_type = self.__room_type_dao.read_room_type_by_id(type_id)
 
-            # Preis dynamisch anpassen:
-            price_season= self.get_price_season(price)
-
-            room = model.Room(room_id, hotel_id, room_number, room_type, price_season)
+            room = model.Room(room_id, hotel_id, room_number, room_type, price)
             rooms.append(room)
         return rooms
     
@@ -148,19 +143,4 @@ class RoomDataAccess(BaseDataAccess):
         DELETE FROM room WHERE hotel_id = ?
         """
         self.execute(sql, (hotel_id,))
-
-
-    def get_price_season(self, room_price) -> float:
-        month = date.today().month
-        base_price = room_price
-
-        if 6 <= month <= 9 or month == 12:  
-            percent = 2.0
-        elif 1 <= month <= 5:  
-            percent = 1.5
-        else:
-            percent = 1.0 
-
-        return round(base_price * percent, 2)
-
         

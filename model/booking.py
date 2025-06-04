@@ -5,7 +5,6 @@ from model.hotel import Hotel
 from model.room import Room
 
 
-
 class Booking:
     def __repr__(self):
         return (
@@ -62,7 +61,7 @@ class Booking:
             raise ValueError("is cancelled has to be a boolean")
 
         self.__booking_id = booking_id
-        self.__room = room
+        self.__room:Room = room
         self.__check_in_date = check_in_date
         self.__check_out_date = check_out_date
         self.__total_amount = total_amount
@@ -70,58 +69,17 @@ class Booking:
         self.__is_cancelled = is_cancelled
         self.__invoice: Invoice = None #Komposition mit Invoice
         
-    # def print_booking_summary(self, bookings):
-    #     guest = self.guest
-    #     room = self.room
-        
-    #     print("📘 Buchungsdetails:\n")
-    #     print(f"🔖 Buchungsnummer   : {self.booking_id}")
-    #     print(f"🛏️  Zimmernummer    : {room.room_number}")
-    #     print(f"🏷️  Zimmertyp        : Typ {room.room_type}")
-    #     print(f"💰 Preis/Nacht       : {room.price_per_night:.2f} CHF")
-        
-    #     #Hotel.show_user_friendly()
-        
-    #     print(f"📅 Check-In          : {self.check_in_date}")
-    #     print(f"📅 Check-Out         : {self.check_out_date}")
-    #     print(f"💵 Gesamtbetrag      : {self.total_amount:.2f} CHF")
-        
-    #     # print(f"🙍 Gast              : {guest.first_name} {guest.last_name}")
-    #     # if hasattr(guest, 'email'):
-    #     #     print(f"📧 E-Mail            : {guest.email}")
-    #     # if hasattr(guest, 'address'):
-    #     #     guest_address = guest.address
-    #     #     print(f"🏠 Adresse Gast      : {guest_address.street}, {guest_address.zip_code} {guest_address.city}")
-        
-    #     print(f"📌 Status            : {'❌ Storniert' if self.is_cancelled else '✅ Aktiv'}")
-    #     print("-" * 80)
-    
+    def show_userfriendly(self):
+        return f"""
+            Booking Details:
 
+            Buchungs-ID: {self.booking_id}
+            Check-In: {self.check_in_date}
+            Check-Out: {self.check_out_date}
+            Total Amount: CHF{self.total_amount:.2f} 
 
-    #Funktion, wo man den Total Amount berechnet mit Nebenkosten (mit Room verbinden und base price nutzen)
-
-    # #Funktion, womit man die Rechnung nach Check-Out Datum erzeugt -> Funktioniert nicht wie ich es eigentlich will. Die Rechnung wird dann nicht noch beim Kunden beigefügt in der leeren Liste :(
-    # def create_invoice(self):
-    #     if not isinstance(self.__total_amount, float):
-    #         raise ValueError("Total amount must be a float.")
-        
-    #     if not self.__total_amount >0:
-    #         raise ValueError("Total amount has to be over CHF 0")
-        
-    #     if self.__is_cancelled:
-    #         raise ValueError("Booking is cancelled. Cannot create invoice.")
-
-    #     # if self.__check_out_date > date.today():
-    #     #     raise ValueError("Client is still in the hotel. Try invoicing after checkout.")
-
-    #     #Invoice erzeugen lassen
-    #     self.__invoice = Invoice(self.__booking_id, self.__check_out_date, self.__total_amount, False, self.__guest_id)
-    #     print(f"Invoice with the Id {self.__invoice.invoice_id} has been created.\n")
-    
-    #     #Rechnung wird mit dem Kunden verknüpft (Aggregation)
-    #     if self.__guest:
-    #         self.__guest.add_invoice(self.__invoice)
-    #         print(self.__invoice.get_details())
+            Cancelled: {self.is_cancelled}
+            """
 
     # Getter für Zugriff auf die Rechnung
     @property

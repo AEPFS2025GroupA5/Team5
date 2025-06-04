@@ -2,6 +2,7 @@ import os
 
 import model
 import data_access
+from datetime import date
 
 
 class RoomManager:
@@ -16,7 +17,13 @@ class RoomManager:
 ## Admin Funktionen
 
     def get_all_rooms(self) -> list[model.Room]:
-        return self.__room_da.read_all_rooms()
+        rooms= self.__room_da.read_all_rooms()
+        
+        #Preis Dynamik
+        for room in rooms:
+            seasonal_price = self.get_price_season(room.price_per_night)
+            room.price_per_night = seasonal_price
+        return rooms
     
     def create_new_room(self,
                         hotel_id: int,
@@ -77,10 +84,13 @@ class RoomManager:
                        room_id: int
         ) -> model.Room:
         room = self.__room_da.read_room_by_id(room_id)
+        #Preisdynamik
+        seasonal_price = self.get_price_season(room.price_per_night)
+        room.price_per_night= seasonal_price
         return room
     
     def get_room_details_for_hotel(self, hotel_id: int) -> list[model.Room]:
-        all_rooms = self.__room_da.read_all_rooms()
+        all_rooms = self.get_all_rooms()
         result = []
         for room in all_rooms:
             if room.hotel_id == hotel_id:
@@ -198,6 +208,19 @@ class RoomManager:
             raise TypeError("Facility ID must be an integer")
         self.__facility_da.delete_facility_by_id(facility_id)
 
+##Pricing Management
+    def get_price_season(self, price_per_night:float) -> float:
+        month = date.today().month
+        base_price = price_per_night
+
+        if 6 <= month <= 9 or month == 12:  
+            percent = 2.0
+        elif 1 <= month <= 5:  
+            percent = 1.5
+        else:
+            percent = 1.0 
+
+        return round(base_price * percent, 2)
    
     
     

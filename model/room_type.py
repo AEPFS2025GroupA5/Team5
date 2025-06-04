@@ -70,6 +70,10 @@ class RoomType:
         self._max_guests = max_guests
 
     
-
+    def userfriendly(self):
+        return f""""
+        Description: {self._description}\n"
+        Max Guests: {self._max_guests}\n"
+        """
 
   
