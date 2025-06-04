@@ -162,8 +162,10 @@ class BookingManager:
             print(model.Booking.show_userfriendly())
 
     def print_userfriendly_room(self, rooms: list[model.Room]) -> None:
+        room= self.__room_manager.get_all_rooms()
         for room in rooms:
             print(model.Room.userfriendly(room, room))
+            print(model.RoomType.userfriendly(room))
         
     def print_user_friendly_hotels(self, hotels: list[model.Hotel]) -> None:
         for hotel in hotels:

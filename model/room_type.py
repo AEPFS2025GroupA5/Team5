@@ -72,8 +72,8 @@ class RoomType:
     
     def userfriendly(self):
         return f""""
-        Description: {self._description}\n"
-        Max Guests: {self._max_guests}\n"
+        Description: {self.description}\n"
+        Max Guests: {self.max_guests}\n"
         """
 
   

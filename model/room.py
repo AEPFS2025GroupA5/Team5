@@ -112,7 +112,6 @@ class Room:
         return f"""
             Room Details:
             Zimmernummer: {self.room_number}
-            Zimmertyp-ID: {RoomType.userfriendly()}
-            Preis pro Nacht: {self.price_per_night:.2f} CHF
+            Preis pro Nacht: {room.price_per_night:.2f} CHF
             """
  

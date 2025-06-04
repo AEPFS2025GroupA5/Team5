@@ -1,6 +1,6 @@
 import sys
 from enum import Enum
-
+from datetime import date, datetime
 
 class YesOrNo(Enum):
     YES = 1
@@ -30,6 +30,19 @@ class StringLengthError(ValueError):
         self.value = value
         self.min_length = min_length
         self.max_length = max_length
+
+
+def input_valid_date(prompt: str, today: date = None) -> date:
+    while True:
+        user_input = input(prompt)
+        try:
+            date_obj = datetime.strptime(user_input.strip(), "%Y-%m-%d").date()
+            if date_obj < date.today():
+                raise ValueError("Date cannot be in the past")            
+            else:
+                return date_obj
+        except ValueError:
+            print("Invalid date format. Please use YYYY-MM-DD (e.g. 2025-09-11)")
 
 
 def input_valid_string(prompt: str, min_length: int = 0, max_length: int = sys.maxsize) -> str:
