@@ -44,7 +44,6 @@ class Hotel:
     
     def show_user_friendly(self):
         return (
-            f"Hotel Details:"
             f"Name: {self._name}\n"
             f"{self.__address.show_user_friendly()}"
             f"Stars: {self._stars}\n"

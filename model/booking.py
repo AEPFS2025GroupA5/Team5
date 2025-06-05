@@ -71,9 +71,7 @@ class Booking:
         
     def show_userfriendly(self):
         return f"""
-            Booking Details:
-
-            Buchungs-ID: {self.booking_id}
+            Booking-ID: {self.booking_id}
             Check-In: {self.check_in_date}
             Check-Out: {self.check_out_date}
             Total Amount: CHF{self.total_amount:.2f} 

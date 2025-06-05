@@ -55,6 +55,10 @@ class BookingDataAccess(BaseDataAccess):
         return None
 
     def read_booking_by_id(self, booking_id: int) -> model.Booking:
+        if not booking_id:
+            raise ValueError("Booking Id is required")
+        if not isinstance(booking_id, int):
+            raise ValueError("Booking Id must be an integer")
         sql = """
         SELECT 
             b.booking_id, b.check_in_date, b.check_out_date, b.total_amount, b.is_cancelled,
@@ -107,18 +111,31 @@ class BookingDataAccess(BaseDataAccess):
         return None
 
     def read_av_rooms(self, check_out_date: date, check_in_date: date) -> list[model.Room]:
+        #Raise Value Errors
         sql = """
-        SELECT r.room_id, r.room_number, r.type_id, r.price_per_night,
-            h.hotel_id, h.name, h.stars,
-            a.address_id, a.street, a.city, a.zip_code
-        FROM Room r
-        JOIN Hotel h ON h.hotel_id = r.hotel_id
-        JOIN Address a ON a.address_id = h.address_id
-        LEFT JOIN Booking b ON r.room_id = b.room_id
-            AND b.check_in_date <= ? AND b.check_out_date >= ?
-        AND b.room_id IS NULL
+        SELECT 
+        Room.room_id,
+        Room.room_number,
+        Room.type_id,
+        Room.price_per_night,
+        Room.hotel_id,
+        Hotel.name,
+        Hotel.stars,
+        Hotel.address_id,
+        Address.street,
+        Address.city,
+        Address.zip_code
+        FROM 
+            Room
+        JOIN Hotel on Hotel.hotel_id= Room.hotel_id
+        JOIN Address on Address.address_id = Hotel.address_id
+        LEFT JOIN 
+            Booking ON Room.room_id = Booking.room_id
+        WHERE not (Booking.check_out_date >= ?
+        AND Booking.check_in_date <= ?)
+        OR Booking.room_id IS NULL
         """
-        rows = self.fetchall(sql, (check_out_date, check_in_date))
+        rows = self.fetchall(sql, (check_in_date, check_out_date))
         if rows:
             all_av_rooms = []
 
@@ -138,15 +155,39 @@ class BookingDataAccess(BaseDataAccess):
         
 
     def read_all_av_rooms_by_hotel(self, hotel_id:int, check_out_date:date, check_in_date:date) -> list[model.Room]:
+        if not hotel_id:
+            raise ValueError("Hotel Id has to be defined")
+        if not isinstance(hotel_id, int):
+            raise ValueError("Hotel Id has to be an integer")
+        if not isinstance(check_in_date, date):
+            raise ValueError("Check in Date has to be a date")
+        if not isinstance(check_out_date, date):
+            raise ValueError("Check out Date has to be a date")
+        # if check_out_date <= check_in_date:
+        #     raise ValueError("Check-out date must be after check-in date")
+        
         sql = """
-        SELECT r.room_id, r.hotel_id, r.room_number, r.type_id, r.price_per_night
-        FROM Room r
-        LEFT JOIN Booking b ON r.room_id = b.room_id
-        AND b.check_in_date <= ? AND b.check_out_date >= ?
-        WHERE r.hotel_id = ?
-        AND b.room_id IS NULL
+        SELECT 
+            Room.room_id,
+            Room.hotel_id,
+            Room.room_number,
+            Room.type_id,
+            Room.price_per_night
+        FROM 
+            Room
+        LEFT JOIN 
+            Booking ON Room.room_id = Booking.room_id
+        WHERE 
+            Room.hotel_id = ? AND (
+                NOT (
+                    Booking.check_out_date >= ?
+                    AND Booking.check_in_date <= ?
+                )
+                OR Booking.room_id IS NULL
+            )
         """
-        params = (check_out_date, check_in_date, hotel_id)
+
+        params = (hotel_id, check_in_date, check_out_date)
         rows = self.fetchall(sql, params)
         
         if rows:
@@ -163,17 +204,40 @@ class BookingDataAccess(BaseDataAccess):
         return None
 
     def read_av_rooms_city(self, city: str, check_out_date: date, check_in_date: date) -> list[model.Room]:
+        if not city:
+            raise ValueError("City has to be defined")
+        if not isinstance(city, str):
+            raise ValueError("City has to be a string")
+        if not isinstance(check_in_date, date):
+            raise ValueError("Check in Date has to be a date")
+        if not isinstance(check_out_date, date):
+            raise ValueError("Check out Date has to be a date")
+        # if check_out_date <= check_in_date:
+        #     raise ValueError("Check-out date must be after check-in date")        
+
         sql = """
-        SELECT r.room_id, r.room_number, r.type_id, r.price_per_night,
-            h.hotel_id, h.name, h.stars,
-            a.address_id, a.street, a.city, a.zip_code
-        FROM Room r
-        JOIN Hotel h ON h.hotel_id = r.hotel_id
-        JOIN Address a ON a.address_id = h.address_id
-        LEFT JOIN Booking b ON r.room_id = b.room_id
-            AND b.check_in_date <= ? AND b.check_out_date >= ?
-        WHERE a.city LIKE ?
-        AND b.room_id IS NULL
+        SELECT 
+            Room.room_id,
+            Room.room_number,
+            Room.type_id,
+            Room.price_per_night,
+            Room.hotel_id,
+            Hotel.name,
+            Hotel.stars,
+            Address.address_id,
+            Address.street,
+            Address.city,
+            Address.zip_code
+        FROM 
+            Room
+        Join Hotel on hotel.hotel_id = Room.hotel_id
+        Join Address on Address.address_id = Hotel.address_id
+        LEFT JOIN 
+            Booking ON Room.room_id = Booking.room_id
+                AND Booking.check_in_date <= ?
+                AND Booking.check_out_date >= ?
+        WHERE Booking.room_id IS NULL
+        AND Address.city Like ?
         """
         like = f"%{city}%"
         rows = self.fetchall(sql, (check_out_date, check_in_date, like))
@@ -194,7 +258,16 @@ class BookingDataAccess(BaseDataAccess):
         return None
 
     def create_new_booking(self, room_id:int, check_in_date:date, check_out_date:date, guest_id:int, total_amount:float) -> model.Booking:
-        
+        if not room_id:
+            raise ValueError("Room has to be defined")
+        if not isinstance(check_in_date, date):
+            raise ValueError("Check in Date has to be a date")
+        if not isinstance(check_out_date, date):
+            raise ValueError("Check out Date has to be a date")
+        if check_out_date <= check_in_date:
+            raise ValueError("Check-out date must be after check-in date")
+        if not guest_id:
+            raise ValueError("Guest has to be defined")
 
         #Connection with Data Acess Layer
         room_mo = data_access.RoomDataAccess()
@@ -206,8 +279,8 @@ class BookingDataAccess(BaseDataAccess):
 
         available_rooms = self.read_all_av_rooms_by_hotel(hotel_dao.hotel_id, check_out_date, check_in_date)
         available_room_ids = [room_id for room in available_rooms]
-        if room_id not in available_room_ids:
-            raise ValueError("Room is not available in the selected period")
+        # if room_id not in available_room_ids:
+        #     raise ValueError("Room is not available in the selected period")
 
         sql = """
         INSERT INTO booking (guest_id, room_id, check_in_date, check_out_date, total_amount) VALUES (?, ?, ?, ?, ?)             
@@ -221,6 +294,13 @@ class BookingDataAccess(BaseDataAccess):
     def cancell_booking(self, booking_id:int)-> None:
         if not booking_id:
             raise ValueError("Booking ID is required.")
+        #Das Check In Datum soll in nicht in der Vergangenheit liegen
+        booking= self.read_booking_by_id(booking_id)
+        if booking.check_in_date <= date.today():
+            raise ValueError("This Booking cannot be cancelled.")
+        #Die Buchung soll nicht nochmals storniert werden
+        if booking.is_cancelled:
+            raise ValueError("This Booking has already been cancelled")
         
         today = date.today()
 

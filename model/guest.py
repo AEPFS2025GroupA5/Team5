@@ -125,7 +125,7 @@ class Guest:
         
     #Userfriendly
     def userfriendly(self):
-        return f"""👤 Guest Details
+        return f"""
             ID: {self.guest_id}
             Name: {self.first_name} {self.last_name}
             E-Mail: {self.email}

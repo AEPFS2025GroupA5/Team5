@@ -18,11 +18,6 @@ class RoomManager:
 
     def get_all_rooms(self) -> list[model.Room]:
         rooms= self.__room_da.read_all_rooms()
-        
-        #Preis Dynamik
-        for room in rooms:
-            seasonal_price = self.get_price_season(room.price_per_night)
-            room.price_per_night = seasonal_price
         return rooms
     
     def create_new_room(self,
@@ -84,9 +79,6 @@ class RoomManager:
                        room_id: int
         ) -> model.Room:
         room = self.__room_da.read_room_by_id(room_id)
-        #Preisdynamik
-        seasonal_price = self.get_price_season(room.price_per_night)
-        room.price_per_night= seasonal_price
         return room
     
     def get_room_details_for_hotel(self, hotel_id: int) -> list[model.Room]:

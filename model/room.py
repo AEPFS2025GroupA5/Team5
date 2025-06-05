@@ -110,7 +110,6 @@ class Room:
    
     def userfriendly(self, room:Room):
         return f"""
-            Room Details:
             Zimmernummer: {self.room_number}
             Preis pro Nacht: {room.price_per_night:.2f} CHF
             """
