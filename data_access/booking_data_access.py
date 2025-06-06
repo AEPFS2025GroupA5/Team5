@@ -334,8 +334,8 @@ class BookingDataAccess(BaseDataAccess):
         hotel_dao = room_mo.read_hotel_by_roomId(room_id)
         guest_dao = guest_mo.read_guest_by_id(guest_id)
 
-        available_rooms = self.read_all_av_rooms_by_hotel(hotel_dao.hotel_id, check_out_date, check_in_date)
-        available_room_ids = [room_id for room in available_rooms]
+        # available_rooms = self.read_all_av_rooms_by_hotel(hotel_dao.hotel_id, check_out_date, check_in_date)
+        # available_room_ids = [room_id for room in available_rooms]
         # if room_id not in available_room_ids:
         #     raise ValueError("Room is not available in the selected period")
 

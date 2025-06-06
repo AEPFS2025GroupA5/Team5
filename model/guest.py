@@ -59,10 +59,10 @@ class Guest:
         self.__address:Address = address    #Aggregation mit Address
         self.__bookings: list[Booking] = [] #Aggregation Booking leere Liste, wo man alle Buchungen vom Kunden sehen kann
 
-    #Getter Funktion vom Invoices
-    @property
-    def invoice(self):
-        return self.__invoice
+    # #Getter Funktion vom Invoices
+    # @property
+    # def invoice(self):
+    #     return self.__invoice
     
     #Getter Funktion vom Address
     @property

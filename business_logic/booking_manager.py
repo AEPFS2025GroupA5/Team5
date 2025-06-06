@@ -124,16 +124,19 @@ class BookingManager:
         return billed_bookings
     
     #Filterung
-    def get_guests_by_last_and_firstname(self, last_name:str, first_name:str) -> list[model.Guest]:
-        matching_guests= [guest for guest in self.__all_guests if last_name.lower() in guest.last_name.lower() and first_name.lower() in guest.first_name.lower()]
-        return matching_guests
-    
-    def get_guests_by_last_and_firstname(self, last_name:str, first_name:str) -> list[model.Guest]:
-        matching_guests= [guest for guest in self.__all_guests if last_name.lower() in guest.last_name.lower() and first_name.lower() in guest.first_name.lower()]
-        return matching_guests
-    
+    # def get_guests_by_last_and_firstname(self, last_name:str, first_name:str) -> list[model.Guest]:
+    #     matching_guests= [guest for guest in self.__all_guests if last_name.lower() in guest.last_name.lower() and first_name.lower() in guest.first_name.lower()]
+    #     return matching_guests
 
-    
+    def get_guests_by_last_and_firstname(self, last_name: str, first_name: str) -> list[model.Guest]:
+        last_name = last_name.strip().lower()
+        first_name = first_name.strip().lower()
+        
+        matching_guests = [
+            guest for guest in self.__all_guests
+            if guest.last_name.strip().lower() == last_name and guest.first_name.strip().lower() == first_name
+        ]
+        return matching_guests
 
     #Userfriendly Outputs
     def print_userfriendly_booking(self, bookings: list[model.Booking]):
