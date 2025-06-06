@@ -68,5 +68,3 @@ def get_room_info_short(room: model.Room) -> str:
     if not isinstance(room, model.Room):
         raise TypeError("room must be a Room object")
     return f"Room Number: {room.room_number}, Type: {get_room_type_short(room.room_type)}, Price: {room.price_per_night} "
-
-

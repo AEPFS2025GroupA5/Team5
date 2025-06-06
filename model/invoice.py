@@ -21,41 +21,41 @@ class Invoice:
         issue_date: date, 
         total_amount: float, 
         is_paid: bool = False, 
-        guest:"Guest" = None
+        # guest:"Guest" = None
     ):
 
         #Typprüfung
-        if invoice_id is None:
-            raise ValueError("Invoice Id is required")
-        if not isinstance(invoice_id, int):
-            raise ValueError("Invoice Id has to be an integer")
+        # if invoice_id is None:
+        #     raise ValueError("Invoice Id is required")
+        # if not isinstance(invoice_id, int):
+        #     raise ValueError("Invoice Id has to be an integer")
         
-        if booking_id is None:
-            raise ValueError("Booking Id is required")
-        if not isinstance(booking_id, int):
-            raise ValueError("Booking Id has to be an integer")
+        # if booking_id is None:
+        #     raise ValueError("Booking Id is required")
+        # if not isinstance(booking_id, int):
+        #     raise ValueError("Booking Id has to be an integer")
         
-        if issue_date is None:
-            raise ValueError("Issue Date is required")
-        if not isinstance(issue_date, date):
-            raise ValueError("Issue Date has to be a date")
+        # if issue_date is None:
+        #     raise ValueError("Issue Date is required")
+        # if not isinstance(issue_date, date):
+        #     raise ValueError("Issue Date has to be a date")
         
-        if total_amount is None:
-            raise ValueError("Total Amount is required")
-        if not isinstance(total_amount, (int, float)):
-            raise ValueError("Total amount must be a number (int or float)")
+        # if total_amount is None:
+        #     raise ValueError("Total Amount is required")
+        # if not isinstance(total_amount, (int, float)):
+        #     raise ValueError("Total amount must be a number (int or float)")
 
         self.__invoice_id = invoice_id
         self._issue_date = issue_date
         self._total_amount = total_amount
         self.booking_id = booking_id
         self._is_paid = is_paid
-        self.__guest:Guest = guest
+        # self.__guest:Guest = guest
     
-    #Get für Guest
-    @property
-    def guest(self):
-        return self.__guest
+    # #Get für Guest
+    # @property
+    # def guest(self):
+    #     return self.__guest
     
     #Get und Set für Invoice 
     @property

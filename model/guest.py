@@ -25,37 +25,37 @@ class Guest:
             address:Address
         ):
 
-        #Typprüfung
-        if guest_id is None:
-            raise ValueError("Guest Id is required")
-        if not isinstance(guest_id, int):
-            raise ValueError("Guest Id has to be an integer")
+        # #Typprüfung
+        # if guest_id is None:
+        #     raise ValueError("Guest Id is required")
+        # if not isinstance(guest_id, int):
+        #     raise ValueError("Guest Id has to be an integer")
         
-        if first_name is None:
-            raise ValueError("First name is required")
-        if not isinstance(first_name, str):
-            raise ValueError("First name has to be a string")
+        # if first_name is None:
+        #     raise ValueError("First name is required")
+        # if not isinstance(first_name, str):
+        #     raise ValueError("First name has to be a string")
 
-        if last_name is None:
-            raise ValueError("Last name is required")
-        if not isinstance(last_name, str):
-            raise ValueError("Last name has to be a string")        
+        # if last_name is None:
+        #     raise ValueError("Last name is required")
+        # if not isinstance(last_name, str):
+        #     raise ValueError("Last name has to be a string")        
 
-        if email is None:
-            raise ValueError("E-Mail is required")
-        if not isinstance(email, str):
-            raise ValueError("E-Mail has to be a string")     
+        # if email is None:
+        #     raise ValueError("E-Mail is required")
+        # if not isinstance(email, str):
+        #     raise ValueError("E-Mail has to be a string")     
         
-        if address is None:
-            raise ValueError("Address Id is required")
-        if not isinstance(address, Address):
-            raise ValueError("Adress has to be an object")
+        # if address is None:
+        #     raise ValueError("Address Id is required")
+        # if not isinstance(address, Address):
+        #     raise ValueError("Adress has to be an object")
 
         self.__guest_id = guest_id
         self._first_name = first_name
         self._last_name = last_name
         self._email = email
-        self.__invoice: list[Invoice] = [] #Aggregation Invoice
+        # self.__invoice: list[Invoice] = [] #Aggregation Invoice
         self.__address:Address = address    #Aggregation mit Address
         self.__bookings: list[Booking] = [] #Aggregation Booking leere Liste, wo man alle Buchungen vom Kunden sehen kann
 
@@ -85,13 +85,12 @@ class Guest:
     
     @first_name.setter
     def first_name(self, new:str):
-        if not isinstance(new, str):
-            raise ValueError("First Name has to be a string")
-        if not new:
-            raise ValueError("First Name is required")
-        else:
-            self._first_name = new
-            return f"You have changed First Name into: {self.first_name}"
+        # if not isinstance(new, str):
+        #     raise ValueError("First Name has to be a string")
+        # if not new:
+        #     raise ValueError("First Name is required")
+        self._first_name = new
+        return f"You have changed First Name into: {self.first_name}"
 
     @property
     def last_name(self):
@@ -99,13 +98,12 @@ class Guest:
 
     @last_name.setter
     def last_name(self, new:str):
-        if not isinstance(new, str):
-            raise ValueError("Last Name has to be a string")
-        if not new:
-            raise ValueError("Last Name is required")
-        else:
-            self._last_name = new
-            return f"You have changed Last Name into: {self._last_name}"
+        # if not isinstance(new, str):
+        #     raise ValueError("Last Name has to be a string")
+        # if not new:
+        #     raise ValueError("Last Name is required")
+        self._last_name = new
+        return f"You have changed Last Name into: {self._last_name}"
 
     @property
     def email(self):
@@ -113,15 +111,14 @@ class Guest:
 
     @email.setter
     def email(self, new:str):
-        if not isinstance(new, str):
-            raise ValueError("E-Mail has to be a string")
-        if not new:
-            raise ValueError("E-Mail is required")
-        if not "@" in new:
-            raise ValueError('E-Mail needs an "@" in their address')
-        else:
-            self._email=new
-            return f"You have changed E-Mail into: {self._email}"
+        # if not isinstance(new, str):
+        #     raise ValueError("E-Mail has to be a string")
+        # if not new:
+        #     raise ValueError("E-Mail is required")
+        # if not "@" in new:
+        #     raise ValueError('E-Mail needs an "@" in their address')
+        self._email=new
+        return f"You have changed E-Mail into: {self._email}"
         
     #Userfriendly
     def userfriendly(self):

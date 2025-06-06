@@ -54,6 +54,63 @@ class BookingDataAccess(BaseDataAccess):
             return all_bookings
         return None
 
+    def read_bookings_by_guest(self, guest_id: int) -> model.Booking:
+        if not guest_id:
+            raise ValueError("Booking Id is required")
+        if not isinstance(guest_id, int):
+            raise ValueError("Booking Id must be an integer")
+        sql = """
+        SELECT 
+            b.booking_id, b.check_in_date, b.check_out_date, b.total_amount, b.is_cancelled,
+            g.guest_id, g.first_name, g.last_name, g.email,
+            ga.address_id, ga.street, ga.city, ga.zip_code,
+            r.room_id, r.room_number, r.type_id, r.price_per_night,
+            h.hotel_id, h.name, h.stars,
+            ha.address_id, ha.street, ha.city, ha.zip_code
+        FROM booking b
+        JOIN guest g ON b.guest_id = g.guest_id
+        JOIN address ga ON g.address_id = ga.address_id
+        JOIN room r ON b.room_id = r.room_id
+        JOIN hotel h ON r.hotel_id = h.hotel_id
+        JOIN address ha ON h.address_id = ha.address_id
+        WHERE g.guest_id = ?
+        """
+        rows = self.fetchall(sql, (guest_id,))
+        bookings= []
+        if rows:
+            for (
+                booking_id, check_in, check_out, total_amount, is_cancelled,
+                guest_id, first_name, last_name, email,
+                guest_addr_id, guest_street, guest_city, guest_zip,
+                room_id, room_number, room_type_id, price_per_night,
+                hotel_id, hotel_name, hotel_stars,
+                hotel_addr_id, hotel_street, hotel_city, hotel_zip
+            ) in rows:
+
+                # Objekte aufbauen
+                guest_address = model.Address(guest_addr_id, guest_street, guest_city, guest_zip)
+                guest = model.Guest(guest_id, first_name, last_name, email, guest_address)
+
+                hotel_address = model.Address(hotel_addr_id, hotel_street, hotel_city, hotel_zip)
+                hotel = model.Hotel(hotel_id, hotel_name, hotel_stars, hotel_address)
+
+                room = model.Room(room_id, hotel, room_number, room_type_id, price_per_night)
+
+                #Objekt Booking erstellen
+                booking = model.Booking(
+                    booking_id=booking_id,
+                    room=room,
+                    check_in_date=check_in,
+                    check_out_date=check_out,
+                    total_amount=total_amount,
+                    guest=guest,
+                    is_cancelled=bool(is_cancelled)
+                )
+                bookings.append(booking)
+
+            return bookings
+        return None
+
     def read_booking_by_id(self, booking_id: int) -> model.Booking:
         if not booking_id:
             raise ValueError("Booking Id is required")

@@ -48,3 +48,29 @@ def get_userfriendly_room(room: model.Room) -> str:
     h = hotelman.read_hotel_by_id(r.hotel_id)
     return f"Hotel: {h.name},{h.stars}, {h.address.city}, Room number: {r.room_number}, Room description: {r.room_type.description}, Max Guests: {r.room_type.max_guests}, Price per night: CHF {r.price_per_night}"
 
+
+def get_userfriendly_booking(booking:model.Booking)-> str:
+    bookingman= business_logic.BookingManager()
+    hotelman= business_logic.HotelManager()
+    rooman= business_logic.RoomManager()
+
+    r= rooman.get_room_by_id(booking.room.room_id)
+    h= hotelman.read_hotel_by_id(r.hotel_id)
+    b= bookingman.read_booking_by_id(booking.booking_id)
+
+    return f"Booking ID: {b.booking_id}, Check- In: {b.check_in_date}, Check-Out: {b.check_out_date}, Cancelled: {b.is_cancelled}, Booked in: {h.name} Room: {r.room_number}"
+
+
+def get_guest_firstname() -> str:
+    while True:
+        try:
+            return ui.input_helper.input_valid_string("Enter your firstname", 3, 15)
+        except Exception as e:
+            print(f"Invalid input: {e}, give at most 15 characters")
+
+def get_guest_lastname() -> str:
+    while True:
+        try:
+            return ui.input_helper.input_valid_string("Enter your lastname", 3, 20)
+        except Exception as e:
+            print(f"Invalid input: {e}, give at most 20 characters")

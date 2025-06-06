@@ -36,7 +36,10 @@ class GuestDataAccess(BaseDataAccess):
         sql = "SELECT guest_id, first_name, last_name, email, address_id FROM guest WHERE last_name LIKE ?"
         params = tuple([f"%{last_name}%"])
         rows = self.fetchall(sql,params)
-        return [model.Guest(*row) for row in rows] #möglicherweise hier auch noch ein raise Error machen, wenn es keine Gäste gibt
+        if rows:
+          return [model.Guest(*row) for row in rows] 
+        else:
+          return None
 
     def create_new_guest(self,
                             first_name: str,

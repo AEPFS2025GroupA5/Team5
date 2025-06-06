@@ -31,34 +31,34 @@ class Booking:
     ):
         
         #Typprüfung
-        if not booking_id:
-            raise ValueError("booking Id is required")
-        if not isinstance(booking_id, int):
-            raise ValueError("booking Id has to be an integer")
+        # if not booking_id:
+        #     raise ValueError("booking Id is required")
+        # if not isinstance(booking_id, int):
+        #     raise ValueError("booking Id has to be an integer")
         
-        if not check_in_date:
-            raise ValueError("check in date is required")
-        if not isinstance(check_in_date, date):
-            raise ValueError("check in date has to be a date")
+        # if not check_in_date:
+        #     raise ValueError("check in date is required")
+        # if not isinstance(check_in_date, date):
+        #     raise ValueError("check in date has to be a date")
         
-        if not check_out_date:
-            raise ValueError("check out date is required")
-        if not isinstance(check_out_date, date):
-            raise ValueError("check out date has to be a date")
+        # if not check_out_date:
+        #     raise ValueError("check out date is required")
+        # if not isinstance(check_out_date, date):
+        #     raise ValueError("check out date has to be a date")
         
-        if total_amount < 0:
-            raise ValueError("total amount has to be over CHF 0")
-        if not isinstance(total_amount, float):
-            raise ValueError("total amount has to be a float")
+        # if total_amount < 0:
+        #     raise ValueError("total amount has to be over CHF 0")
+        # if not isinstance(total_amount, float):
+        #     raise ValueError("total amount has to be a float")
         
-        if not isinstance(guest, Guest):
-            raise ValueError("guest has to be an integer")
+        # if not isinstance(guest, Guest):
+        #     raise ValueError("guest has to be an integer")
         
-        if not isinstance(room, Room):
-            raise ValueError("room id has to be an integer")
+        # if not isinstance(room, Room):
+        #     raise ValueError("room id has to be an integer")
             
-        if not isinstance(is_cancelled, bool):
-            raise ValueError("is cancelled has to be a boolean")
+        # if not isinstance(is_cancelled, bool):
+        #     raise ValueError("is cancelled has to be a boolean")
 
         self.__booking_id = booking_id
         self.__room:Room = room
@@ -122,10 +122,9 @@ class Booking:
 
     @is_cancelled.setter #Man erlaubt nur zu stornieren und niemals zurückzunehmen, da es auch in der Praxis so ist.
     def is_cancelled(self, new:bool):
-        if not isinstance(new, bool):
-            raise ValueError("It has to be a bool")
-        if not new:
-            raise ValueError("You cannot uncancell an already cancelled booking")
-        else:
-            self.__is_cancelled = new
-            print(f'You have changed "is_cancelled" to: {self.__is_cancelled}')
+        # if not isinstance(new, bool):
+        #     raise ValueError("It has to be a bool")
+        # if not new:
+        #     raise ValueError("You cannot uncancell an already cancelled booking")
+        self.__is_cancelled = new
+        print(f'You have changed "is_cancelled" to: {self.__is_cancelled}')

@@ -6,6 +6,7 @@ import data_access
 from datetime import date
 from business_logic.room_manager import RoomManager
 from business_logic.invoice_manager import InvoiceManager
+from business_logic.guest_manager import GuestManager
 
 class BookingManager:
     def __init__(self):
@@ -13,6 +14,9 @@ class BookingManager:
         self.__room_da = data_access.RoomDataAccess()
         self.__room_manager = RoomManager()
         self.__invoice_manager = InvoiceManager()
+        self.__guest_manager = GuestManager()
+
+        self.__all_guests = self.__guest_manager.read_all_guest()
     
     ## Admin
     def read_all_bookings(self):
@@ -37,12 +41,14 @@ class BookingManager:
         room= self.__room_da.read_room_by_id(room_id)
         # Preis dynamisch anpassen:
         seasonal_price = self.__room_manager.get_price_season(room.price_per_night)
+        seasonal_per_night= seasonal_price - room.price_per_night
         room.price_per_night= seasonal_price
 
         #Berechnung von MWST und Verwaltungskosten
         num_nights = (check_out_date - check_in_date).days
         price = num_nights * room.price_per_night
-        
+    
+
         mwst_satz= 108.1
         verwaltungskosten_satz= 0.1
 
@@ -55,11 +61,14 @@ class BookingManager:
 
         total_amount= float(round(base_price, 2))
 
+        seasonal= seasonal_per_night*num_nights
+
         sub_total= float(round(total_amount-mwst_betrag, 2))
 
         #Userfriendly Ausgabe für die erstellte Buchung mit Auszug aller Kosten und MWST Betrag -> Aus simplen Gründen haben wir 8.1% genommen
         print(f"   Thank you for your booking!")
         print(f"   🛏 Base Price ({num_nights:.2f} nights at CHF {room.price_per_night:.2f} ): CHF {price:.2f} ")
+        print(f"   Seasonal Fee: CHF {seasonal}")
         print(f"   🛠 Administrative Fee: CHF {vr_kost:.2f} ")
         print(f"-------------------------------------------")
         print(f"   Subtotal: {sub_total:.2f}")
@@ -80,7 +89,10 @@ class BookingManager:
             raise ValueError("Booking ID has to be an integer")
         else:
             return self.__booking_da.read_booking_by_id(booking_id)
-            
+
+    def read_bookings_by_guest(self, guest_id:int)-> model.Booking:
+        return self.__booking_da.read_bookings_by_guest(guest_id)   
+
     def read_av_rooms_city(self, city: str, check_out_date: date, check_in_date: date) -> list[model.Room]:
         return self.__booking_da.read_av_rooms_city(city, check_out_date, check_in_date)
 
@@ -111,6 +123,18 @@ class BookingManager:
 
         return billed_bookings
     
+    #Filterung
+    def get_guests_by_last_and_firstname(self, last_name:str, first_name:str) -> list[model.Guest]:
+        matching_guests= [guest for guest in self.__all_guests if last_name.lower() in guest.last_name.lower() and first_name.lower() in guest.first_name.lower()]
+        return matching_guests
+    
+    def get_guests_by_last_and_firstname(self, last_name:str, first_name:str) -> list[model.Guest]:
+        matching_guests= [guest for guest in self.__all_guests if last_name.lower() in guest.last_name.lower() and first_name.lower() in guest.first_name.lower()]
+        return matching_guests
+    
+
+    
+
     #Userfriendly Outputs
     def print_userfriendly_booking(self, bookings: list[model.Booking]):
         for booking in bookings:
