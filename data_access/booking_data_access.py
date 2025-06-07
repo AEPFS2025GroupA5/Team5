@@ -7,12 +7,15 @@ from model.room import Room
 from model.hotel import Hotel
 from data_access import RoomDataAccess
 from data_access import GuestDataAccess
+from data_access import RoomTypeDataAccess
 
 class BookingDataAccess(BaseDataAccess):
     def __init__(self, 
                 db_path: str = None               
         ):
         super().__init__(db_path)
+
+        self.__room_type_dao = data_access.room_type_access.RoomTypeDataAccess()
 
 
     # def read_all_bookings(self) -> list[model.Booking]:
@@ -86,7 +89,8 @@ class BookingDataAccess(BaseDataAccess):
                 is_cancelled = bool(cancelled)
                 address = model.Address(address_id, street, city, zip_code)
                 hotel = model.Hotel(hotel_id, hotel_name, hotel_stars, address)
-                room = model.Room(room_id, hotel, room_number, room_type, price_per_night)
+                room_type_2 = self.__room_type_dao.read_room_type_by_id(room_type)
+                room = model.Room(room_id, hotel.hotel_id, room_number, room_type_2, price_per_night)
                 guest = model.Guest(guest_id, guest_first_name, guest_last_name, guest_email, address)
                 
                 booking = model.Booking(
@@ -143,7 +147,7 @@ class BookingDataAccess(BaseDataAccess):
                 booking_id, check_in, check_out, total_amount, is_cancelled,
                 guest_id, first_name, last_name, email,
                 guest_addr_id, guest_street, guest_city, guest_zip,
-                room_id, room_number, room_type_id, price_per_night,
+                room_id, room_number, room_type, price_per_night,
                 hotel_id, hotel_name, hotel_stars,
                 hotel_addr_id, hotel_street, hotel_city, hotel_zip
             ) in rows:
@@ -151,11 +155,10 @@ class BookingDataAccess(BaseDataAccess):
                 # Objekte aufbauen
                 guest_address = model.Address(guest_addr_id, guest_street, guest_city, guest_zip)
                 guest = model.Guest(guest_id, first_name, last_name, email, guest_address)
-
                 hotel_address = model.Address(hotel_addr_id, hotel_street, hotel_city, hotel_zip)
                 hotel = model.Hotel(hotel_id, hotel_name, hotel_stars, hotel_address)
-
-                room = model.Room(room_id, hotel, room_number, room_type_id, price_per_night)
+                room_type = self.__room_type_dao.read_room_type_by_id(room_type)
+                room = model.Room(room_id, hotel.hotel_id, room_number, room_type, price_per_night)
 
                 #Objekt Booking erstellen
                 booking = model.Booking(
@@ -270,8 +273,8 @@ class BookingDataAccess(BaseDataAccess):
 
             hotel_address = model.Address(hotel_addr_id, hotel_street, hotel_city, hotel_zip)
             hotel = model.Hotel(hotel_id, hotel_name, hotel_stars, hotel_address)
-
-            room = model.Room(room_id, hotel, room_number, room_type_id, price_per_night)
+            room_type = self.__room_type_dao.read_room_type_by_id(room_type_id)
+            room = model.Room(room_id, hotel.hotel_id, room_number, room_type, price_per_night)
 
             booking = model.Booking(
                 booking_id=booking_id,
@@ -333,7 +336,8 @@ class BookingDataAccess(BaseDataAccess):
                 #Objekte erstellen, um die verfügbaren Zimmer in der Liste zu appenden
                 address = model.Address(address_id=address_id, street=street, city=city, zip_code=zip_code)
                 hotel = model.Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address)
-                av_room = model.Room(room_id=room_id, hotel_id=hotel, room_number=room_number, room_type=type_id, price_per_night=price_per_night)
+                room_type = self.__room_type_dao.read_room_type_by_id(type_id)
+                av_room = model.Room(room_id, hotel.hotel_id, room_number, room_type, price_per_night)
                 all_av_rooms.append(av_room)
         
             return all_av_rooms
@@ -382,7 +386,8 @@ class BookingDataAccess(BaseDataAccess):
 
             for (room_id, hotel_id, room_number, type_id, price_per_night) in rows:               
                 #Objekt für verfügbare Zimmer erstellen
-                av_room = model.Room(room_id=room_id, hotel_id=hotel_id, room_number=room_number, room_type=type_id, price_per_night=price_per_night)
+                room_type = self.__room_type_dao.read_room_type_by_id(type_id)
+                av_room = model.Room(room_id, hotel_id, room_number,room_type, price_per_night)
                 #verfügbare Zimmer in der leeren Liste appenden
                 all_av_rooms.append(av_room)
             
@@ -434,11 +439,11 @@ class BookingDataAccess(BaseDataAccess):
             for (room_id, room_number, type_id, price_per_night,
                 hotel_id, name, stars,
                 address_id, street, city, zip_code) in rows:
-
                 #Objekte erstellen, um die verfügbaren Zimmer in der Liste zu appenden
                 address = model.Address(address_id=address_id, street=street, city=city, zip_code=zip_code)
                 hotel = model.Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address)
-                av_room = model.Room(room_id=room_id, hotel_id=hotel, room_number=room_number, room_type=type_id, price_per_night=price_per_night)
+                room_type = self.__room_type_dao.read_room_type_by_id(type_id)
+                av_room = model.Room(room_id, hotel.hotel_id, room_number, room_type, price_per_night)
                 all_av_rooms.append(av_room)
             
             return all_av_rooms
