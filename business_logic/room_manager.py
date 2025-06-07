@@ -219,8 +219,13 @@ class RoomManager:
 
 ##Pricing Management
     def get_price_season(self, check_in_date: date, price_per_night:float) -> float:
-        month = check_in_date.month
+        percent= self.get_percent_season(check_in_date)
         base_price = price_per_night
+
+        return round(base_price * percent, 2)
+
+    def get_percent_season(self, check_in_date: date) -> float:
+        month = check_in_date.month
 
         if 6 <= month <= 9 or month == 12:  
             percent = 2.0
@@ -229,7 +234,7 @@ class RoomManager:
         else:
             percent = 1.0 
 
-        return round(base_price * percent, 2)
+        return percent
    
     
     

@@ -34,6 +34,14 @@ def get_userfriendly_room(room: model.Room) -> str:
     h = hotelman.read_hotel_by_id(r.hotel_id)
     return f"Hotel: {h.name},{h.stars}, {h.address.city}, Room number: {r.room_number}, Room description: {r.room_type.description}, Max Guests: {r.room_type.max_guests}, Price per night: CHF {r.price_per_night}"
 
+def get_userfriendly_price(room: model.Room) -> str:
+    roomman= business_logic.RoomManager()
+    hotelman= business_logic.HotelManager()
+
+    r = roomman.get_room_by_id(room.room_id)
+    h = hotelman.read_hotel_by_id(r.hotel_id)
+    return f"Hotel: {h.name}, {h.stars} stars, City: {h.address.city}, Room number: {r.room_number}, Room description: {r.room_type.description}, Max Guests: {r.room_type.max_guests}"
+
 
 def get_userfriendly_booking(booking:model.Booking)-> str:
     bookingman= business_logic.BookingManager()
