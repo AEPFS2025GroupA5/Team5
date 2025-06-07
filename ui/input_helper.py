@@ -51,8 +51,6 @@ def input_valid_string(prompt: str, min_length: int = 0, max_length: int = sys.m
 
     if not (min_length <= len(user_input) <= max_length):
         raise StringLengthError(user_input, min_length, max_length)
-    if not isinstance(user_input, str):
-        raise TypeError("Input must be a string.")
     
     return user_input  # Gültige Zeichenkette zurückgeben
 
