@@ -15,25 +15,25 @@ class Address:
         self._city = city
         self._zip_code = zip_code
 
-        # if address_id is None:
-        #     raise ValueError("Address Id is required")
-        # if not isinstance(address_id, int):
-        #     raise ValueError("Address Id has to be an integer")
+        if address_id is None:
+            raise ValueError("Address Id is required")
+        if not isinstance(address_id, int):
+            raise ValueError("Address Id has to be an integer")
         
-        # if street is None:
-        #     raise ValueError("Street is required")
-        # if not isinstance(street, str):
-        #     raise ValueError("Street has to be a string")
+        if street is None:
+            raise ValueError("Street is required")
+        if not isinstance(street, str):
+            raise ValueError("Street has to be a string")
 
-        # if city is None:
-        #     raise ValueError("City is required")
-        # if not isinstance(city, str):
-        #     raise ValueError("City has to be a string")
+        if city is None:
+            raise ValueError("City is required")
+        if not isinstance(city, str):
+            raise ValueError("City has to be a string")
         
-        # if zip_code is None:
-        #     raise ValueError("Zipcode is required")
-        # if not isinstance(zip_code, str):
-        #     raise ValueError("Zipcode has to be a string")
+        if zip_code is None:
+            raise ValueError("Zipcode is required")
+        if not isinstance(zip_code, str):
+            raise ValueError("Zipcode has to be a string")
 
     @property
     def address_id(self):
