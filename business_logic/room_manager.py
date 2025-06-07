@@ -218,8 +218,8 @@ class RoomManager:
         self.__room_facility_da.delete_facility_from_room(room_id, facility_id)
 
 ##Pricing Management
-    def get_price_season(self, price_per_night:float) -> float:
-        month = date.today().month
+    def get_price_season(self, check_in_date: date, price_per_night:float) -> float:
+        month = check_in_date.month
         base_price = price_per_night
 
         if 6 <= month <= 9 or month == 12:  

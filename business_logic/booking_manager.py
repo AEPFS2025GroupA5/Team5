@@ -40,7 +40,7 @@ class BookingManager:
 
         room= self.__room_da.read_room_by_id(room_id)
         # Preis dynamisch anpassen:
-        seasonal_price = self.__room_manager.get_price_season(room.price_per_night)
+        seasonal_price = self.__room_manager.get_price_season(check_in_date, room.price_per_night)
         seasonal_per_night= seasonal_price - room.price_per_night
         room.price_per_night= seasonal_price
 
@@ -133,7 +133,7 @@ class BookingManager:
     def billing(self, booking_id:int):
         booking = self.read_booking_by_id(booking_id)
         # today = date.today()
-        today = date(2025,9,16)
+        today = date(2025,9,16)  #####das hier noch rausnehmen
 
         if booking.is_cancelled:
             print(f"You cannot bill an invoice where the booking is cancelled")
