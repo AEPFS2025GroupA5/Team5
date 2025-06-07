@@ -12,7 +12,6 @@ class Invoice:
                 f"Booking Id: {self.booking_id}\n" \
                 f"Issue Date: {self.issue_date}\n" \
                 f"Total Amount: CHF {self.total_amount}\n" \
-                f"Paid Status: {self.is_paid}\n"
 
     def __init__(
         self, 
@@ -20,7 +19,6 @@ class Invoice:
         booking_id: int, 
         issue_date: date, 
         total_amount: float, 
-        is_paid: bool = False, 
         # guest:"Guest" = None
     ):
 
@@ -49,7 +47,6 @@ class Invoice:
         self._issue_date = issue_date
         self._total_amount = total_amount
         self.booking_id = booking_id
-        self._is_paid = is_paid
         # self.__guest:Guest = guest
     
     # #Get für Guest
@@ -78,17 +75,3 @@ class Invoice:
             raise ValueError("new invoice amount has to be greater than 0")
         else:
             self._total_amount= new
-
-    @property
-    def is_paid(self):
-        return self._is_paid
-
-    @is_paid.setter
-    def is_paid(self, new:bool):
-        if not isinstance(new, bool):
-            raise ValueError("is_paid must be a boolean.")
-        if not self._is_paid and new:
-            self._is_paid = True
-            print(f'You have changed "is_paid" to: {self.is_paid}')
-        else:
-            raise ValueError("Invoice already paid or invalid update.")

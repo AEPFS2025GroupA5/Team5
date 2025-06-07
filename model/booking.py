@@ -75,7 +75,7 @@ class Booking:
             Check-In: {self.check_in_date}
             Check-Out: {self.check_out_date}
             Total Amount: CHF{self.total_amount:.2f} 
-
+            Invoice: {self.invoice}
             Cancelled: {self.is_cancelled}
             """
 
@@ -83,6 +83,12 @@ class Booking:
     @property
     def invoice(self):
         return self.__invoice
+    
+    @invoice.setter
+    def invoice(self, thing):
+        if not isinstance(thing, Invoice) and thing is not None:
+            raise ValueError("invoice must be an Invoice object or None.")
+        self.__invoice = thing
     
     # Getter für Zugriff auf den Gast
     @property
@@ -122,9 +128,9 @@ class Booking:
 
     @is_cancelled.setter #Man erlaubt nur zu stornieren und niemals zurückzunehmen, da es auch in der Praxis so ist.
     def is_cancelled(self, new:bool):
-        # if not isinstance(new, bool):
-        #     raise ValueError("It has to be a bool")
-        # if not new:
-        #     raise ValueError("You cannot uncancell an already cancelled booking")
+        if not isinstance(new, bool):
+            raise ValueError("It has to be a bool")
+        if not new:
+            raise ValueError("You cannot uncancell an already cancelled booking")
         self.__is_cancelled = new
         print(f'You have changed "is_cancelled" to: {self.__is_cancelled}')

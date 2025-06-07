@@ -35,9 +35,9 @@ class InvoiceDataAccess(BaseDataAccess):
             sub_total= float(round(total_amount/108.1*100,2))
             mwst_betrag= total_amount - sub_total
             print(f"   Subtotal of Invoice: {sub_total:.2f}")
-            print(f"   🧾 MwSt (8.1%): CHF {mwst_betrag:.2f} ")
-            print(f"   💵 Gesamtbetrag: CHF {total_amount:.2f} ")
-
+            print(f"   MwSt (8.1%): CHF {mwst_betrag:.2f} ")
+            print(f"   Gesamtbetrag: CHF {total_amount:.2f} ")
+            return inv
         return None
     
     def create_new_invoice(self,
@@ -58,18 +58,20 @@ class InvoiceDataAccess(BaseDataAccess):
         
         if not isinstance(total_amount, (int, float)):
             raise ValueError("Total amount must be a number (int or float)")
-        if total_amount <= 0:
+        if total_amount < 0:
             raise ValueError("Total Amount must be greater than 0")
         if total_amount is None:
             raise ValueError("Totale Amount is mandatory")
 
-        else:
-            sql = "INSERT INTO invoice (booking_id, issue_date, total_amount) VALUES (?, ?, ?)"
-            params = tuple([booking_id, issue_date, total_amount])
-            
-            last_row_id, _ = self.execute(sql, params)
+        sql = "INSERT INTO invoice (booking_id, issue_date, total_amount) VALUES (?, ?, ?)"
+        params = tuple([booking_id, issue_date, total_amount])
+        
+        last_row_id, _ = self.execute(sql, params)
 
-            return model.Invoice(invoice_id=last_row_id, booking_id=booking_id, issue_date=issue_date, total_amount=total_amount)
+        invoice= model.Invoice(invoice_id=last_row_id, booking_id=booking_id, issue_date=issue_date, total_amount=total_amount)
+        print(f"Invoice created for booking {booking_id} (CHF {total_amount:.2f})")
+
+        return invoice
 
     def update_invoice_by_total_amount(self, 
                         invoice_id:int,

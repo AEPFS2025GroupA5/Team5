@@ -12,20 +12,6 @@ def get_booking_id_input() -> int:
         except Exception as e:
             print(f"Invalid input: {e}")
 
-# def get_guest_id_input() -> int:
-#     while True:
-#         try:
-#             return ui.input_helper.input_valid_int("Enter Guest ID: ", 1, 9999)
-#         except Exception as e:
-#             print(f"Invalid input: {e}")
-
-# def get_total_amount_input() -> float:
-#     while True:
-#         try:
-#             return float(ui.input_helper.input_valid_int("Enter total amount (CHF): ", 1, 100000))
-#         except Exception as e:
-#             print(f"Invalid input: {e}")
-
 def get_checkin_date_input() -> date:
     while True:
         try:
@@ -58,8 +44,11 @@ def get_userfriendly_booking(booking:model.Booking)-> str:
     h= hotelman.read_hotel_by_id(r.hotel_id)
     b= bookingman.read_booking_by_id(booking.booking_id)
 
-    return f"Booking ID: {b.booking_id}, Check- In: {b.check_in_date}, Check-Out: {b.check_out_date}, Cancelled: {b.is_cancelled}, Booked in: {h.name} Room: {r.room_number}"
+    #return f"Booking ID: {b.booking_id}, Check- In: {b.check_in_date}, Check-Out: {b.check_out_date}, Totall Amoung: {b.total_amount}, Cancelled: {b.is_cancelled}, Booked in: {h.name} Room: {r.room_number}, Invoice: {b.invoice.booking_id}"
+    return f"Booking ID: {b.booking_id}, Check- In: {b.check_in_date}, Check-Out: {b.check_out_date}, Total Amount: {b.total_amount}, Cancelled: {b.is_cancelled}, Booked in: {h.name} Room: {r.room_number}, Invoice: {b.invoice.booking_id if b.invoice else 'No Invoice'}"
 
+def get_userfriendly_invoice(i:model.Invoice)-> str:
+    return f"Invoice ID: {i.invoice_id}, Issue Date: {i.issue_date}, Amount to pay:{i.total_amount}"
 
 def get_guest_firstname() -> str:
     while True:

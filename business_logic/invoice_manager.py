@@ -21,6 +21,7 @@ class InvoiceManager:
                            issue_date: date,
                            total_amount: float
         ) -> model.Invoice:
+        
         return self.__invoice_da.create_new_invoice(booking_id, issue_date, total_amount)
 
     def update_invoice_by_total_amount(self, 

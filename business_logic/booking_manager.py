@@ -65,17 +65,22 @@ class BookingManager:
 
         sub_total= float(round(total_amount-mwst_betrag, 2))
 
-        #Userfriendly Ausgabe für die erstellte Buchung mit Auszug aller Kosten und MWST Betrag -> Aus simplen Gründen haben wir 8.1% genommen
-        print(f"   Thank you for your booking!")
-        print(f"   🛏 Base Price ({num_nights:.2f} nights at CHF {room.price_per_night:.2f} ): CHF {price:.2f} ")
-        print(f"   Seasonal Fee: CHF {seasonal}")
-        print(f"   🛠 Administrative Fee: CHF {vr_kost:.2f} ")
-        print(f"-------------------------------------------")
-        print(f"   Subtotal: {sub_total:.2f}")
-        print(f"   🧾 VAT (8.1%): CHF {mwst_betrag:.2f} ")
-        print(f"   💵 Total Amount: CHF {total_amount:.2f} ")
+        booking= self.__booking_da.create_new_booking(room_id, check_in_date, check_out_date, guest_id, total_amount)
 
-        return self.__booking_da.create_new_booking(room_id, check_in_date, check_out_date, guest_id, total_amount)
+        if booking:
+            #Userfriendly Ausgabe für die erstellte Buchung mit Auszug aller Kosten und MWST Betrag -> Aus simplen Gründen haben wir 8.1% genommen
+            print(f"Thank you for your booking!")
+            print(f"   Base Price ({num_nights:.2f} nights at CHF {room.price_per_night:.2f} ): CHF {price:.2f} ")
+            print(f"   Seasonal Fee: CHF {seasonal}")
+            print(f"   Administrative Fee: CHF {vr_kost:.2f} ")
+            print(f"-------------------------------------------")
+            print(f"   Subtotal: {sub_total:.2f}")
+            print(f"   VAT (8.1%): CHF {mwst_betrag:.2f} ")
+            print(f"   Total Amount: CHF {total_amount:.2f} ")
+
+            return booking
+        else:
+            return None        
         
     def read_booking_by_id(self, booking_id: int) -> model.Booking:
         bookings = self.__booking_da.read_all_bookings()
@@ -98,35 +103,55 @@ class BookingManager:
 
     def cancell_booking(self, booking_id:int)-> None:
         self.__booking_da.cancell_booking(booking_id)
-        print (f"❌ Buchung mit ID {booking_id} wurde storniert.")
+        print (f"Booking ID {booking_id} is cancelled.")
+        self.__invoice_manager.create_new_invoice(booking_id, date.today(), 0.00)
+        print(f"Invoice of CHF 0.00 has been created!")
 
-    ## Fakturierung
-    def billing(self):
-        bookings = self.read_all_bookings()
-        today = date.today()
-        billed_bookings = []
+    # ## Fakturierung
+    # def billing_general(self):
+    #     bookings = self.read_all_bookings()
+    #     today = date.today()
+    #     billed_bookings = []
 
-        for b in bookings:
-            if b.is_cancelled:
-                continue
-            if b.check_out_date > today:
-                continue
-            if b.invoice is not None:
-                continue  
+    #     for b in bookings:
+    #         if b.is_cancelled:
+    #             continue
+    #         if b.check_out_date > today:
+    #             continue
+    #         if b.invoice is not None:
+    #             continue  
 
-            inv= InvoiceManager()
-            invoice= inv.create_new_invoice(booking_id=b.booking_id, issue_date=today, total_amount=b.total_amount)
+    #         inv= InvoiceManager()
+    #         invoice= inv.create_new_invoice(booking_id=b.booking_id, issue_date=today, total_amount=b.total_amount)
+    #         b.invoice= invoice
 
+    #         print(f"Rechnung erstellt für Buchung {b.booking_id} (CHF {b.total_amount:.2f})")
+    #         billed_bookings.append(b)
 
-            print(f"Rechnung erstellt für Buchung {b.booking_id} (CHF {b.total_amount:.2f})")
-            billed_bookings.append(b)
-
-        return billed_bookings
+    #     return billed_bookings
     
-    #Filterung
-    # def get_guests_by_last_and_firstname(self, last_name:str, first_name:str) -> list[model.Guest]:
-    #     matching_guests= [guest for guest in self.__all_guests if last_name.lower() in guest.last_name.lower() and first_name.lower() in guest.first_name.lower()]
-    #     return matching_guests
+    def billing(self, booking_id:int):
+        booking = self.read_booking_by_id(booking_id)
+        # today = date.today()
+        today = date(2025,9,16)
+
+        if booking.is_cancelled:
+            print(f"You cannot bill an invoice where the booking is cancelled")
+            return None
+        if booking.check_out_date > today:
+            print(f"You cannot bill an invoice where the check_out_date is in the future")
+            return None
+        if booking.invoice is not None:
+            print("You cannot bill a booking where there is already an existing invoice")
+            return None  
+
+        inv= InvoiceManager()
+        invoice= inv.create_new_invoice(booking_id=booking.booking_id, issue_date=today, total_amount=booking.total_amount)
+        booking.invoice= invoice
+
+        return invoice
+    
+
 
     def get_guests_by_last_and_firstname(self, last_name: str, first_name: str) -> list[model.Guest]:
         last_name = last_name.strip().lower()
@@ -152,3 +177,6 @@ class BookingManager:
     def print_user_friendly_hotels(self, hotels: list[model.Hotel]) -> None:
         for hotel in hotels:
             print(model.Hotel.show_user_friendly(hotel))
+
+
+
