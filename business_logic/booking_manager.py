@@ -178,5 +178,11 @@ class BookingManager:
         for hotel in hotels:
             print(model.Hotel.show_user_friendly(hotel))
 
+    #Admin Funktionen
+    def update_booking_price_for_guest(self, booking_id:int)-> None:
+        booking=self.__booking_da.read_booking_by_id(booking_id)
+        if booking is None:
+            raise ValueError(f"There is no booking ID {booking_id} in the systems")
 
+        self.__booking_da.update_booking_price_for_guest(booking_id)
 

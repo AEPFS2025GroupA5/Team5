@@ -506,3 +506,14 @@ class BookingDataAccess(BaseDataAccess):
         WHERE booking_id = ?
         """
         self.execute(sql, (booking_id,))
+
+    def update_booking_price_for_guest(self, booking_id:int)-> None:
+        if not booking_id:
+            raise ValueError("Booking ID is required.")
+
+        sql = """
+        UPDATE Booking 
+        SET total_amount=1000 
+        WHERE booking_id=4
+        """
+        self.execute(sql, (booking_id,))
