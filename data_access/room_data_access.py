@@ -11,6 +11,9 @@ class RoomDataAccess(BaseDataAccess):
         super().__init__(db_path)
 
         self.__room_type_dao = data_access.room_type_access.RoomTypeDataAccess()
+        self.__hotel_dao = data_access.hotel_data_access.HotelDataAccess()
+
+    ## Read Methods
 
     def read_all_rooms(self) -> list[model.Room]:
         sql = """
@@ -77,11 +80,15 @@ class RoomDataAccess(BaseDataAccess):
             rooms.append(room)
         return rooms
     
+    ## Admin Methods
+    
     def update_room(self,
                 room: model.Room
         ) -> None:
-        if room is None:
-            raise ValueError("Room has to be defined")
+
+        #Prüfungen
+        if not isinstance(room, model.Room):
+            raise TypeError("Room must be a Room object")
         
         sql = """
         UPDATE room SET hotel_id = ?, room_number = ?, type_id = ?, price_per_night = ? WHERE room_id = ?
@@ -96,7 +103,6 @@ class RoomDataAccess(BaseDataAccess):
 
         self.execute(sql, params)
         print(f"Room with ID {room.room_id} updated successfully.")
-        print(f"All Rooms in DB: {self.read_all_rooms()}")
 
     def create_new_room(self,
                         hotel_id: int,
@@ -104,31 +110,27 @@ class RoomDataAccess(BaseDataAccess):
                         type_id: model.RoomType,
                         price_per_night: float
         ) -> model.Room:
-        if not hotel_id:
-            raise ValueError("Hotel ID has to be defined")
-        if not room_number:
-            raise ValueError("Room number has to be defined")
-        if not isinstance(price_per_night, (int, float)):
-            raise TypeError("base_price must be an float")
-        if price_per_night < 0:
-            raise ValueError("base_price has to be positiv")
+        #Prüfungen
+        hotel = self.__hotel_dao.read_hotel_by_id(hotel_id)
+        if not hotel:
+            raise ValueError(f"Hotel does not exist")
+        room_type = self.__room_type_dao.read_room_type_by_id(type_id)
+        if not room_type:
+            raise ValueError(f"RoomType does not exist")
         
         sql = """
         INSERT INTO room (hotel_id, room_number, type_id, price_per_night) VALUES (?, ?, ?, ?)
         """
-        params = (hotel_id, room_number, type_id, price_per_night)
+        params = (hotel.hotel_id, room_number, type_id, price_per_night)
         last_row_id, _ = self.execute(sql, params)
 
-        return model.Room(last_row_id, hotel_id, room_number, type_id, price_per_night)
+        return model.Room(last_row_id, hotel.hotel_id, room_number, room_type, price_per_night)
     
 
-    def delete_room_by_id(self,
+    def delete_room (self,
                         room: model.Room
         ) -> None:
-        if room is None:
-            raise ValueError("Room has to be defined")
-        if not room.room_id:
-            raise ValueError("Room was not found")
+        
         sql = """
         DELETE FROM room WHERE room_id = ?
         """
@@ -137,8 +139,12 @@ class RoomDataAccess(BaseDataAccess):
     def delete_rooms_by_hotel_id(self,
                             hotel_id:int
         ) -> None:
-        if hotel_id is None:
-            raise ValueError("Hotel ID has to be defined")
+
+        #Prüfungen
+        hotel = self.__hotel_dao.read_hotel_by_id(hotel_id)
+        if not hotel:
+            raise ValueError(f"Hotel with ID {hotel_id} does not exist")
+       
         sql = """
         DELETE FROM room WHERE hotel_id = ?
         """

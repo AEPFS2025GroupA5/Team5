@@ -2,9 +2,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 class Facility:
-
-    _facility_list: dict[int, Facility] = {}
-
     def __init__(self,
             facility_id:int,
             name:str
@@ -13,9 +10,6 @@ class Facility:
         # Prüfungen
         if not isinstance(facility_id, int):
             raise TypeError("facility_id must be an int")
-        if not facility_id:
-            raise ValueError("facility_id is required")
-
         if not isinstance(name, str):
             raise TypeError("name must be a string")
         if not name:
@@ -24,7 +18,6 @@ class Facility:
         self.__facility_id: int = facility_id
         self._name:str = name
 
-        Facility._facility_list[facility_id] = self
 
     def __repr__(self):
          return f"Facility(ID: {self.__facility_id} | Name: {self._name})"

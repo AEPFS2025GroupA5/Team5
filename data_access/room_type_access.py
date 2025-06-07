@@ -7,6 +7,8 @@ class RoomTypeDataAccess(BaseDataAccess):
         ):
         super().__init__(db_path)
 
+    ## Read Methods
+
     def read_all_room_types(self) -> list[model.RoomType]:
         sql = """
         SELECT type_id, description, max_guests FROM room_type
@@ -22,14 +24,14 @@ class RoomTypeDataAccess(BaseDataAccess):
           if row:
             return model.RoomType(*row)
           return None
+    
+    ## Admin Methods
+
     def create_new_room_type(self,
                              description: str,
                              max_guests: int
         ) -> model.RoomType:
-        if not description:
-            raise ValueError("Description has to be defined")
-        if not isinstance(max_guests, int) or max_guests <= 0:
-         raise ValueError("max_guests has to be positiv")
+       
         
         sql = """
         INSERT INTO room_type (description, max_guests) VALUES (?, ?)
@@ -42,9 +44,6 @@ class RoomTypeDataAccess(BaseDataAccess):
     def update_room_type(self,
                          room_type: model.RoomType
         ) -> None:
-        if room_type is None:
-            raise ValueError("RoomType has to be defined")
-        
         sql = """
         UPDATE room_type SET description = ?, max_guests = ? WHERE type_id = ?
         """
@@ -59,10 +58,6 @@ class RoomTypeDataAccess(BaseDataAccess):
     def delete_room_type_by_id(self, 
                          room_type: model.RoomType
         ) -> None:
-        if room_type is None:
-            raise ValueError("type_id has to be defined")
-        if not room_type.type_id:
-            raise ValueError("RoomType was not found")
         sql = """
         DELETE FROM room_type WHERE type_id = ?
         """

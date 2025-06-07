@@ -7,30 +7,22 @@ class Room:
     def __init__(       
         self,
         room_id: int,
-        hotel_id: Hotel,
+        hotel_id: int,
         room_number: str,
         room_type: RoomType,      
         price_per_night: float
     ):
-        # Prüfungen
-        if not isinstance(room_id, int):
-            raise ValueError("room_id must be an integer")
-        
-        if not isinstance(room_number, str) or not room_number:
-            raise ValueError("room_number must be a non-empty string")
-        
-        if not hotel_id:
-            raise ValueError("hotel is required")
-      
-        if not room_id:
-            raise ValueError("room_id is required")
+        # TypeErrors
         if not isinstance(room_id, int):
             raise TypeError("room_id is to be an integer")
-   
+        if not isinstance(hotel_id, int):
+            raise TypeError("hotel_id is to be an integer")
+        if not isinstance(room_number, str):
+            raise TypeError("room_number must be a string")
+        if not isinstance(room_type, RoomType):
+            raise TypeError("room_type must be a RoomType object")
         if not isinstance(price_per_night, (int, float)):
             raise TypeError("price_per_night must be a number")
-        if price_per_night <= 0:
-            raise ValueError("price_per_night must be greater than 0")
         
         self.__room_id = room_id
         self.__room_type:RoomType = room_type
@@ -91,7 +83,7 @@ class Room:
         self.__hotel = hotel
 
     @room_type.setter
-    def type_id(self,
+    def room_type(self,
                  room_type: RoomType
         ) -> None:
         if not room_type:
@@ -107,10 +99,3 @@ class Room:
         if price_per_night <= 0:
             raise ValueError("price_per_night must be greater than 0")
         self.__price_per_night = price_per_night
-   
-    def userfriendly(self, room:Room):
-        return f"""
-            Zimmernummer: {self.room_number}
-            Preis pro Nacht: {room.price_per_night:.2f} CHF
-            """
- 

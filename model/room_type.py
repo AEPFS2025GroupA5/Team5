@@ -9,21 +9,15 @@ class RoomType:
         max_guests: int,
         ):
         
-        # Prüfungen
+        # TypeErrors
         if not isinstance(type_id, int):
             raise TypeError("type_id must be an int")
-        if not type_id:
-            raise ValueError("type_id is required")
 
         if not isinstance(description, str):
             raise TypeError("description must be a string")
-        if not description:
-            raise ValueError("description must not be empty")
 
         if not isinstance(max_guests, int):
             raise TypeError("max_guests must be an int")
-        if max_guests <= 0:
-            raise ValueError("max_guests must be greater than 0")
      
         self.__type_id = type_id
         self._description = description

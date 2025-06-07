@@ -22,3 +22,13 @@ class RoomFacilityDataAccess(BaseDataAccess):
         result = self.fetchall(sql, (room_id,))
         return [model.Facility(facility_id, name) for facility_id, name in result]
     
+    def delete_facility_from_room(self, room_id: int, facility_id:int):
+        sql = """
+        DELETE FROM Room_Facilities
+        WHERE room_id = ? AND facility_id = ?
+        """
+        rows_deleted = self.execute(sql, (room_id, facility_id))
+        if rows_deleted == 0:
+            print("No facility was removed")
+
+    

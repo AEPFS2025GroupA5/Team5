@@ -37,6 +37,8 @@ class HotelDataAccess(BaseDataAccess):
                         address = self._address_data_access.read_address_by_id(address_id)
                         return model.Hotel(hotel_id, name, stars, address)
                 return None
+        
+        
        
         def read_hotel_by_name(self, name:str) -> model.Hotel:
                 sql = """

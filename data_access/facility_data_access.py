@@ -7,6 +7,7 @@ class FacilityDataAccess(BaseDataAccess):
         ):
         super().__init__(db_path)
 
+   ## Read Methods
     def read_all_facilities(self) -> list[model.Facility]:
         sql = """
         SELECT facility_id, facility_name FROM facilities
@@ -31,9 +32,6 @@ class FacilityDataAccess(BaseDataAccess):
     def read_facility_by_name(self,
                                 name: str
         ) -> model.Facility:
-     if not name:
-        raise ValueError("Facility name is required")
-
      sql = "SELECT facility_id, facility_name FROM facilities WHERE facility_name = ?"
      params = (name,)
      result = self.fetchone(sql, params)
@@ -42,14 +40,11 @@ class FacilityDataAccess(BaseDataAccess):
         return model.Facility(facility_id=result[0], name=result[1])
      return None
 
+## Admin Methods
+
     def create_new_facility(self, 
                             name: str
         ) -> model.Facility:
-     if not isinstance(name, str):
-            raise TypeError("facility name has to be a str")
-     if not name:
-            raise ValueError("facility name is mandatory")
-    
      sql = "INSERT INTO facilities (facility_name) VALUES (?)"
      params = tuple([name])
      last_row_id, _ = self.execute(sql, params)
