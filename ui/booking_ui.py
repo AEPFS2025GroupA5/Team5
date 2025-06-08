@@ -71,3 +71,4 @@ def get_guest_lastname() -> str:
             return ui.input_helper.input_valid_string("Enter your lastname", 3, 20)
         except Exception as e:
             print(f"Invalid input: {e}, give at most 20 characters")
+

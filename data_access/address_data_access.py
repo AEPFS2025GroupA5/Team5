@@ -10,12 +10,12 @@ class AddressDataAccess(BaseDataAccess):
         SELECT address_id, street, city, zip_code FROM address
         """
         rows = self.fetchall(sql)
-        return [model.Address(*row) for row in rows]
+        if rows:
+            return [model.Address(*row) for row in rows]
+        else:
+            return None
 
     def read_address_by_id(self, address_id: int) -> model.Address:
-        if not address_id:
-            raise ValueError("address_id is required")
-
         sql = "SELECT address_id, street, city, zip_code FROM address WHERE address_id = ?"
         result = self.fetchone(sql, (address_id,))
         if result:
@@ -24,9 +24,6 @@ class AddressDataAccess(BaseDataAccess):
         return None
     
     def get_address_id_by_city(self, city: str) -> int:
-        if not city:
-            raise ValueError("city is required")
-
         sql = "SELECT address_id FROM address WHERE city = ?"
         row = self.fetchall(sql, (city,))
         if row:

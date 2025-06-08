@@ -145,8 +145,10 @@ class BookingManager:
         last_name = last_name.strip().lower()
         first_name = first_name.strip().lower()
         
+        all_guests = self.__guest_manager.read_all_guest()
+
         matching_guests = [
-            guest for guest in self.__all_guests
+            guest for guest in all_guests
             if guest.last_name.strip().lower() == last_name and guest.first_name.strip().lower() == first_name
         ]
         return matching_guests
