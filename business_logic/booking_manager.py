@@ -13,6 +13,7 @@ class BookingManager:
         self.__booking_da = data_access.BookingDataAccess()
         self.__room_da = data_access.RoomDataAccess()
         self.__room_manager = RoomManager()
+        self.__hotel_dao = data_access.HotelDataAccess()
         self.__invoice_manager = InvoiceManager()
         self.__guest_manager = GuestManager()
 
@@ -22,23 +23,83 @@ class BookingManager:
     def read_all_bookings(self):
         bookings= self.__booking_da.read_all_bookings()
         return bookings
-        #admin display
 
-    ## Guest Function
+    def update_booking_price_for_guest(self, booking_id:int)-> None:
+        booking=self.__booking_da.read_booking_by_id(booking_id)
+        if booking is None:
+            raise ValueError(f"There is no booking ID {booking_id} in the systems")
+
+        self.__booking_da.update_booking_price_for_guest(booking_id)
+
+## Guest Function
+    #Read Functions
     def read_all_av_rooms_by_hotel(self, hotel_id:int, check_out_date:date, check_in_date:date) -> list[model.Room]:
         rooms=  self.__booking_da.read_all_av_rooms_by_hotel(hotel_id, check_out_date, check_in_date)
         return rooms
-        #userfriendly display()
+
+
+#Funktioniert nicht?!
+    # def read_all_av_rooms_by_hotel(self, hotel_id:int, check_out_date:date, check_in_date:date) -> list[model.Room]:
+    #     if check_in_date < date.today():
+    #         raise ValueError("Check-in date cannot be in the past.")
+
+    #     if check_out_date >= check_in_date:
+    #         raise ValueError("Check-out date must be after check-in date.")
+        
+    #     hotel= self.__hotel_dao.read_hotel_by_id(hotel_id)
+
+    #     if hotel is None:
+    #         raise ValueError(f"Such hotel ID {hotel_id} does not exist in our systems")
+
+
+    #     rooms=  self.__booking_da.read_all_av_rooms_by_hotel(hotel_id, check_out_date, check_in_date)
+    #     return rooms
 
     def read_av_rooms(self, check_out_date: date, check_in_date: date) -> list[model.Room]:
+        if check_in_date >= check_out_date:
+            raise ValueError("Check-out date must be after check-in date.")
+
         rooms= self.__booking_da.read_av_rooms(check_out_date=check_out_date, check_in_date=check_in_date)
         return rooms    
    
-    def create_new_booking(self, room_id:int, check_in_date:date, check_out_date:date, guest_id:int):      
-        available_rooms = self.read_all_av_rooms_by_hotel(self.__room_da.read_hotel_by_roomId(room_id).hotel_id, check_out_date, check_in_date)
-        available_room_ids = [room_id for room in available_rooms]
+    def read_booking_by_id(self, booking_id: int) -> model.Booking:
+        bookings = self.__booking_da.read_all_bookings()
+        booking_ids= [booking_id for booking in bookings]
 
-        room= self.__room_da.read_room_by_id(room_id)
+        if booking_id not in booking_ids:
+            raise ValueError(f"There is no booking id {booking_id}")
+        else:
+            return self.__booking_da.read_booking_by_id(booking_id)
+
+    def read_bookings_by_guest(self, guest_id:int)-> model.Booking:
+        guest= self.__guest_manager.read_guest_by_id(guest_id)
+        if guest is None:
+            raise ValueError("There is no such guest")
+        return self.__booking_da.read_bookings_by_guest(guest_id)   
+
+    def read_av_rooms_city(self, city: str, check_out_date: date, check_in_date: date) -> list[model.Room]:
+        return self.__booking_da.read_av_rooms_city(city, check_out_date, check_in_date)
+
+
+    #Manipulate Data Function
+    def create_new_booking(self, room_id:int, check_in_date:date, check_out_date:date, guest_id:int):
+        if check_in_date >= check_out_date:
+            raise ValueError("Check-out date must be after check-in date.")
+        
+        guest= self.__guest_manager.read_guest_by_id(guest_id)
+        if guest is None:
+            raise ValueError("There is no such guest")
+        
+        room= self.__room_manager.get_room_by_id(room_id)
+        if room is None:
+            raise ValueError("There is no such room")
+        
+        available_rooms = self.read_all_av_rooms_by_hotel(room.hotel_id, check_out_date, check_in_date)
+        available_room_ids = [room.room_id for room in available_rooms]
+
+        if room_id not in available_room_ids:
+            raise ValueError("This room isn't available")
+        
         # Preis dynamisch anpassen:
         seasonal_price = self.__room_manager.get_price_season(check_in_date, room.price_per_night)
         seasonal_per_night= seasonal_price - room.price_per_night
@@ -55,8 +116,6 @@ class BookingManager:
         verwaltungskosten = price * verwaltungskosten_satz
         base_price = verwaltungskosten + price
 
-        vr_kost= verwaltungskosten/mwst_satz*100
-
         mwst_betrag= base_price - (base_price/mwst_satz*100)
 
         total_amount= float(round(base_price, 2))
@@ -70,9 +129,9 @@ class BookingManager:
         if booking:
             #Userfriendly Ausgabe für die erstellte Buchung mit Auszug aller Kosten und MWST Betrag -> Aus simplen Gründen haben wir 8.1% genommen
             print(f"Thank you for your booking!")
-            print(f"   Base Price ({num_nights:.2f} nights at CHF {room.price_per_night:.2f} ): CHF {price:.2f} ")
+            print(f"   Base Price ({num_nights:.2f} nights at CHF {room.price_per_night:.2f} ): CHF {price:.2f} incl. VAT 8.1%")
             print(f"   Seasonal Fee: CHF {seasonal}")
-            print(f"   Administrative Fee: CHF {vr_kost:.2f} ")
+            print(f"   Administrative Fee: CHF {verwaltungskosten:.2f} incl. VAT 8.1%")
             print(f"-------------------------------------------")
             print(f"   Subtotal: {sub_total:.2f}")
             print(f"   VAT (8.1%): CHF {mwst_betrag:.2f} ")
@@ -82,33 +141,18 @@ class BookingManager:
         else:
             return None        
         
-    def read_booking_by_id(self, booking_id: int) -> model.Booking:
-        bookings = self.__booking_da.read_all_bookings()
-        booking_ids= [booking_id for booking in bookings]
-
-        if booking_id not in booking_ids:
-            raise ValueError(f"There is no booking id {booking_id}")
-        if not booking_id:
-            raise ValueError("Booking Id is required")
-        if not isinstance(booking_id, int):
-            raise ValueError("Booking ID has to be an integer")
-        else:
-            return self.__booking_da.read_booking_by_id(booking_id)
-
-    def read_bookings_by_guest(self, guest_id:int)-> model.Booking:
-        return self.__booking_da.read_bookings_by_guest(guest_id)   
-
-    def read_av_rooms_city(self, city: str, check_out_date: date, check_in_date: date) -> list[model.Room]:
-        return self.__booking_da.read_av_rooms_city(city, check_out_date, check_in_date)
+    
 
     def cancell_booking(self, booking_id:int)-> None:
         booking= self.read_booking_by_id(booking_id)
         #Das Check In Datum soll in nicht in der Vergangenheit liegen
         if booking.check_in_date <= date.today():
             raise ValueError("This Booking cannot be cancelled.")
+        
         #Die Buchung soll nicht nochmals storniert werden
         if booking.is_cancelled:
             raise ValueError("This Booking has already been cancelled")
+        
         #Buchungen, die eine Rechnung haben sollten nicht storniert werden können
         if booking.invoice is not None:
             raise ValueError("This Booking has been billed and cannot be cancelled")
@@ -120,7 +164,7 @@ class BookingManager:
     
     def billing(self, booking_id:int):
         booking = self.read_booking_by_id(booking_id)
-        # today = date.today()
+        #today = date.today()
         today = date(2025,9,16)  #####das hier noch rausnehmen
 
         if booking.is_cancelled:
@@ -139,8 +183,7 @@ class BookingManager:
 
         return invoice
     
-
-
+   #Filter Funktion
     def get_guests_by_last_and_firstname(self, last_name: str, first_name: str) -> list[model.Guest]:
         last_name = last_name.strip().lower()
         first_name = first_name.strip().lower()
@@ -159,20 +202,13 @@ class BookingManager:
             print(model.Booking.show_userfriendly())
 
     def print_userfriendly_room(self, rooms: list[model.Room]) -> None:
-        room= self.__room_manager.get_all_rooms()
+        rooms= self.__room_manager.get_all_rooms()
         for room in rooms:
-            print(model.Room.userfriendly(room, room))
+            print(model.Room.userfriendly(room))
             print(model.RoomType.userfriendly(room))
         
     def print_user_friendly_hotels(self, hotels: list[model.Hotel]) -> None:
         for hotel in hotels:
             print(model.Hotel.show_user_friendly(hotel))
 
-    #Admin Funktionen
-    def update_booking_price_for_guest(self, booking_id:int)-> None:
-        booking=self.__booking_da.read_booking_by_id(booking_id)
-        if booking is None:
-            raise ValueError(f"There is no booking ID {booking_id} in the systems")
-
-        self.__booking_da.update_booking_price_for_guest(booking_id)
 
