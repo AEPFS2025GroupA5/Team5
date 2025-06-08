@@ -34,26 +34,20 @@ class BookingManager:
 ## Guest Function
     #Read Functions
     def read_all_av_rooms_by_hotel(self, hotel_id:int, check_out_date:date, check_in_date:date) -> list[model.Room]:
+        if check_in_date < date.today():
+            raise ValueError("Check-in date cannot be in the past.")
+
+        if check_out_date <= check_in_date:
+            raise ValueError("Check-out date must be after check-in date.")
+
+        hotel= self.__hotel_dao.read_hotel_by_id(hotel_id)
+
+        if hotel is None:
+            raise ValueError(f"Such hotel ID {hotel_id} does not exist in our systems")
+
+
         rooms=  self.__booking_da.read_all_av_rooms_by_hotel(hotel_id, check_out_date, check_in_date)
         return rooms
-
-
-#Funktioniert nicht?!
-    # def read_all_av_rooms_by_hotel(self, hotel_id:int, check_out_date:date, check_in_date:date) -> list[model.Room]:
-    #     if check_in_date < date.today():
-    #         raise ValueError("Check-in date cannot be in the past.")
-
-    #     if check_out_date >= check_in_date:
-    #         raise ValueError("Check-out date must be after check-in date.")
-        
-    #     hotel= self.__hotel_dao.read_hotel_by_id(hotel_id)
-
-    #     if hotel is None:
-    #         raise ValueError(f"Such hotel ID {hotel_id} does not exist in our systems")
-
-
-    #     rooms=  self.__booking_da.read_all_av_rooms_by_hotel(hotel_id, check_out_date, check_in_date)
-    #     return rooms
 
     def read_av_rooms(self, check_out_date: date, check_in_date: date) -> list[model.Room]:
         if check_in_date >= check_out_date:
@@ -78,6 +72,12 @@ class BookingManager:
         return self.__booking_da.read_bookings_by_guest(guest_id)   
 
     def read_av_rooms_city(self, city: str, check_out_date: date, check_in_date: date) -> list[model.Room]:
+        if check_in_date < date.today():
+            raise ValueError("Check-in date cannot be in the past.")
+
+        if check_out_date <= check_in_date:
+            raise ValueError("Check-out date must be after check-in date.")
+        
         return self.__booking_da.read_av_rooms_city(city, check_out_date, check_in_date)
 
 
