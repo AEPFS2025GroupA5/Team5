@@ -24,12 +24,12 @@ class BookingManager:
         bookings= self.__booking_da.read_all_bookings()
         return bookings
 
-    def update_booking_price_for_guest(self, booking_id:int)-> None:
+    def update_booking_price_for_guest(self, price_to_set:float, booking_id:int)-> None:
         booking=self.__booking_da.read_booking_by_id(booking_id)
         if booking is None:
             raise ValueError(f"There is no booking ID {booking_id} in the systems")
 
-        self.__booking_da.update_booking_price_for_guest(booking_id)
+        self.__booking_da.update_booking_price_for_guest(price_to_set, booking_id)
 
 ## Guest Function
     #Read Functions
