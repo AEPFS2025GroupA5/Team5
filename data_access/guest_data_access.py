@@ -27,6 +27,11 @@ class GuestDataAccess(BaseDataAccess):
   def read_guest_by_id(self, 
                           guest_id: int
       ) -> model.Guest:
+    if not guest_id:
+      raise ValueError("Guest ID is required")
+    if not isinstance(guest_id, int):
+      raise ValueError("Guest ID has to be an integer")
+
     sql = """
     SELECT g.guest_id, g.first_name, g.last_name, g.email,
           a.address_id, a.street, a.city, a.zip_code
@@ -45,6 +50,11 @@ class GuestDataAccess(BaseDataAccess):
   def read_guest_by_name(self, 
                             last_name:str
       ) -> model.Guest:
+    if not last_name:
+      raise ValueError("Last Name is required")
+    if not isinstance(last_name, str):
+      raise ValueError("Last name has to be a string")
+
     sql = "SELECT guest_id, first_name, last_name, email, address_id FROM guest WHERE last_name LIKE ?"
     params = tuple([f"%{last_name}%"])
     rows = self.fetchall(sql,params)
@@ -65,6 +75,24 @@ class GuestDataAccess(BaseDataAccess):
                           email: str,
                           address_id: int
       ) -> model.Guest:
+    
+    if not first_name:
+      raise ValueError("First name is required")
+    if not isinstance(first_name, str):
+      raise ValueError("First name has to be a string")
+    if not last_name:
+      raise ValueError("Last name is required")
+    if not isinstance(last_name, str):
+      raise ValueError("Last name has to be a string")
+    if not email:
+      raise ValueError("Email is required")
+    if not isinstance(email, str):
+      raise ValueError("Email has to be a string")
+    if not address_id:
+      raise ValueError("Address ID is required")
+    if not isinstance(address_id, int):
+      raise ValueError("Address ID has to be an integer")
+
     sql= "INSERT INTO guest (first_name, last_name, email, address_id) VALUES (?, ?, ?, ?)"
     params = tuple([first_name, last_name, email, address_id])
     last_row_id, _ = self.execute(sql, params)
@@ -75,7 +103,16 @@ class GuestDataAccess(BaseDataAccess):
   def update_guest_by_last_name(self,
                                   guest_id:int, 
                                   new_last_name:str
-      ) -> None:    
+      ) -> None:  
+    if not guest_id:
+      raise ValueError("Guest ID is required")
+    if not isinstance(guest_id, int):
+      raise ValueError("Guet ID has to be an integer")
+    if not new_last_name:
+      raise ValueError("Last name is required")
+    if not isinstance(new_last_name, str):
+      raise ValueError("Last name has to be a string")  
+
     sql = "UPDATE guest SET last_name = ? WHERE guest_id = ?"
     params = (new_last_name, guest_id)
     self.execute(sql, params)

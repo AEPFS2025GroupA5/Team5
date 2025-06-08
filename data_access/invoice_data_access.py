@@ -16,17 +16,25 @@ class InvoiceDataAccess(BaseDataAccess):
         rows = self.fetchall(sql)
         all_invoices = []
 
-        for row in rows:
-            invoice_id, booking_id, issue_date, total_amount = row
-            total_amount = float(f"{total_amount:.2f}")
-            invoice = model.Invoice(invoice_id, booking_id, issue_date, total_amount)
-            all_invoices.append(invoice)
+        if rows:
+            for row in rows:
+                invoice_id, booking_id, issue_date, total_amount = row
+                total_amount = float(f"{total_amount:.2f}")
+                invoice = model.Invoice(invoice_id, booking_id, issue_date, total_amount)
+                all_invoices.append(invoice)
 
-        return all_invoices
-    
+            return all_invoices
+        else:
+            return None
+
     def read_invoice_by_id(self,
                             invoice_id:int
         ) -> model.Invoice:
+        if not invoice_id:
+            raise ValueError("Invoice ID is required")
+        if not isinstance(invoice_id, int):
+            raise ValueError("Invoice ID has to be an integer")
+
         sql = "SELECT invoice_id, booking_id, issue_date, total_amount FROM invoice WHERE invoice_id = ?"
         row = self.fetchone(sql, (invoice_id,))
         if row:
