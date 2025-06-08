@@ -127,5 +127,7 @@ class Booking:
             raise ValueError("It has to be a bool")
         if not new:
             raise ValueError("You cannot uncancell an already cancelled booking")
+        if not self.new:
+            raise ValueError("Booking ID is required")
         self.__is_cancelled = new
         print(f'You have changed "is_cancelled" to: {self.__is_cancelled}')

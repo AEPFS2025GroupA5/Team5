@@ -105,12 +105,12 @@ class Guest:
 
     @email.setter
     def email(self, new:str):
-        # if not isinstance(new, str):
-        #     raise ValueError("E-Mail has to be a string")
-        # if not new:
-        #     raise ValueError("E-Mail is required")
-        # if not "@" in new:
-        #     raise ValueError('E-Mail needs an "@" in their address')
+        if not isinstance(new, str):
+            raise ValueError("E-Mail has to be a string")
+        if not new:
+            raise ValueError("E-Mail is required")
+        if not "@" in new:
+            raise ValueError('E-Mail needs an "@" in their address')
         self._email=new
         return f"You have changed E-Mail into: {self._email}"
         

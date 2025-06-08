@@ -102,33 +102,21 @@ class BookingManager:
         return self.__booking_da.read_av_rooms_city(city, check_out_date, check_in_date)
 
     def cancell_booking(self, booking_id:int)-> None:
+        booking= self.read_booking_by_id(booking_id)
+        #Das Check In Datum soll in nicht in der Vergangenheit liegen
+        if booking.check_in_date <= date.today():
+            raise ValueError("This Booking cannot be cancelled.")
+        #Die Buchung soll nicht nochmals storniert werden
+        if booking.is_cancelled:
+            raise ValueError("This Booking has already been cancelled")
+        #Buchungen, die eine Rechnung haben sollten nicht storniert werden können
+        if booking.invoice is not None:
+            raise ValueError("This Booking has been billed and cannot be cancelled")
+        
         self.__booking_da.cancell_booking(booking_id)
         print (f"Booking ID {booking_id} is cancelled.")
         self.__invoice_manager.create_new_invoice(booking_id, date.today(), 0.00)
         print(f"Invoice of CHF 0.00 has been created!")
-
-    # ## Fakturierung
-    # def billing_general(self):
-    #     bookings = self.read_all_bookings()
-    #     today = date.today()
-    #     billed_bookings = []
-
-    #     for b in bookings:
-    #         if b.is_cancelled:
-    #             continue
-    #         if b.check_out_date > today:
-    #             continue
-    #         if b.invoice is not None:
-    #             continue  
-
-    #         inv= InvoiceManager()
-    #         invoice= inv.create_new_invoice(booking_id=b.booking_id, issue_date=today, total_amount=b.total_amount)
-    #         b.invoice= invoice
-
-    #         print(f"Rechnung erstellt für Buchung {b.booking_id} (CHF {b.total_amount:.2f})")
-    #         billed_bookings.append(b)
-
-    #     return billed_bookings
     
     def billing(self, booking_id:int):
         booking = self.read_booking_by_id(booking_id)
