@@ -164,8 +164,8 @@ class BookingManager:
     
     def billing(self, booking_id:int):
         booking = self.read_booking_by_id(booking_id)
-        #today = date.today()
-        today = date(2025,9,16)  #####das hier noch rausnehmen
+        today = date.today()
+        #today = date(2025,9,16)  #####das hier noch rausnehmen
 
         if booking.is_cancelled:
             print(f"You cannot bill an invoice where the booking is cancelled")
