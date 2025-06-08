@@ -16,6 +16,8 @@ class BookingDataAccess(BaseDataAccess):
         super().__init__(db_path)
 
         self.__room_type_dao = data_access.room_type_access.RoomTypeDataAccess()
+        self.__guest_dao = data_access.guest_data_access.GuestDataAccess()
+        self.__room_dao = data_access.room_data_access.RoomDataAccess()
 
     def read_all_bookings(self) -> list[model.Booking]:
         sql = """
@@ -51,7 +53,6 @@ class BookingDataAccess(BaseDataAccess):
                 hotel = model.Hotel(hotel_id, hotel_name, hotel_stars, address)
                 rt= self.__room_type_dao.read_room_type_by_id(room_type)
                 room_typ= model.RoomType(rt.type_id, rt.description, rt.max_guests)
-                # room_type_2 = self.__room_type_dao.read_room_type_by_id(room_type)
                 room = model.Room(room_id, hotel.hotel_id, room_number, room_typ, price_per_night)
                 guest = model.Guest(guest_id, guest_first_name, guest_last_name, guest_email, address)
                 
@@ -82,6 +83,11 @@ class BookingDataAccess(BaseDataAccess):
 
 
     def read_bookings_by_guest(self, guest_id: int) -> model.Booking:
+        if not guest_id:
+            raise ValueError("Guest ID is required")
+        if not isinstance(guest_id, int):
+            raise ValueError("Guest ID has to be an integer")
+
         sql = """
         SELECT 
             b.booking_id, b.check_in_date, b.check_out_date, b.total_amount, b.is_cancelled,
@@ -201,91 +207,17 @@ class BookingDataAccess(BaseDataAccess):
             return booking
         
         return None
-
-    # def read_av_rooms(self, check_out_date: date, check_in_date: date) -> list[model.Room]:
-    #     sql = """
-    #     SELECT 
-    #     Room.room_id,
-    #     Room.room_number,
-    #     Room.type_id,
-    #     Room.price_per_night,
-    #     Room.hotel_id,
-    #     Hotel.name,
-    #     Hotel.stars,
-    #     Hotel.address_id,
-    #     Address.street,
-    #     Address.city,
-    #     Address.zip_code
-    #     FROM 
-    #         Room
-    #     JOIN Hotel on Hotel.hotel_id= Room.hotel_id
-    #     JOIN Address on Address.address_id = Hotel.address_id
-    #     LEFT JOIN 
-    #         Booking ON Room.room_id = Booking.room_id
-    #     WHERE not (Booking.check_out_date >= ?
-    #     AND Booking.check_in_date <= ?)
-    #     OR Booking.room_id IS NULL
-    #     """
-    #     rows = self.fetchall(sql, (check_in_date, check_out_date))
-    #     if rows:
-    #         all_av_rooms = []
-
-    #         for (room_id, room_number, type_id, price_per_night,
-    #             hotel_id, name, stars,
-    #             address_id, street, city, zip_code) in rows:
-
-    #             #Objekte erstellen, um die verfügbaren Zimmer in der Liste zu appenden
-    #             address = model.Address(address_id=address_id, street=street, city=city, zip_code=zip_code)
-    #             hotel = model.Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address)
-    #             room_type = self.__room_type_dao.read_room_type_by_id(type_id)
-    #             av_room = model.Room(room_id, hotel.hotel_id, room_number, room_type, price_per_night)
-    #             all_av_rooms.append(av_room)
-        
-    #         return all_av_rooms
-        
-    #     return None
-        
-
-    # def read_all_av_rooms_by_hotel(self, hotel_id:int, check_out_date:date, check_in_date:date) -> list[model.Room]: #geht nicht        
-    #     sql = """
-    #     SELECT 
-    #         Room.room_id,
-    #         Room.hotel_id,
-    #         Room.room_number,
-    #         Room.type_id,
-    #         Room.price_per_night
-    #     FROM 
-    #         Room
-    #     LEFT JOIN 
-    #         Booking ON Room.room_id = Booking.room_id
-    #     WHERE 
-    #         Room.hotel_id = ? AND (
-    #             NOT (
-    #                 Booking.check_out_date >= ?
-    #                 AND Booking.check_in_date <= ?
-    #             )
-    #             OR Booking.room_id IS NULL
-    #         )
-    #     """
-
-    #     params = (hotel_id, check_in_date, check_out_date)
-    #     rows = self.fetchall(sql, params)
-        
-    #     if rows:
-    #         all_av_rooms = []
-
-    #         for (room_id, hotel_id, room_number, type_id, price_per_night) in rows:               
-    #             #Objekt für verfügbare Zimmer erstellen
-    #             room_type = self.__room_type_dao.read_room_type_by_id(type_id)
-    #             av_room = model.Room(room_id, hotel_id, room_number,room_type, price_per_night)
-    #             #verfügbare Zimmer in der leeren Liste appenden
-    #             all_av_rooms.append(av_room)
-            
-    #         return all_av_rooms
-        
-    #     return None
     
     def read_av_rooms(self, check_out_date: date, check_in_date: date) -> list[model.Room]:
+        if not check_out_date:
+            raise ValueError("Check Out Date is required")
+        if not isinstance(check_out_date, date):
+            raise ValueError("Check Out Date has to be a date")
+        if not check_in_date:
+            raise ValueError("Check In Date is required")
+        if not isinstance(check_in_date, date):
+            raise ValueError("Check In Date has to be a date")
+
         sql = """
         SELECT 
             Room.room_id,
@@ -323,17 +255,27 @@ class BookingDataAccess(BaseDataAccess):
                 hotel = model.Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address)
                 room_type = self.__room_type_dao.read_room_type_by_id(type_id)
                 
-                # if room_type is None:
-                #     raise ValueError(f"RoomType with ID {type_id} not found.")
-
                 av_room = model.Room(room_id, hotel.hotel_id, room_number, room_type, price_per_night)
                 all_av_rooms.append(av_room)
 
             return all_av_rooms
         
-        return []
+        return None
 
     def read_all_av_rooms_by_hotel(self, hotel_id: int, check_out_date: date, check_in_date: date) -> list[model.Room]:
+        if not hotel_id:
+            raise ValueError("Hotel ID is required")
+        if not isinstance(hotel_id, int):
+            raise ValueError("Hotel ID has to be an integer")
+        if not check_out_date:
+            raise ValueError("Check Out Date is required")
+        if not isinstance(check_out_date, date):
+            raise ValueError("Check Out Date has to be a date")
+        if not check_in_date:
+            raise ValueError("Check In Date is required")
+        if not isinstance(check_in_date, date):
+            raise ValueError("Check In Date has to be a date")
+
         sql = """
         SELECT 
             Room.room_id,
@@ -372,9 +314,6 @@ class BookingDataAccess(BaseDataAccess):
                 hotel = model.Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address)
                 room_type = self.__room_type_dao.read_room_type_by_id(type_id)
 
-                # if room_type is None:
-                #     raise ValueError(f"RoomType with ID {type_id} not found.")
-
                 room = model.Room(room_id, hotel.hotel_id, room_number, room_type, price_per_night)
                 all_av_rooms.append(room)
 
@@ -382,11 +321,20 @@ class BookingDataAccess(BaseDataAccess):
 
         return []
 
-
-
-
-
-    def read_av_rooms_city(self, city: str, check_out_date: date, check_in_date: date) -> list[model.Room]: #funktioniert erstaunlicherweise   
+    def read_av_rooms_city(self, city: str, check_out_date: date, check_in_date: date) -> list[model.Room]:
+        if not city:
+            raise ValueError("City is required")
+        if not isinstance(city, str):
+            raise ValueError("City has to be a string")
+        if not check_out_date:
+            raise ValueError("Check Out Date is required")
+        if not isinstance(check_out_date, date):
+            raise ValueError("Check Out Date has to be a date")
+        if not check_in_date:
+            raise ValueError("Check In Date is required")
+        if not isinstance(check_in_date, date):
+            raise ValueError("Check In Date has to be a date")
+        
         sql = """
         SELECT 
             Room.room_id,
@@ -429,19 +377,34 @@ class BookingDataAccess(BaseDataAccess):
             return all_av_rooms
         return None
 
-    def create_new_booking(self, room_id:int, check_in_date:date, check_out_date:date, guest_id:int, total_amount:float) -> model.Booking:
-        #Connection with Data Acess Layer
-        room_mo = data_access.RoomDataAccess()
-        guest_mo = data_access.GuestDataAccess()
+    def create_new_booking(self, room_id:int, check_in_date:date, check_out_date:date, guest_id:int, total_amount:float) -> model.Booking: 
+        if not room_id:
+            raise ValueError("Room ID is required")
+        if not isinstance(room_id, int):
+            raise ValueError("Room ID has to be an integer")
+        if not check_out_date:
+            raise ValueError("Check Out Date is required")
+        if not isinstance(check_out_date, date):
+            raise ValueError("Check Out Date has to be a date")
+        if not check_in_date:
+            raise ValueError("Check In Date is required")
+        if not isinstance(check_in_date, date):
+            raise ValueError("Check In Date has to be a date")
+        if not guest_id:
+            raise ValueError("Guest ID is required")
+        if not isinstance(guest_id, int):
+            raise ValueError("Guest ID has to be an integer")
+        if not total_amount:
+            raise ValueError("Total Amount is required")
+        if not isinstance(total_amount, float):
+            raise ValueError("Total Amount has to be a float")
 
-        room_dao = room_mo.read_room_by_id(room_id)
-        hotel_dao = room_mo.read_hotel_by_roomId(room_id)
-        guest_dao = guest_mo.read_guest_by_id(guest_id)
+        room_dao = self.__room_dao.read_room_by_id(room_id)
+        hotel_dao = self.__room_dao.read_hotel_by_roomId(room_id)
+        guest_dao = self.__guest_dao.read_guest_by_id(guest_id)
 
         available_rooms = self.read_all_av_rooms_by_hotel(hotel_dao.hotel_id, check_out_date, check_in_date)
         available_room_ids = [room_id for room in available_rooms]
-        if room_id not in available_room_ids:
-            raise ValueError("Room is not available in the selected period")
 
         sql = """
         INSERT INTO booking (guest_id, room_id, check_in_date, check_out_date, total_amount) VALUES (?, ?, ?, ?, ?)             
@@ -453,6 +416,11 @@ class BookingDataAccess(BaseDataAccess):
         return model.Booking(booking_id=last_row_id, room=room_dao, check_in_date=check_in_date, check_out_date=check_out_date, total_amount=total_amount, guest=guest_dao, is_cancelled=False)
         
     def cancell_booking(self, booking_id:int)-> None:
+        if not booking_id:
+            raise ValueError("Booking ID is required")
+        if not isinstance(booking_id, int):
+            raise ValueError("Booking ID has to be an integer")
+
         today = date.today()
 
         booking= self.read_booking_by_id(booking_id)
@@ -463,13 +431,19 @@ class BookingDataAccess(BaseDataAccess):
         """
         self.execute(sql, (booking_id,))
 
-    def update_booking_price_for_guest(self, booking_id:int)-> None:
+    def update_booking_price_for_guest(self, price_to_set:float, booking_id:int)-> None:
+        if not price_to_set:
+            raise ValueError("The price to set is required")
+        if not isinstance(price_to_set, float):
+            raise ValueError("The price to set has to be a float")
         if not booking_id:
-            raise ValueError("Booking ID is required.")
+            raise ValueError("Booking ID is required")
+        if not isinstance(booking_id, int):
+            raise ValueError("Booking ID has to be an integer")
 
         sql = """
         UPDATE Booking 
-        SET total_amount=1000 
-        WHERE booking_id=4
+        SET total_amount=? 
+        WHERE booking_id=?
         """
-        self.execute(sql, (booking_id,))
+        self.execute(sql, (price_to_set, booking_id,))
