@@ -1,5 +1,5 @@
 # Team5
-Im Frühjahrssemester wurden wir beauftragt, ein Anwendungsszenario für ein Hotelreservierungssystem zu entwickeln. Dieses Projekt baut auf der Arbeit des vorangegangenen Semesters auf, in dem wir eine Datenbank für den Kurs "Datenbasierte Unternehmensanwendung" entworfen haben.
+Im Frühlingssemester 2025 wurden wir beauftragt, ein Anwendungsszenario für ein Hotelreservierungssystem zu entwickeln. Dieses Projekt baut auf der Arbeit des vorangegangenen Semesters auf, in dem wir eine Datenbank für den Kurs "Datenbasierte Unternehmensanwendung" entworfen haben.
 
 Wie in den Projektrichtlinien beschrieben, verwenden wir verschiedene Werkzeuge, um unseren Entwicklungsprozess zu unterstützen:
 - Visual Paradigm für das Klassendiagramm
@@ -33,18 +33,19 @@ Im Verlauf des Projekts haben wir ausserdem entdeckt, dass GitHub ein integriert
 > Insgesamt haben wir also ein **hybrides** Planungssystem verwendet – bestehend aus WhatsApp-Kommunikation für schnelle Absprachen und GitHub Kanban für strukturierte Aufgabenverteilung.
 
 ### Teamübersicht & Aufgabenverteilung
+------------------------------------------------------
 (Documenter - Chirakkal Fenlin)
 (Documenter - Seidel Ivan)
 
 
-Dieng Saliou - *Architekt der Unterkunftsstruktur*
-Verantwortliche Klassen (Model, Data Access, Business Logic, UI):
+#### Dieng Saliou - *Architekt der Unterkunftsstruktur*
+<br> Verantwortliche Klassen (Model, Data Access, Business Logic, UI):
 - `Facility`
 - `Room`
 - `Room Type`
 - `Hotel`
 
-Entsprechende Userstories implementiert:
+<br> Entsprechende Userstories implementiert:
 - 1 - 1.4
 - 1.5 und 1.6
 - 2 und 2.1
@@ -52,22 +53,24 @@ Entsprechende Userstories implementiert:
 - 9
 - 10
 - 11.1
+<br>
+<br>
 
-
-Müller Anna - *Architektin des Gasterlebnisses*
-Zugeteilte Klassen in Model, Data Access, Business Logic und UI Layer umgesetzt:
+#### Müller Anna - *Architektin des Gasterlebnisses*
+<br> Zugeteilte Klassen in Model, Data Access, Business Logic und UI Layer umgesetzt:
 - `Booking`
 - `Invoice`
 - `Guest`
 - `Address`
 
-Entsprechende Userstories implementiert:
+<br> Entsprechende Userstories implementiert:
 - 1.4
 - 2.2
 - 4 - 8
-
-Beide Teammitglieder arbeiteten eng zusammen und führten regelmässige Code-Reviews durch, um eine einheitliche Codebasis und konsistente Logik sicherzustellen.
+<br>
+> Beide Teammitglieder arbeiteten eng zusammen und führten regelmässige Code-Reviews durch, um eine einheitliche Codebasis und konsistente Logik sicherzustellen.
 Zusätzlich wurde die Dokumentation sowohl im Jupyter Notebook als auch in diesem README gepflegt.
+<br>
 
 ## How to use
 Hier erklären was der Nutzer tun soll, damit er Zugriff auf das Notebook hat.
@@ -77,8 +80,9 @@ Hier erklären was der Nutzer tun soll, damit er Zugriff auf das Notebook hat.
 
 ![image](https://github.com/user-attachments/assets/4b941f4b-ab1e-47da-bd5d-bf659b77275c)
 
-![image](<img width="931" alt="AEP Python" src="https://github.com/user-attachments/assets/d14c7e2d-297e-4098-8f0e-2751c9cb6531" />)
-Das UML haben wir mit Visual Paradigm erstellt und das UML bildet die Beziehung zwischen den Klassen Hotel, Booking, Invoice, Room, Guest, Address, Room Type und Facility. Wir sind nach dem gleichen Schema gegangen wie das von der Datenbank
+Das UML haben wir mit Visual Paradigm erstellt und das UML bildet die Beziehung zwischen den Klassen Hotel, Booking, Invoice, Room, Guest, Address, Room Type und Facility. Wir sind nach dem gleichen Schema gegangen wie das von der Datenbank.
+
+Evtl. noch erklären 
 
 ![image](https://github.com/user-attachments/assets/88c00dcb-0977-4137-ad5d-8224df509808)
 
