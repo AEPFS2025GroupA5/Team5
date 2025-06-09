@@ -73,15 +73,16 @@ Zusätzlich wurde die Dokumentation sowohl im Jupyter Notebook als auch in diese
 Hier erklären was der Nutzer tun soll, damit er Zugriff auf das Notebook hat.
 
 
-### UML
-![image](https://github.com/user-attachments/assets/36cdc1f8-5d7e-4562-be27-18b6bcd21edf)
+## UML
 
+![image](https://github.com/user-attachments/assets/4b941f4b-ab1e-47da-bd5d-bf659b77275c)
+
+![image](<img width="931" alt="AEP Python" src="https://github.com/user-attachments/assets/d14c7e2d-297e-4098-8f0e-2751c9cb6531" />)
 Das UML haben wir mit Visual Paradigm erstellt und das UML bildet die Beziehung zwischen den Klassen Hotel, Booking, Invoice, Room, Guest, Address, Room Type und Facility. Wir sind nach dem gleichen Schema gegangen wie das von der Datenbank
 
-Hier Bild eifügen
+![image](https://github.com/user-attachments/assets/88c00dcb-0977-4137-ad5d-8224df509808)
 
-
-### Abschluss
+## Abschluss
 Die Umsetzung dieses Projekts ermöglichte es uns, unsere Kenntnisse in Python und objektorientierter Programmierung praxisnah zu vertiefen – gleichzeitig war es auch eine wertvolle Lernerfahrung in Bezug auf Teamarbeit, Kommunikation und Projektorganisation.
 
 Zu Beginn hatten wir Schwierigkeiten, überhaupt in das Projekt hineinzufinden. Es fiel uns nicht leicht, die ersten Schritte zu machen, da vieles neu und komplex wirkte. Zusätzlich gab es technische Hürden: Wir begannen in Deepnote, hatten jedoch anfangs grosse Schwierigkeiten, dies korrekt auf GitHub zu pushen. Das führte zu Unsicherheiten und Zeitverlust.
