@@ -1,7 +1,6 @@
 from model.invoice import Invoice
 from model.guest import Guest
 from datetime import date
-from model.hotel import Hotel
 from model.room import Room
 
 

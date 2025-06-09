@@ -23,11 +23,16 @@ class AddressDataAccess(BaseDataAccess):
            return model.Address(address_id, street, city, zip_code)
         return None
     
-    def get_address_id_by_city(self, city: str) -> int:
-        sql = "SELECT address_id FROM address WHERE city = ?"
-        row = self.fetchall(sql, (city,))
-        if row:
-            return row[0]
+    def get_address_id_by_city(self, city: str) -> int: #Ändern!
+        sql = "SELECT address_id, street, city, zip_code FROM address WHERE city LIKE ?"
+        like = f"%{city}%"
+        rows = self.fetchall(sql, (like,))
+        addresses= []
+        if rows:
+            for (address_id, street, city, zip_code) in rows:
+                address= model.Address(address_id, street, city, zip_code)
+                addresses.append(address)
+            return addresses
         return None
 
     def create_new_address(self, street: str, city: str, zip_code: str) -> model.Address:

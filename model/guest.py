@@ -114,7 +114,7 @@ class Guest:
         self._email=new
         return f"You have changed E-Mail into: {self._email}"
         
-    #Userfriendly
+    #Userfriendly -> das noch in die UI rein tun!!!
     def userfriendly(self):
         return f"""
             ID: {self.guest_id}
