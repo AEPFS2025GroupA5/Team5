@@ -53,26 +53,27 @@ class BookingDataAccess(BaseDataAccess):
                 hotel = model.Hotel(hotel_id, hotel_name, hotel_stars, address)
                 rt= self.__room_type_dao.read_room_type_by_id(room_type)
                 room_typ= model.RoomType(rt.type_id, rt.description, rt.max_guests)
-                room = model.Room(room_id, hotel.hotel_id, room_number, room_typ, price_per_night)
+                room = model.Room(room_id, hotel.hotel_id, room_number, room_typ, price_per_night) #hier den ganzen Hotel rübergeben!
+                #room = model.Room(room_id, hotel, room_number, room_typ, price_per_night)
                 guest = model.Guest(guest_id, guest_first_name, guest_last_name, guest_email, address)
                 
                 booking = model.Booking(
-                    booking_id=booking_id, 
-                    room=room, 
-                    check_in_date=check_in, 
-                    check_out_date=check_out, 
-                    total_amount=total_amount, 
-                    guest=guest, 
-                    is_cancelled=is_cancelled
+                    booking_id, 
+                    room,
+                    check_in, 
+                    check_out, 
+                    total_amount, 
+                    guest, 
+                    is_cancelled
                 )
                 
                 # Invoice zuweisen, falls vorhanden
                 if invoice_id:
                     invoice = model.Invoice(
-                        invoice_id=invoice_id,
-                        booking_id=booking_id,
-                        issue_date=issue_date,
-                        total_amount=invoice_amount,
+                        invoice_id,
+                        booking_id,
+                        issue_date,
+                        invoice_amount
                     )
                     booking.invoice = invoice
                 
@@ -122,7 +123,8 @@ class BookingDataAccess(BaseDataAccess):
                 hotel_address = model.Address(hotel_addr_id, hotel_street, hotel_city, hotel_zip)
                 hotel = model.Hotel(hotel_id, hotel_name, hotel_stars, hotel_address)
                 room_type = self.__room_type_dao.read_room_type_by_id(room_type)
-                room = model.Room(room_id, hotel.hotel_id, room_number, room_type, price_per_night)
+                room = model.Room(room_id, hotel.hotel_id, room_number, room_type, price_per_night) #hier den ganzen Hotel Objekt rübergeben!
+                #room = model.Room(room_id, hotel, room_number, room_type, price_per_night)
 
                 #Objekt Booking erstellen
                 booking = model.Booking(
@@ -182,7 +184,8 @@ class BookingDataAccess(BaseDataAccess):
             hotel_address = model.Address(hotel_addr_id, hotel_street, hotel_city, hotel_zip)
             hotel = model.Hotel(hotel_id, hotel_name, hotel_stars, hotel_address)
             room_type = self.__room_type_dao.read_room_type_by_id(room_type_id)
-            room = model.Room(room_id, hotel.hotel_id, room_number, room_type, price_per_night)
+            room = model.Room(room_id, hotel.hotel_id, room_number, room_type, price_per_night) #hier ganzen Hotel Objekt rübergeben
+            #room = model.Room(room_id, hotel, room_number, room_type, price_per_night)
 
             booking = model.Booking(
                 booking_id=booking_id,
@@ -208,7 +211,7 @@ class BookingDataAccess(BaseDataAccess):
         
         return None
     
-    def read_av_rooms(self, check_out_date: date, check_in_date: date) -> list[model.Room]:
+    def read_av_rooms(self, check_out_date: date, check_in_date: date) -> list[model.Room]: #Ändern
         if not check_out_date:
             raise ValueError("Check Out Date is required")
         if not isinstance(check_out_date, date):
@@ -220,29 +223,24 @@ class BookingDataAccess(BaseDataAccess):
 
         sql = """
         SELECT 
-            Room.room_id,
-            Room.room_number,
-            Room.type_id,
-            Room.price_per_night,
-            Room.hotel_id,
-            Hotel.name,
-            Hotel.stars,
-            Address.address_id,
-            Address.street,
-            Address.city,
-            Address.zip_code
-        FROM 
-            Room
+        Room.room_id, Room.room_number, Room.type_id, Room.price_per_night,
+        Hotel.hotel_id, Hotel.name, Hotel.stars,
+        Address.address_id, Address.street, Address.city, Address.zip_code
+        FROM Room
         JOIN Hotel ON Hotel.hotel_id = Room.hotel_id
         JOIN Address ON Address.address_id = Hotel.address_id
-        LEFT JOIN Booking 
-            ON Room.room_id = Booking.room_id
-            AND Booking.check_in_date <= ?
-            AND Booking.check_out_date >= ?
-        WHERE Booking.room_id IS NULL
+        WHERE room_id NOT in (
+            SELECT room_id FROM Booking 
+            WHERE((check_in_date BETWEEN ? AND ?) 
+            OR (check_out_date BETWEEN ? AND ?))
+            OR (check_in_date <= ? AND check_out_date >= ?)
+        )
         """
-        
-        rows = self.fetchall(sql, (check_out_date, check_in_date))
+        params= tuple([check_in_date, check_out_date, 
+                    check_in_date, check_out_date, 
+                    check_in_date, check_out_date 
+                    ])
+        rows = self.fetchall(sql, params)
         
         if rows:
             all_av_rooms = []
@@ -253,20 +251,24 @@ class BookingDataAccess(BaseDataAccess):
 
                 address = model.Address(address_id=address_id, street=street, city=city, zip_code=zip_code)
                 hotel = model.Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address)
-                room_type = self.__room_type_dao.read_room_type_by_id(type_id)
+                room_t_obj = self.__room_type_dao.read_room_type_by_id(type_id)
                 
-                av_room = model.Room(room_id, hotel.hotel_id, room_number, room_type, price_per_night)
+                av_room = model.Room(room_id, hotel.hotel_id, room_number, room_t_obj, price_per_night) #hier ganzen Hotel Objekt rübergeben
+                #av_room = model.Room(room_id, hotel, room_number, room_type, price_per_night)
                 all_av_rooms.append(av_room)
 
             return all_av_rooms
         
         return None
 
-    def read_all_av_rooms_by_hotel(self, hotel_id: int, check_out_date: date, check_in_date: date) -> list[model.Room]:
+    def read_all_av_rooms_by_hotel(self, hotel_id: int, check_out_date: date, check_in_date: date) -> list[model.Room]: #Ändern
+    #def read_all_av_rooms_by_hotel(self, hotel_id: model.Hotel, check_out_date: date, check_in_date: date) -> list[model.Room]: #Ändern
         if not hotel_id:
             raise ValueError("Hotel ID is required")
         if not isinstance(hotel_id, int):
             raise ValueError("Hotel ID has to be an integer")
+        #if not isinstance(hotel_id, Hotel):
+            # raise ValueError("Hotel ID has to be an Hotel object")
         if not check_out_date:
             raise ValueError("Check Out Date is required")
         if not isinstance(check_out_date, date):
@@ -276,52 +278,47 @@ class BookingDataAccess(BaseDataAccess):
         if not isinstance(check_in_date, date):
             raise ValueError("Check In Date has to be a date")
 
-        sql = """
+        sql = """ 
         SELECT 
-            Room.room_id,
-            Room.room_number,
-            Room.type_id,
-            Room.price_per_night,
-            Room.hotel_id,
-            Hotel.name,
-            Hotel.stars,
-            Address.address_id,
-            Address.street,
-            Address.city,
-            Address.zip_code
-        FROM 
-            Room
+        Room.room_id, Room.room_number, Room.type_id, Room.price_per_night,
+        Hotel.hotel_id, Hotel.name, Hotel.stars,
+        Address.address_id, Address.street, Address.city, Address.zip_code
+        FROM Room
         JOIN Hotel ON Hotel.hotel_id = Room.hotel_id
         JOIN Address ON Address.address_id = Hotel.address_id
-        LEFT JOIN Booking 
-            ON Room.room_id = Booking.room_id
-            AND Booking.check_in_date <= ?
-            AND Booking.check_out_date >= ?
-        WHERE Booking.room_id IS NULL
-        AND Hotel.hotel_id = ?
+        WHERE hotel.hotel_id = ? AND room_id NOT in (
+            SELECT room_id FROM Booking 
+            WHERE((check_in_date BETWEEN ? AND ?) 
+            OR (check_out_date BETWEEN ? AND ?))
+            OR (check_in_date <= ? AND check_out_date >= ?)
+        )
         """
-
-        rows = self.fetchall(sql, (check_out_date, check_in_date, hotel_id))
+        params= tuple([hotel_id, 
+                       check_in_date, check_out_date, 
+                       check_in_date, check_out_date, 
+                       check_in_date, check_out_date])
+        rows = self.fetchall(sql, params)
 
         if rows:
             all_av_rooms = []
 
             for (room_id, room_number, type_id, price_per_night,
-                hotel_id, name, stars,
-                address_id, street, city, zip_code) in rows:
+        hotel_id, hotel_name, stars,
+        address_id, street, city, zip_code) in rows:
 
-                address = model.Address(address_id=address_id, street=street, city=city, zip_code=zip_code)
-                hotel = model.Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address)
+                address = model.Address(address_id, street, city, zip_code)
+                hotel = model.Hotel(hotel_id, hotel_name, stars, address)
                 room_type = self.__room_type_dao.read_room_type_by_id(type_id)
 
-                room = model.Room(room_id, hotel.hotel_id, room_number, room_type, price_per_night)
+                room = model.Room(room_id, hotel.hotel_id, room_number, room_type, price_per_night) #hier Hotel objekt rübergeben!
+                #room = model.Room(room_id, hotel, room_number, room_type, price_per_night) 
                 all_av_rooms.append(room)
 
             return all_av_rooms
 
         return []
 
-    def read_av_rooms_city(self, city: str, check_out_date: date, check_in_date: date) -> list[model.Room]:
+    def read_av_rooms_city(self, city: str, check_out_date: date, check_in_date: date) -> list[model.Room]: #Ändern
         if not city:
             raise ValueError("City is required")
         if not isinstance(city, str):
@@ -337,30 +334,26 @@ class BookingDataAccess(BaseDataAccess):
         
         sql = """
         SELECT 
-            Room.room_id,
-            Room.room_number,
-            Room.type_id,
-            Room.price_per_night,
-            Room.hotel_id,
-            Hotel.name,
-            Hotel.stars,
-            Address.address_id,
-            Address.street,
-            Address.city,
-            Address.zip_code
-        FROM 
-            Room
-        Join Hotel on hotel.hotel_id = Room.hotel_id
-        Join Address on Address.address_id = Hotel.address_id
-        LEFT JOIN 
-            Booking ON Room.room_id = Booking.room_id
-                AND Booking.check_in_date <= ?
-                AND Booking.check_out_date >= ?
-        WHERE Booking.room_id IS NULL
-        AND Address.city Like ?
+        Room.room_id, Room.room_number, Room.type_id, Room.price_per_night,
+        Hotel.hotel_id, Hotel.name, Hotel.stars,
+        Address.address_id, Address.street, Address.city, Address.zip_code
+        FROM Room
+        JOIN Hotel ON Hotel.hotel_id = Room.hotel_id
+        JOIN Address ON Address.address_id = Hotel.address_id
+        WHERE Address.city LIKE ? AND room_id NOT in (
+            SELECT room_id FROM Booking 
+            WHERE((check_in_date BETWEEN ? AND ?) 
+            OR (check_out_date BETWEEN ? AND ?))
+            OR (check_in_date <= ? AND check_out_date >= ?)
+        )
         """
         like = f"%{city}%"
-        rows = self.fetchall(sql, (check_out_date, check_in_date, like))
+        params= tuple([like, 
+                    check_in_date, check_out_date, 
+                    check_in_date, check_out_date, 
+                    check_in_date, check_out_date 
+                    ])
+        rows = self.fetchall(sql, params)
         if rows:
             all_av_rooms = []
 
@@ -371,7 +364,8 @@ class BookingDataAccess(BaseDataAccess):
                 address = model.Address(address_id=address_id, street=street, city=city, zip_code=zip_code)
                 hotel = model.Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address)
                 room_type = self.__room_type_dao.read_room_type_by_id(type_id)
-                av_room = model.Room(room_id, hotel.hotel_id, room_number, room_type, price_per_night)
+                av_room = model.Room(room_id, hotel.hotel_id, room_number, room_type, price_per_night) #hier den ganzen Hotel Objekt übergeben!
+                #av_room = model.Room(room_id, hotel, room_number, room_type, price_per_night)
                 all_av_rooms.append(av_room)
             
             return all_av_rooms

@@ -49,7 +49,7 @@ class Guest:
         if address is None:
             raise ValueError("Address Id is required")
         if not isinstance(address, Address):
-            raise ValueError("Adress has to be an object")
+            raise ValueError("Address has to be an object")
 
         self.__guest_id = guest_id
         self._first_name = first_name
@@ -114,7 +114,7 @@ class Guest:
         self._email=new
         return f"You have changed E-Mail into: {self._email}"
         
-    #Userfriendly
+    #Userfriendly -> das noch in die UI rein tun!!!
     def userfriendly(self):
         return f"""
             ID: {self.guest_id}
