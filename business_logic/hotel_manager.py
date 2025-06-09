@@ -15,9 +15,9 @@ class HotelManager:
         self._all_hotels = self.__hotel_da.read_all_hotels()
 
 
-## Admin Funktionen
+## Admin Funktionen 
 
-    def refresh_all_hotels(self):
+    def refresh_all_hotels(self) -> None:
         self._all_hotels = self.__hotel_da.read_all_hotels()
 
     def create_new_hotel(self,
@@ -25,8 +25,9 @@ class HotelManager:
                         stars: int,
                         address_id: int      
         )-> model.Hotel:
-        
-        return self.__hotel_da.create_new_hotel(name, stars, address_id)
+        new_hotel = self.__hotel_da.create_new_hotel(name, stars, address_id)
+        self.refresh_all_hotels()
+        return new_hotel
     
     def update_hotel(self,
                     hotel_id :int = None,
@@ -34,14 +35,16 @@ class HotelManager:
                     stars: int = None,
                     address_id: int = None
         ) -> None:
-           
-           
-           return self.__hotel_da.update_hotel_by_data(hotel_id, name, stars, address_id)
+           updated = self.__hotel_da.update_hotel_by_data(hotel_id, name, stars, address_id)
+           self.refresh_all_hotels()
+           return updated
     
     def delete_hotel_by_id(self,
                             hotel_id:int
         ) -> None:
-          return self.__hotel_da.delete_hotel_by_id(hotel_id)
+          result = self.__hotel_da.delete_hotel_by_id(hotel_id)
+          self.refresh_all_hotels()
+          return result
     
     def read_hotel_by_id(self,
                         hotel_id:int
@@ -140,14 +143,18 @@ class HotelManager:
     
     def print_user_friendly_hotels(self, hotels: list[model.Hotel]) -> None:
         for hotel in hotels:
-            print(hotel.show_user_friendly())
+            info = (
+            f"Name:    {hotel.name}\n"
+            f"Adresse: {hotel.address.street}\n"
+            f"City:    {hotel.address.city}\n"
+            f"Stars:   {hotel.stars}\n"
+            + "-" * 40
+        )
+            print(info)
 
-    def read_hotel_userfriendly(self,) -> list[model.Hotel]:
-         all_hotels = self.__hotel_da.read_all_hotels()
-         return [hotel.show_user_friendly() for hotel in all_hotels]
-    
     def get_user_frendly_hotel_info_short(hotel: model.Hotel):
         return f"Hotel ID: {hotel.hotel_id}, Name: {hotel.name}, Stars: {hotel.stars}, Address: {hotel.address.city}, {hotel.address.street}"
+    
     
                   
      

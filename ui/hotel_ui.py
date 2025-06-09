@@ -44,7 +44,7 @@ def get_max_guests_input() -> int:
             print(f"Invalid input: {e}. Please enter a valid integer.")
 
 def get_user_frendly_hotel_info_short(hotel: model.Hotel) -> str:
-    return f"Name: {hotel.name}, Stars: {hotel.stars}, Address: {hotel.address.city}"
+    return f"Name: {hotel.name}, City: {hotel.address.city}, Stars: {hotel.stars}"
 
 def get_city_no_limit() -> str:
     while True:

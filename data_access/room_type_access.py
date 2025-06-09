@@ -8,7 +8,6 @@ class RoomTypeDataAccess(BaseDataAccess):
         super().__init__(db_path)
 
     ## Read Methods
-
     def read_all_room_types(self) -> list[model.RoomType]:
         sql = """
         SELECT type_id, description, max_guests FROM room_type
@@ -26,13 +25,10 @@ class RoomTypeDataAccess(BaseDataAccess):
           return None
     
     ## Admin Methods
-
     def create_new_room_type(self,
                              description: str,
                              max_guests: int
         ) -> model.RoomType:
-       
-        
         sql = """
         INSERT INTO room_type (description, max_guests) VALUES (?, ?)
         """

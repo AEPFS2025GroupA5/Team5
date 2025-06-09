@@ -15,7 +15,6 @@ class RoomManager:
 
 
 ## Read Methods
-
     def get_all_rooms(self) -> list[model.Room]:
         rooms= self.__room_da.read_all_rooms()
         return rooms
@@ -30,7 +29,7 @@ class RoomManager:
         all_rooms = self.get_all_rooms()
         result = []
         for room in all_rooms:
-            if room.hotel_id == hotel_id:
+            if room.hotel.hotel_id == hotel_id:
                 result.append(room)
         return result
     
@@ -53,41 +52,26 @@ class RoomManager:
                 
     ## Admin Methods
     def create_new_room(self,
-                        hotel_id: int,
+                        hotel: model.Hotel,
                         room_number: str,
-                        type_id: int,
+                        room_type: model.RoomType,
                         price_per_night: float
         ) -> model.Room:
-        #Prüfung der Eingaben // Doppelt, weil eigentlich die BL für die Prüfungen zuständig ist
+        #Prüfung der Eingaben 
         if price_per_night <= 0:
             raise ValueError("Price per night must be a positive number")
-        t1 = self.__hotel_da.read_hotel_by_id(hotel_id)
-        if not t1:
-            raise ValueError(f"Hotel with ID {hotel_id} does not exist")
-        t2 = self.__room_type_da.read_room_type_by_id(type_id)
-        if not t2:
-            raise ValueError(f"Room type with ID {t2} does not exist")
-        
-        
-        return self.__room_da.create_new_room(hotel_id, room_number, type_id, price_per_night)
+        return self.__room_da.create_new_room(hotel, room_number, room_type, price_per_night)
     
     def update_room(self,
                     room_id: int,
-                    hotel_id: int,
+                    hotel: model.Hotel,
                     room_number: str,
-                    type_id: int,
+                    room_type: model.RoomType,
                     price_per_night: float
         ) -> None:
          if price_per_night <= 0:
             raise ValueError("Price per night must be a positive number")
-         t1 = self.__hotel_da.read_hotel_by_id(hotel_id)
-         if not t1:
-            raise ValueError(f"Hotel with ID {t1} does not exist")
-         room_type = self.__room_type_da.read_room_type_by_id(type_id)
-         if not room_type:
-            raise ValueError(f"Room type with ID {room_type} does not exist")
-        
-         room = model.Room(room_id, hotel_id, room_number, room_type, price_per_night)
+         room = model.Room(room_id, hotel, room_number, room_type, price_per_night)
          self.__room_da.update_room(room)
 
     def update_room_by_object(self,
@@ -124,11 +108,9 @@ class RoomManager:
         
 
         for room in rooms:
-            hotel = self.__hotel_da.read_hotel_by_id(room.hotel_id)
-            hotel_name = hotel.name if hotel else "Unknown Hotel"
             facilities = self.get_facilities_for_room(room.room_id)
             
-            print(f"Hotel: {hotel_name}")
+            print(f"Hotel: {room.hotel.name}")
             print(f"Room ID: {room.room_id}")
             print(f"Room Number: {room.room_number}")
             print(f"Room Type: {room.room_type._description}")
@@ -136,6 +118,7 @@ class RoomManager:
             print(f"Facilities: {[facility.name for facility in facilities]}")
             print(f"Price per Night: {room.price_per_night}")
             print("-" * 40)
+
 
 
 ## Room Type Management

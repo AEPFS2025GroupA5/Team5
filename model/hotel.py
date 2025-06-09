@@ -11,15 +11,11 @@ class Hotel:
                 address:model.Address,
          ):
         
-        #Prüfungen
+        #TypeError Prüfungen
         if not isinstance(hotel_id, int):
             raise TypeError("hotel_id must be an integer")
-        if not hotel_id:
-            raise ValueError("hotel_id is required")
         if not isinstance(name, str):
             raise TypeError("name must be a string")
-        if not name:
-            raise ValueError("name is required")
         if not isinstance(stars, int):
             raise TypeError("stars must be an integer")
         if not isinstance(address, model.Address):
@@ -42,13 +38,6 @@ class Hotel:
             f")"
         )
     
-    def show_user_friendly(self):
-        return (
-            f"Name: {self._name}\n"
-            f"{self.__address.show_user_friendly()}"
-            f"Stars: {self._stars}\n"
-            
-        )
     #Getter    
     @property
     def hotel_id(self):
@@ -77,20 +66,4 @@ class Hotel:
         if not all(isinstance(room, model.Room) for room in new_rooms):
             raise TypeError("All items in the list must be Room objects")
         self.__rooms = new_rooms
-    
-    
-#Funktionen
-    def add_room(self,
-                room: model.Room
-        ): 
-        if room.__hotel is not self:
-            raise ValueError("Room does not belong to this hotel")
-        if room not in self.__rooms:
-            self.__rooms.append(room)
-
-    def remove_room(self,
-                    room: model.Room
-        ):
-        if room in self.__rooms:
-            self.__rooms.remove(room)
 

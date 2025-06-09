@@ -3,20 +3,18 @@ from typing import TYPE_CHECKING
 
 class Facility:
     def __init__(self,
-            facility_id:int,
-            name:str
+                facility_id:int,
+                name:str
         ):
     
-        # Prüfungen
+        # TypeErrors
         if not isinstance(facility_id, int):
             raise TypeError("facility_id must be an int")
         if not isinstance(name, str):
             raise TypeError("name must be a string")
-        if not name:
-            raise ValueError("name must not be empty")
         
-        self.__facility_id: int = facility_id
-        self._name:str = name
+        self.__facility_id = facility_id
+        self._name = name
 
 
     def __repr__(self):
@@ -30,21 +28,12 @@ class Facility:
     @property
     def name(self) -> str:
         return self._name
-
-    
-    def get(facility_id: int) -> Facility:
-        try:
-            return Facility._facility_list[facility_id]
-        except KeyError:
-            raise ValueError(f"Facility with id {facility_id} not found")
     
     ##Setter
     @name.setter
     def name(self, name: str):
         if not isinstance(name, str):
             raise TypeError("name must be a string")
-        if not name:
-            raise ValueError("name can't be empty")
         self._name = name
 
 

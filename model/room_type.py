@@ -63,11 +63,4 @@ class RoomType:
             raise ValueError("max_guests must be greater than 0")
         self._max_guests = max_guests
 
-    
-    def userfriendly(self):
-        return f""""
-        Description: {self.description}\n"
-        Max Guests: {self.max_guests}\n"
-        """
-
   
