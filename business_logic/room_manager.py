@@ -1,9 +1,7 @@
 import os
-
 import model
 import data_access
 from datetime import date
-
 
 class RoomManager:
     def __init__(self):
@@ -12,12 +10,11 @@ class RoomManager:
         self.__room_facility_da = data_access.room_facility_data_access.RoomFacilityDataAccess()
         self.__hotel_da = data_access.hotel_data_access.HotelDataAccess()
         self.__facility_da = data_access.facility_data_access.FacilityDataAccess()
-
+        self._all_rooms = self.__room_da.read_all_rooms()
 
 ## Read Methods
-    def get_all_rooms(self) -> list[model.Room]:
-        rooms= self.__room_da.read_all_rooms()
-        return rooms
+    def read_all_rooms(self) -> list[model.Room]:
+        return self._all_rooms
     
     def get_room_by_id(self, 
                        room_id: int
@@ -26,9 +23,8 @@ class RoomManager:
         return room
     
     def get_room_details_for_hotel(self, hotel_id: int) -> list[model.Room]:
-        all_rooms = self.get_all_rooms()
         result = []
-        for room in all_rooms:
+        for room in self._all_rooms:
             if room.hotel.hotel_id == hotel_id:
                 result.append(room)
         return result
@@ -38,29 +34,33 @@ class RoomManager:
     
     def get_room_info_user_friendly(self, hotel_id: int) -> list[dict]:
         rooms = self.get_room_details_for_hotel(hotel_id)
-        
-
         for room in rooms:
             facilities = self.get_facilities_for_room(room.room_id)
             print(f"Room Number:    {room.room_number}")
             print(f"Room Type:      {room.room_type.description}")
             print(f"Max Guests:     {room.room_type.max_guests}")
             print(f"Facilities:     {[facility.name for facility in facilities]}")
-            print(f"Price per Night: {room.price_per_night:.2f} CHF")
+            print(f"Price per Night:{room.price_per_night:.2f} CHF")
             print("-" * 40)
 
-                
     ## Admin Methods
+    # Dafür die Memory zu refreshen und gleichzeitig alle Räume in der DB zu printen. Zb wenn man eine Änderung gemacht hat.
+    def refresh_all_rooms(self) -> None:
+        self._all_rooms = self.__room_da.read_all_rooms()
+        print (f"All Rooms in DB: {self._all_rooms}")
+
     def create_new_room(self,
                         hotel: model.Hotel,
                         room_number: str,
                         room_type: model.RoomType,
                         price_per_night: float
         ) -> model.Room:
-        #Prüfung der Eingaben 
+        #Business Logic
         if price_per_night <= 0:
             raise ValueError("Price per night must be a positive number")
-        return self.__room_da.create_new_room(hotel, room_number, room_type, price_per_night)
+        new_room = self.__room_da.create_new_room(hotel, room_number, room_type, price_per_night)
+        self.refresh_all_rooms()
+        return new_room
     
     def update_room(self,
                     room_id: int,
@@ -69,9 +69,11 @@ class RoomManager:
                     room_type: model.RoomType,
                     price_per_night: float
         ) -> None:
+         #Business Logic
          if price_per_night <= 0:
             raise ValueError("Price per night must be a positive number")
          room = model.Room(room_id, hotel, room_number, room_type, price_per_night)
+         self.refresh_all_rooms()
          self.__room_da.update_room(room)
 
     def update_room_by_object(self,
@@ -79,6 +81,7 @@ class RoomManager:
         ) -> None:
         if not isinstance(room, model.Room):
             raise TypeError("Room must be a Room object")
+        self.refresh_all_rooms()
         self.__room_da.update_room(room)
 
     def delete_room(self,
@@ -87,7 +90,7 @@ class RoomManager:
         room = self.__room_da.read_room_by_id(room.room_id)
         if not room:
             raise ValueError(f"No room found")
-        
+        self.refresh_all_rooms()
         self.__room_da.delete_room(room)
     
     def change_price_per_night(self,
@@ -99,17 +102,13 @@ class RoomManager:
             raise ValueError(f"No room found with ID {room_id}")
         if new_price <= 0:
             raise ValueError("New price per night must be a positive number")
-        
         room.price_per_night = new_price
+        self.refresh_all_rooms()
         self.__room_da.update_room(room)
 
     def get_rooms_for_admin(self) -> list[model.Room]:
-        rooms = self.get_all_rooms()
-        
-
-        for room in rooms:
+        for room in self._all_rooms:
             facilities = self.get_facilities_for_room(room.room_id)
-            
             print(f"Hotel: {room.hotel.name}")
             print(f"Room ID: {room.room_id}")
             print(f"Room Number: {room.room_number}")
@@ -136,7 +135,6 @@ class RoomManager:
         ) -> model.RoomType:
         if max_guests <= 0:
             raise ValueError("Max guests must be a positive integer")
-        
         return self.__room_type_da.create_new_room_type(description, max_guests)
     
     def update_room_type(self,
@@ -147,7 +145,6 @@ class RoomManager:
 
         if max_guests <= 0:
             raise ValueError("Max guests must be a positive integer")
-        
         room_type = model.RoomType(id, description, max_guests)
         self.__room_type_da.update_room_type(room_type)
 
@@ -158,9 +155,7 @@ class RoomManager:
         self.__room_type_da.delete_room_type_by_id(room_type)
 
 
-
 ### Facility Management
-
     def add_facility_to_room(self, room_id: int, facility_id: int) -> None:
         if not isinstance(room_id, int) or not isinstance(facility_id, int):
             raise TypeError("Room ID and Facility ID must be integers")

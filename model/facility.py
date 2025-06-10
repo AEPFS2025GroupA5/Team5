@@ -16,7 +16,6 @@ class Facility:
         self.__facility_id = facility_id
         self._name = name
 
-
     def __repr__(self):
          return f"Facility(ID: {self.__facility_id} | Name: {self._name})"
 

@@ -4,12 +4,12 @@ from model.hotel import Hotel
 
 class Room:
     def __init__(       
-        self,
-        room_id: int,
-        hotel: Hotel,
-        room_number: str,
-        room_type: RoomType,      
-        price_per_night: float
+                self,
+                room_id: int,
+                hotel: Hotel,
+                room_number: str,
+                room_type: RoomType,      
+                price_per_night: float
     ):
         # TypeErrors
         if not isinstance(room_id, int):
@@ -33,7 +33,7 @@ class Room:
         return (
             f"Room(\n"
             f"  ID: {self.__room_id}\n"
-            f"  Hotel ID: {self.__hotel.__hotel_id}\n"
+            f"  Hotel ID: {self.__hotel.hotel_id}\n"
             f"  Room Number: {self._room_number}\n"
             f"  Type ID: {self.__room_type}\n"
             f"  Price per night: {self.__price_per_night:.2f}\n"
@@ -87,6 +87,3 @@ class Room:
         ) -> None:
         if not isinstance(price_per_night, (int, float)):
             raise TypeError("price_per_night must be a number")
-        if price_per_night <= 0:
-            raise ValueError("price_per_night must be greater than 0")
-        self.__price_per_night = price_per_night

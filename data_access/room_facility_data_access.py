@@ -3,7 +3,6 @@ import model
 import data_access.room_type_access
 import model.facility 
 
-
 class RoomFacilityDataAccess(BaseDataAccess):
     def __init__(self, db_path: str = None):
         super().__init__(db_path)

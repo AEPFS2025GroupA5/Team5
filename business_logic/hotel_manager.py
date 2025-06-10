@@ -11,14 +11,14 @@ class HotelManager:
         self.__booking_da = data_access.BookingDataAccess()
         self.__room_manager = business_logic.RoomManager()
         self.__booking_manager = business_logic.BookingManager()
-
         self._all_hotels = self.__hotel_da.read_all_hotels()
 
 
 ## Admin Funktionen 
-
+    # Dafür die Memory zu refreshen und gleichzeitig alle Hotels in der DB zu printen. Zb wenn man eine Änderung gemacht hat.
     def refresh_all_hotels(self) -> None:
         self._all_hotels = self.__hotel_da.read_all_hotels()
+        print (f"All Hotels in DB: {self._all_hotels}")
 
     def create_new_hotel(self,
                         name: str,
@@ -62,7 +62,7 @@ class HotelManager:
             return self.__hotel_da.read_hotel_by_name(name) 
         
     def read_all_hotels(self) -> list[model.Hotel]:
-        return self.__hotel_da.read_all_hotels() 
+        return self._all_hotels
 
 
 ## Filterfunktionen

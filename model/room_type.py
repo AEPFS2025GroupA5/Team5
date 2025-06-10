@@ -4,9 +4,9 @@ from model.facility import Facility
 
 class RoomType:
     def __init__(self,
-        type_id: int,
-        description: str,
-        max_guests: int,
+                type_id: int,
+                description: str,
+                max_guests: int,
         ):
         
         # TypeErrors
@@ -26,9 +26,9 @@ class RoomType:
              
     def __repr__(self):
         return (
-        f"  ID: {self.__type_id}\n"
-        f"  Description: {self._description}\n"
-        f"  Max Guests: {self._max_guests}\n"
+        f"  ID:{self.__type_id}\n"
+        f"  Description:{self._description}\n"
+        f"  Max Guests:{self._max_guests}\n"
         )
 
     
@@ -51,16 +51,10 @@ class RoomType:
     def description(self, description: str):
         if not isinstance(description, str):
             raise TypeError("description must be a string")
-        if not description:
-            raise ValueError("description can't be empty")
-        self._description = description
 
     @max_guests.setter
     def max_guests(self, max_guests: int):
         if not isinstance(max_guests, int):
             raise TypeError("max_guests must be an int")
-        if max_guests <= 0:
-            raise ValueError("max_guests must be greater than 0")
-        self._max_guests = max_guests
 
   

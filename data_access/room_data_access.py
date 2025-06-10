@@ -8,6 +8,7 @@ class RoomDataAccess(BaseDataAccess):
                  db_path: str = None
         ):
         super().__init__(db_path)
+
         self.__room_type_dao = data_access.room_type_access.RoomTypeDataAccess()
         self.__hotel_dao = data_access.hotel_data_access.HotelDataAccess()
 
@@ -117,17 +118,19 @@ class RoomDataAccess(BaseDataAccess):
         """
         params = (hotel.hotel_id, room_number, room_type.type_id, price_per_night)
         last_row_id, _ = self.execute(sql, params)
+        new_room = model.Room(last_row_id, hotel, room_number, room_type, price_per_night)
+        print (f"Created new Room with ID: {new_room.room_id}")
 
-        return model.Room(last_row_id, hotel, room_number, room_type, price_per_night)
     
     def delete_room (self,
-                        room: model.Room
+                    room: model.Room
         ) -> None:
         
         sql = """
         DELETE FROM room WHERE room_id = ?
         """
         self.execute(sql, (room.room_id,))
+        print (f"Deleted Room with ID: {room.room_id}")
 
     def delete_room_from_hotel(self,
                             hotel:model.Hotel
@@ -142,4 +145,3 @@ class RoomDataAccess(BaseDataAccess):
         DELETE FROM room WHERE hotel_id = ?
         """
         self.execute(sql, (hotel.hotel_id,))
-        

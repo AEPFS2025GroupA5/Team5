@@ -24,6 +24,7 @@ class RoomTypeDataAccess(BaseDataAccess):
             return model.RoomType(*row)
           return None
     
+
     ## Admin Methods
     def create_new_room_type(self,
                              description: str,
@@ -35,7 +36,10 @@ class RoomTypeDataAccess(BaseDataAccess):
         params = (description, max_guests)
         last_row_id, _ = self.execute(sql, params)
 
-        return model.RoomType(last_row_id, description, max_guests)
+        new_room_type = model.RoomType(last_row_id, description, max_guests)
+        print (f"Created new RoomType with ID: {new_room_type.type_id}")
+        return new_room_type
+  
     
     def update_room_type(self,
                          room_type: model.RoomType
@@ -50,9 +54,10 @@ class RoomTypeDataAccess(BaseDataAccess):
         )
 
         self.execute(sql, params)
+        print (f"Updated RoomType with ID: {room_type.type_id}")
 
     def delete_room_type_by_id(self, 
-                         room_type: model.RoomType
+                              room_type: model.RoomType
         ) -> None:
         sql = """
         DELETE FROM room_type WHERE type_id = ?
@@ -60,6 +65,7 @@ class RoomTypeDataAccess(BaseDataAccess):
         params = ([room_type.type_id])
 
         self.execute(sql, params)
+        print (f"Deleted RoomType with ID: {room_type.type_id}")
     
 
          

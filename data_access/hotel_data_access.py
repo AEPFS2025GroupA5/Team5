@@ -40,7 +40,9 @@ class HotelDataAccess(BaseDataAccess):
         
         
        
-        def read_hotel_by_name(self, name:str) -> model.Hotel:
+        def read_hotel_by_name(self, 
+                               name:str
+                ) -> model.Hotel:
                 sql = """
                 SELECT h.hotel_id, h.name, h.stars, a.address_id, a.street, a.city, a.zip_code
                 FROM hotel h
@@ -72,11 +74,11 @@ class HotelDataAccess(BaseDataAccess):
                 last_row_id, _ = self.execute(sql, params)
                 address = self._address_data_access.read_address_by_id(address_id)
                 new_hotel = model.Hotel(last_row_id, name, stars, address)
-                print(f"New hotel created: {new_hotel}")
+                print(f"New hotel created with ID: {new_hotel.hotel_id}")
                 
         
         def update_hotel_by_object(self,
-                        hotel: model.Hotel
+                                   hotel: model.Hotel
                 ) -> None:
                 if hotel is None:
                         raise ValueError("Hotel has to be defined")
@@ -93,29 +95,25 @@ class HotelDataAccess(BaseDataAccess):
                 self.execute(sql, params)
 
         def update_hotel_by_data(self,
-                hotel_id: int,
-                name: str,
-                stars: int,
-                address_id: int
+                                hotel_id: int,
+                                name: str,
+                                stars: int,
+                                address_id: int
                 ) -> None:
                 address = self._address_data_access.read_address_by_id(address_id)
                 if not address:
                         raise ValueError(f"Address with ID {address_id} not found")
-
                 hotel = model.Hotel(hotel_id, name, stars, address)
-
                 self.update_hotel_by_object(hotel)
-
-                print(f"Hotel {hotel_id} updated successfully.")
+                print(f"Hotel with ID {hotel.hotel_id} updated successfully.")
 
         def delete_hotel_by_id(self,
-                            hotel_id:int
+                               hotel_id:int
                 ) -> None:
                
                 sql = "DELETE FROM hotel WHERE hotel_id = ?"
                 self.execute(sql, (hotel_id,))
-
-                print(f"Hotel {hotel_id} deleted successfully.")
+                print(f"Hotel with ID: {hotel_id} deleted successfully.")
         
         
 
