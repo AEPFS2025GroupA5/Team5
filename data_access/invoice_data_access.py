@@ -39,15 +39,33 @@ class InvoiceDataAccess(BaseDataAccess):
         row = self.fetchone(sql, (invoice_id,))
         if row:
             inv= model.Invoice(*row)
-            total_amount= float(inv.total_amount)
-            sub_total= float(round(total_amount/108.1*100,2))
-            mwst_betrag= total_amount - sub_total
-            print(f"   Subtotal of Invoice: {sub_total:.2f}")
-            print(f"   MwSt (8.1%): CHF {mwst_betrag:.2f} ")
-            print(f"   Gesamtbetrag: CHF {total_amount:.2f} ")
             return inv
         return None
     
+    def read_invoices_by_guest(self, 
+                               guest_id:int
+        ) -> model.Invoice:
+        if not guest_id:
+            raise ValueError("Guest ID is required")
+        if not isinstance(guest_id, int):
+            raise ValueError("Guest ID has to be an integer")
+        sql= """
+        SELECT Invoice.invoice_id, Invoice.booking_id, Invoice.issue_date, Invoice.total_amount
+        FROM invoice 
+        JOIN Booking on Booking.booking_id=Invoice.invoice_id
+        WHERE Booking.guest_id=?
+        """
+        rows= self.fetchall(sql,(guest_id, ))
+        invoices= []
+
+        if rows:
+            for row in rows:
+                inv= model.Invoice(*row)
+                invoices.append(inv)
+            return invoices
+        return None   
+
+
     def create_new_invoice(self,
                            booking_id: int,
                            issue_date: date,

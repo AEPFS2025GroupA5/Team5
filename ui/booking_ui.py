@@ -68,7 +68,7 @@ def get_userfriendly_booking(booking:model.Booking)-> str:
     return f"Booking ID: {b.booking_id}, Check- In: {b.check_in_date}, Check-Out: {b.check_out_date}, Total Amount: {b.total_amount}, Cancelled: {b.is_cancelled}, Booked in: {h.name} Room: {r.room_number}, Invoice: {b.invoice.booking_id if b.invoice else 'No Invoice'}"
 
 def get_userfriendly_invoice(i:model.Invoice)-> str:
-    return f"Invoice ID: {i.invoice_id}, Issue Date: {i.issue_date}, Amount to pay:{i.total_amount}"
+    return f"Invoice ID: {i.invoice_id}, Booking ID: {i.booking_id}, Issue Date: {i.issue_date}, Amount to pay:{i.total_amount}"
 
 def get_userfriendly_guest(guest:model.Guest) -> str:
     return f"Your name: {guest.first_name} {guest.last_name}, Address: {guest.address.street}, {guest.address.city}, {guest.address.zip_code}, E-Mail: {guest.email}"

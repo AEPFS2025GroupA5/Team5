@@ -138,8 +138,6 @@ class BookingManager:
             print(f"{'-'*70}")
             print(f"{'Total amount due:':<39}CHF {total_amount:>10.2f}")
             print(f"{'-'*70}\n")
-            # guest=model.Guest
-            # guest.bookings
             return booking
         else:
             return None        
@@ -162,8 +160,9 @@ class BookingManager:
         
         self.__booking_da.cancell_booking(booking_id)
         print (f"Booking ID {booking_id} is cancelled.")
-        self.__invoice_manager.create_new_invoice(booking_id, date.today(), 0.00)
+        inv= self.__invoice_manager.create_new_invoice(booking_id, date.today(), 0.00)
         print(f"Invoice of CHF 0.00 has been created!")
+        booking.invoice= inv
     
     def billing(self, booking_id:int):
         booking = self.read_booking_by_id(booking_id)
