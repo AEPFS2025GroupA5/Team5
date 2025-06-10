@@ -1,13 +1,13 @@
 # Team5
 Im Frühlingssemester 2025 wurden wir beauftragt, ein Anwendungsszenario für ein Hotelreservierungssystem zu entwickeln. Dieses Projekt baut auf der Arbeit des vorangegangenen Semesters auf, in dem wir eine Datenbank für den Kurs "Datenbasierte Unternehmensanwendung" entworfen haben.
-
 Wie in den Projektrichtlinien beschrieben, verwenden wir verschiedene Werkzeuge, um unseren Entwicklungsprozess zu unterstützen:
 - Visual Paradigm für das Klassendiagramm
 - SQLite für die Datenbank
 - Jupyter Notebook für die Dokumentation sowie Ausführung der Codes
 - GitHub für die Versions Controlle und Projekt Management
 
-Wir haben versucht, DeepNote zu verwenden, aber um mehr Praxisbezug zu bekommen, haben wir Visual Studio Code verwendet.
+## How to use
+Hier erklären was der Nutzer tun soll, damit er Zugriff auf das Notebook hat
 
 ## Projekt Management
 ### Vorgehensweise
@@ -24,18 +24,16 @@ Nachdem wir das Klassendiagramm erstellt hatten, haben wir das Projekt in zwei H
 - `Guest`
 - `Address`
 
-Die Aufgaben wurden entsprechend dieser Aufteilung im Team verteilt.
-
+Die Aufgaben wurden entsprechend dieser Aufteilung im Team verteilt. Zum Coden haben wir uns letztendlich für Visual Studio Code entschieden, da wir die praktische Erfahrung in einem sehr verbreiteten und bekannten Programm als sehr hoch einschätzen.
 Für die Organisation und Kommunikation haben wir hauptsächlich unseren WhatsApp-Gruppenchat genutzt. Darüber haben wir besprochen, bis wann welche Teile fertiggestellt werden sollen, und regelmässig Herausforderungen und offene Fragen diskutiert. Zusätzlich haben wir uns in regelmässigen online oder vor Ort ausgetauscht.
-
 Im Verlauf des Projekts haben wir ausserdem entdeckt, dass GitHub ein integriertes Kanban-Board anbietet. Dieses haben wir gegen Ende des Projektabschnitts ergänzend verwendet, um Aufgaben visuell zu organisieren und den Fortschritt besser nachverfolgen zu können.
 
-> Insgesamt haben wir also ein **hybrides** Planungssystem verwendet – bestehend aus WhatsApp-Kommunikation für schnelle Absprachen und GitHub Kanban für strukturierte Aufgabenverteilung.
+Insgesamt haben wir also ein **hybrides** Planungssystem verwendet – bestehend aus WhatsApp-Kommunikation für schnelle Absprachen und GitHub Kanban für strukturierte Aufgabenverteilung.
 
 ## Projektüberblick und Teamdynamik:
 Im Laufe des Projekts zeigte sich , dass zwei Teammitglieder aus unterschiedlichen Gründen nicht aktiv zum Projekt beitrugen. Nach Rücksprache mit den Dozierenden wurde gemeinsam entschieden, das Projekt im verbleibenden kleineren Team weiterzuführen. Diese Entscheidung war nicht nur notwendig, sondern auch eine wertvolle Lernerfahrung im Hinblick auf Eigenverantwortung, Projektorganisation und Kommunikation im Team.
 
-### Dieng Saliou - *Architekt der Unterkunftsstruktur und Basisstruktur*
+### Saliou Dieng - *Architekt der Unterkunftsstruktur und Basisstruktur*
 <br> Verantwortliche Klassen (Model, Data Access, Business Logic, UI):
 - `Facility`
 - `Room`
@@ -50,8 +48,7 @@ Im Laufe des Projekts zeigte sich , dass zwei Teammitglieder aus unterschiedlich
 - 9
 - 10
 - 11.1
-<br>
-<br>
+
 
 #### Technische Umsetzung:
 Zu meinen Aufgabenbereichen zählten unter anderem die Modellierung und Implementierung der Klassen Facility, Room, RoomType und Hotel. Anfangs fiel es mir noch schwer, die genaue Trennung zwischen den einzelnen Schichten (Model, Data Access, Business Logic, UI) konsequent einzuhalten. Viele Funktionen wurden zunächst direkt in die Model-Klassen eingebaut. Doch im weiteren Verlauf entwickelte ich ein besseres Verständnis für die Architektur, wodurch ich die Logik gezielter auslagern und die Zuständigkeiten klarer strukturieren konnte.
@@ -76,7 +73,9 @@ Besonders stolz bin ich darauf, wie sich mein Umgang mit Python im Laufe des Pro
 Ich hätte gerne mehr und tiefer mit modernen Libaries wie pandas und SQLAlchemy gearbeitet, dafür reichte die Zeit aber leider nicht aus. 
 
 
-### Müller Anna - *Architektin des Gasterlebnisses*
+
+
+### Anna Müller - *Architektin des Gasterlebnisses*
 <br> Zugeteilte Klassen in Model, Data Access, Business Logic und UI Layer umgesetzt:
 - `Booking`
 - `Invoice`
@@ -88,10 +87,6 @@ Ich hätte gerne mehr und tiefer mit modernen Libaries wie pandas und SQLAlchemy
 - 2.2
 - 4 - 8
 <br>
-
-
-## How to use
-Hier erklären was der Nutzer tun soll, damit er Zugriff auf das Notebook hat.
 
 ## UML
 
