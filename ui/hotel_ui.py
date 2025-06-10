@@ -8,7 +8,7 @@ def print_hotel(hotel: model.Hotel) -> None:
         raise TypeError("hotel must be a Hotel object")
     print(hotel.name, hotel.stars, hotel.address.city)
 
-def print_hotel_with_address(hotel: model.Hotel) -> None:
+def print_hotel_with_address(hotel: model.Hotel) -> None:  ##Hier noch andere Show User Friendly Methode rein tun!
     if not isinstance(hotel, model.Hotel):
         raise TypeError("hotel must be a Hotel object")
     print_hotel(hotel)

@@ -28,6 +28,8 @@ class BookingManager:
         booking=self.__booking_da.read_booking_by_id(booking_id)
         if booking is None:
             raise ValueError(f"There is no booking ID {booking_id} in the systems")
+        if booking.invoice:
+            raise ValueError(f"You cannot change a total amount of a booking where there is already an invoice")
 
         self.__booking_da.update_booking_price_for_guest(price_to_set, booking_id)
 
@@ -134,9 +136,10 @@ class BookingManager:
             print(f"{'-'*70}")
             print(f"{'included VAT (8.1%):':<40}CHF {mwst_betrag:>10.2f}")
             print(f"{'-'*70}")
-            print(f"{'💵 Total amount due:':<39}CHF {total_amount:>10.2f}")
+            print(f"{'Total amount due:':<39}CHF {total_amount:>10.2f}")
             print(f"{'-'*70}\n")
-
+            # guest=model.Guest
+            # guest.bookings
             return booking
         else:
             return None        

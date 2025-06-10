@@ -139,8 +139,6 @@ class HotelManager:
         return hotels 
     
 ## Output Funktionen
-
-    
     def print_user_friendly_hotels(self, hotels: list[model.Hotel]) -> None:
         for hotel in hotels:
             info = (
@@ -154,13 +152,3 @@ class HotelManager:
 
     def get_user_frendly_hotel_info_short(hotel: model.Hotel):
         return f"Hotel ID: {hotel.hotel_id}, Name: {hotel.name}, Stars: {hotel.stars}, Address: {hotel.address.city}, {hotel.address.street}"
-    
-    
-                  
-     
-        
-    
-    
-
-      
-            

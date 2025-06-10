@@ -100,7 +100,7 @@ class GuestDataAccess(BaseDataAccess):
     address= model.Address(addre.address_id, addre.street, addre.city, addre.zip_code)
     return model.Guest(last_row_id, first_name, last_name, email, address)
 
-  def update_guest_by_last_name(self,
+  def update_guest_last_name_by_id(self,
                                   guest_id:int, 
                                   new_last_name:str
       ) -> None:  
@@ -117,6 +117,62 @@ class GuestDataAccess(BaseDataAccess):
     params = (new_last_name, guest_id)
     self.execute(sql, params)
 
-  def delete_guest_by_id(self, guest_id: int) -> None:
+  def update_guest_first_name_by_id(self, 
+                                    guest_id: int, 
+                                    new_first_name: str
+        ) -> None:
+      if not guest_id:
+          raise ValueError("Guest ID is required")
+      if not isinstance(guest_id, int):
+          raise ValueError("Guest ID has to be an integer")
+      if not new_first_name:
+          raise ValueError("First name is required")
+      if not isinstance(new_first_name, str):
+          raise ValueError("First name has to be a string")
+      
+      sql = "UPDATE guest SET first_name = ? WHERE guest_id = ?"
+      params = (new_first_name, guest_id)
+      self.execute(sql, params)
+
+
+  def update_guest_address_by_id(self, 
+                                 guest_id: int, 
+                                 address_id: str
+        ) -> None:
+      if not guest_id:
+          raise ValueError("Guest ID is required")
+      if not isinstance(guest_id, int):
+          raise ValueError("Guest ID has to be an integer")
+      if not address_id:
+          raise ValueError("Address is required")
+      if not isinstance(address_id, int):
+          raise ValueError("Address has to be an integer")
+      
+      sql = "UPDATE guest SET address_id = ? WHERE guest_id = ?"
+      params = (address_id, guest_id)
+      self.execute(sql, params)
+
+
+  def update_guest_email_by_id(self, 
+                                guest_id: int, 
+                                new_email: str
+        ) -> None:
+      if not guest_id:
+          raise ValueError("Guest ID is required")
+      if not isinstance(guest_id, int):
+          raise ValueError("Guest ID has to be an integer")
+      if not new_email:
+          raise ValueError("Email is required")
+      if not isinstance(new_email, str):
+          raise ValueError("Email has to be a string")
+      
+      sql = "UPDATE guest SET email = ? WHERE guest_id = ?"
+      params = (new_email, guest_id)
+      self.execute(sql, params)
+
+
+  def delete_guest_by_id(self, 
+                         guest_id: int
+      ) -> None:
     sql = "DELETE FROM guest WHERE guest_id = ?"
     self.execute(sql, (guest_id,))

@@ -113,12 +113,3 @@ class Guest:
             raise ValueError('E-Mail needs an "@" in their address')
         self._email=new
         return f"You have changed E-Mail into: {self._email}"
-        
-    #Userfriendly -> das noch in die UI rein tun!!!
-    def userfriendly(self):
-        return f"""
-            ID: {self.guest_id}
-            Name: {self.first_name} {self.last_name}
-            E-Mail: {self.email}
-            {self.address.show_user_friendly()}
-            """
