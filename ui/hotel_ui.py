@@ -3,17 +3,8 @@ import ui
 import business_logic
 import ui.input_helper
 
-def print_hotel(hotel: model.Hotel) -> None:
-    if not isinstance(hotel, model.Hotel):
-        raise TypeError("hotel must be a Hotel object")
-    print(hotel.name, hotel.stars, hotel.address.city)
 
-def print_hotel_with_address(hotel: model.Hotel) -> None:  ##Hier noch andere Show User Friendly Methode rein tun!
-    if not isinstance(hotel, model.Hotel):
-        raise TypeError("hotel must be a Hotel object")
-    print_hotel(hotel)
-    print(hotel.address.show_user_friendly())
-
+## Input für User
 def get_city_input() -> str:
     while True:
         try:
@@ -43,15 +34,22 @@ def get_max_guests_input() -> int:
         except ValueError as e:
             print(f"Invalid input: {e}. Please enter a valid integer.")
 
-def get_user_frendly_hotel_info_short(hotel: model.Hotel) -> str:
-    return f"Name: {hotel.name}, City: {hotel.address.city}, Stars: {hotel.stars}"
-
 def get_city_no_limit() -> str:
     while True:
         try:
             return ui.input_helper.input_valid_string("Enter the city you want to search for hotels: ", 0, 10)
         except ui.input_helper.StringLengthError:
             print(f"Invalid input, give at most 15 characters.")
+
+
+## Print Funktionen
+def print_hotel(hotel: model.Hotel) -> None:
+    if not isinstance(hotel, model.Hotel):
+        raise TypeError("hotel must be a Hotel object")
+    print(hotel.name, hotel.stars, hotel.address.city)
+
+def get_user_frendly_hotel_info_short(hotel: model.Hotel) -> str:
+    return f"Name: {hotel.name}, City: {hotel.address.city}, Stars: {hotel.stars}"
 
 def get_address_short(address: model.Address) -> str:
     return f"{address.street}, {address.city}, {address.zip_code}"
