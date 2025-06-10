@@ -61,7 +61,7 @@ Ein zentrales Prinzip meines Vorgehens war: Die Data Access Layer (DAL) liefert 
 Zur Strukturierung nutzte ich unter anderem einen RoomManager und einen HotelManager, die als zentrale Schnittstellen zwischen DAL und UI dienten. Sie übernahmen Validierungen, Filterungen (z. B. nach Ort, Personenanzahl oder Preis) und die Geschäftsregeln. Ich habe bewusst nur zwei zentrale Manager implementiert, um die Komplexität im ersten Durchlauf überschaubar zu halten.
 
 #### User Interface:
-Im Frontend konzentrierte ich mich auf die Implementierung der HotelUI. Hier lag mein Fokus darauf, eine möglichst benutzerfreundliche Bedienung zu ermöglichen – unter anderem durch gezielte Eingabehilfen (z. B. für Städte, Zimmergrößen oder Preiskategorien). Ich habe versucht, Fehlerquellen wie falsche Eingabetypen durch gezielte Abfragen und Validierungen frühzeitig zu vermeiden.
+Im Frontend konzentrierte ich mich auf die Implementierung der HotelUI. Hier lag mein Fokus darauf, eine möglichst benutzerfreundliche Bedienung zu ermöglichen – unter anderem durch gezielte Eingabehilfen (z. B. für Städte, Zimmergrößen oder Preiskategorien). Ich habe versucht, Fehlerquellen wie falsche Eingabetypen durch gezielte Abfragen und Validierungen frühzeitig zu vermeiden. Bei individuellen Wünschen arbeitete ich mit dem Input helper y_n, in den Funktionen sind die Parameter als None gesetzt, so muss der User nicht zwingend nach etwas filtern und kann es individuell aussuchen.
 
 Dabei fiel mir rückblickend auf, dass ich manche wiederverwendbaren Logiken noch stärker hätte auslagern können. Trotzdem konnte ich durch die modulare Struktur bereits viele Elemente mehrfach einsetzen.
 
