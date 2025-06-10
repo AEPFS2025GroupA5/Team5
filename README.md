@@ -7,10 +7,10 @@ Wie in den Projektrichtlinien beschrieben, verwenden wir verschiedene Werkzeuge,
 - Jupyter Notebook für die Dokumentation sowie Ausführung der Codes
 - GitHub für die Versions Controlle und Projekt Management
 
-Wir haben versucht, DeepNote zu verwenden, aber um mehr Praxisbezug zu bekommen, haben wir Visual Studio Code verwendet. Codes auszuführen, zu pushen und in unser Repository zu ziehen.
+Wir haben versucht, DeepNote zu verwenden, aber um mehr Praxisbezug zu bekommen, haben wir Visual Studio Code verwendet.
 
-### Projekt Management
-#### Vorgehensweise
+## Projekt Management
+### Vorgehensweise
 Nachdem wir das Klassendiagramm erstellt hatten, haben wir das Projekt in zwei Hauptbereiche aufgeteilt:
 ##### Fokus Hotel:
 - `Facility`
@@ -32,13 +32,10 @@ Im Verlauf des Projekts haben wir ausserdem entdeckt, dass GitHub ein integriert
 
 > Insgesamt haben wir also ein **hybrides** Planungssystem verwendet – bestehend aus WhatsApp-Kommunikation für schnelle Absprachen und GitHub Kanban für strukturierte Aufgabenverteilung.
 
-### Teamübersicht & Aufgabenverteilung
-------------------------------------------------------
-(Documenter - Chirakkal Fenlin)
-(Documenter - Seidel Ivan)
+## Projektüberblick und Teamdynamik:
+Im Laufe des Projekts zeigte sich , dass zwei Teammitglieder aus unterschiedlichen Gründen nicht aktiv zum Projekt beitrugen. Nach Rücksprache mit den Dozierenden wurde gemeinsam entschieden, das Projekt im verbleibenden kleineren Team weiterzuführen. Diese Entscheidung war nicht nur notwendig, sondern auch eine wertvolle Lernerfahrung im Hinblick auf Eigenverantwortung, Projektorganisation und Kommunikation im Team.
 
-
-#### Dieng Saliou - *Architekt der Unterkunftsstruktur*
+### Dieng Saliou - *Architekt der Unterkunftsstruktur und Basisstruktur*
 <br> Verantwortliche Klassen (Model, Data Access, Business Logic, UI):
 - `Facility`
 - `Room`
@@ -56,7 +53,30 @@ Im Verlauf des Projekts haben wir ausserdem entdeckt, dass GitHub ein integriert
 <br>
 <br>
 
-#### Müller Anna - *Architektin des Gasterlebnisses*
+#### Technische Umsetzung:
+Zu meinen Aufgabenbereichen zählten unter anderem die Modellierung und Implementierung der Klassen Facility, Room, RoomType und Hotel. Anfangs fiel es mir noch schwer, die genaue Trennung zwischen den einzelnen Schichten (Model, Data Access, Business Logic, UI) konsequent einzuhalten. Viele Funktionen wurden zunächst direkt in die Model-Klassen eingebaut. Doch im weiteren Verlauf entwickelte ich ein besseres Verständnis für die Architektur, wodurch ich die Logik gezielter auslagern und die Zuständigkeiten klarer strukturieren konnte.
+
+Bei der Modellierung war mir wichtig, sinnvolle Abhängigkeiten zu berücksichtigen – zum Beispiel kann ein Room-Objekt nur erstellt werden, wenn es ein zugehöriges Hotel sowie einen gültigen RoomType gibt. Auch Typüberprüfungen wurden direkt in den Klassen umgesetzt, um Datensicherheit und Fehlerprävention zu gewährleisten.
+
+#### Business Logic und Data Access:
+Ein zentrales Prinzip meines Vorgehens war: Die Data Access Layer (DAL) liefert stets alle vorhandenen Daten (z. B. alle Hotels oder alle Zimmer), während die gezielte Filterung ausschließlich in der Business Logic erfolgt. Diese Trennung war für mich eingängiger, da ich so alle Daten an einem Ort sammeln und später bedarfsgerecht filtern konnte. Dadurch war die Business Logic zwar aufwendiger, aber auch flexibler.
+
+Zur Strukturierung nutzte ich unter anderem einen RoomManager und einen HotelManager, die als zentrale Schnittstellen zwischen DAL und UI dienten. Sie übernahmen Validierungen, Filterungen (z. B. nach Ort, Personenanzahl oder Preis) und die Geschäftsregeln. Ich habe bewusst nur zwei zentrale Manager implementiert, um die Komplexität im ersten Durchlauf überschaubar zu halten.
+
+#### User Interface:
+Im Frontend konzentrierte ich mich auf die Implementierung der HotelUI. Hier lag mein Fokus darauf, eine möglichst benutzerfreundliche Bedienung zu ermöglichen – unter anderem durch gezielte Eingabehilfen (z. B. für Städte, Zimmergrößen oder Preiskategorien). Ich habe versucht, Fehlerquellen wie falsche Eingabetypen durch gezielte Abfragen und Validierungen frühzeitig zu vermeiden.
+
+Dabei fiel mir rückblickend auf, dass ich manche wiederverwendbaren Logiken noch stärker hätte auslagern können. Trotzdem konnte ich durch die modulare Struktur bereits viele Elemente mehrfach einsetzen.
+
+#### Persönliche Reflexion
+Durch das Projekt habe ich nicht nur mein Verständnis für die Softwarearchitektur in Python deutlich verbessert, sondern auch gelernt, worauf es bei der sauberen Trennung von Zuständigkeiten ankommt. Wäre ich nochmals am Anfang, würde ich die Schichten von Anfang an klarer aufbauen, die Data Access Layer eventuell stärker mit gezielten SQL-Abfragen optimieren (z. B. per Joins), und noch häufiger testen.
+
+Besonders stolz bin ich darauf, wie sich mein Umgang mit Python im Laufe des Projekts entwickelt hat – von ersten Experimenten bis hin zu einer durchdachten, funktionsfähigen Anwendung mit nachvollziehbarer Struktur. Auch wenn noch Verbesserungspotenzial besteht (z. B. bei der Wiederverwendung von UI-Elementen), überwiegt für mich klar das Gefühl, viel gelernt und ein solides Ergebnis erarbeitet zu haben.
+
+Ich hätte gerne mehr und tiefer mit modernen Libaries wie pandas und SQLAlchemy gearbeitet, dafür reichte die Zeit aber leider nicht aus. 
+
+
+### Müller Anna - *Architektin des Gasterlebnisses*
 <br> Zugeteilte Klassen in Model, Data Access, Business Logic und UI Layer umgesetzt:
 - `Booking`
 - `Invoice`
@@ -68,13 +88,10 @@ Im Verlauf des Projekts haben wir ausserdem entdeckt, dass GitHub ein integriert
 - 2.2
 - 4 - 8
 <br>
-> Beide Teammitglieder arbeiteten eng zusammen und führten regelmässige Code-Reviews durch, um eine einheitliche Codebasis und konsistente Logik sicherzustellen.
-Zusätzlich wurde die Dokumentation sowohl im Jupyter Notebook als auch in diesem README gepflegt.
-<br>
+
 
 ## How to use
 Hier erklären was der Nutzer tun soll, damit er Zugriff auf das Notebook hat.
-
 
 ## UML
 
