@@ -7,7 +7,38 @@ Wie in den Projektrichtlinien beschrieben, verwenden wir verschiedene Werkzeuge,
 - GitHub für die Versions Controlle und Projekt Management
 
 ## How to use
-Hier erklären was der Nutzer tun soll, damit er Zugriff auf das Notebook hat
+### Voraussetzungen:
+- VS Code oder Pycharm als Applikation
+- `requirements.txt` ausführen während der Installation (siehe Schritt 3)
+
+1. ### Virtuelle Umgebung erstellen
+```
+python -m venv ./.venv
+```
+
+2. ### Script aktivieren
+#### Windows:
+```
+.\.venv\Scripts\activate
+```
+
+#### MacOS:
+```
+source .venv/bin/activate
+```
+
+
+3. ### Jetzt das Requirement installieren
+#### Windows:
+```
+pip install -r .\requirements.txt
+```
+
+#### MacOS:
+```
+pip install -r ./requirements.txt
+```
+
 
 ## Projekt Management
 ### Vorgehensweise
@@ -88,13 +119,29 @@ Ich hätte gerne mehr und tiefer mit modernen Libaries wie pandas und SQLAlchemy
 - 4 - 8
 <br>
 
+#### Technische Umsetzung
+Neben der Modellierung und Implementierung der Klassen Booking, Invoice, Guest und Address habe ich auch die Beziehungen zwischen diesen Klassen modelliert. Das war zwar herausfordernd, aber letztlich sehr lohnend, weil man am Ende ein klares Gesamtbild der Struktur erkennen konnte. Das Modell bildet eine zentrale Grundlage für alle weiteren Schichten der Architektur – besonders für die Business Logic und die Datenzugriffe. Ich habe ausserdem auf eine saubere Trennung zwischen Modell, Data Access, Business Logic und UI geachtet. Viele Funktionen waren anfangs noch in den Modellklassen, wurden aber mit wachsendem Architekturverständnis an die passenden Stellen verschoben. Dabei habe ich gelernt, typische Fehler in der Business Logic besser zu erkennen und zu vermeiden.
+
+#### Business Logic und Data Access:
+Im Logic- und Data-Access-Layer habe ich versucht, alle sinnvollen Datenabfragen abzudecken – etwa Buchungen nach bestimmten Kunden, sämtliche Buchungen insgesamt oder alle Hotels in einer bestimmten Stadt. In der Business Logic war es mir besonders wichtig, kritisch zu denken: Welche Prüfungen sind hier wirklich notwendig? Wo muss ich zusätzliche Validierungen ergänzen, die der Data Access Layer nicht übernehmen kann? Während die Data Access Layer vor allem auf die Datentypen achtet – also etwa prüft, ob Eingaben wirklich Integer oder String sind – konzentriert sich die Business Logic auf inhaltliche Regeln. Zum Beispiel: Das Check-In-Datum darf nicht nach dem Check-Out-Datum liegen. Diese Trennung war für mich ein wichtiger Lernprozess, um eine saubere, logische Architektur aufzubauen
+
+#### User Interface:
+Ich habe darauf geachtet, alle möglichen Pfade im System abzudecken – insbesondere im Hinblick auf unterschiedliche Nutzereingaben. Das bedeutet zum Beispiel, was passiert, wenn statt einer Zahl ein String eingegeben wird. Aber auch funktionale Szenarien wie: ‚Ich möchte noch eine Buchung hinzufügen‘, ‚Ich will eine weitere Buchung stornieren‘ oder ‚Ich möchte eine weitere Buchung fakturieren‘. Solche Überlegungen haben meine Entscheidungen in der UI beeinflusst. Ich habe intensiv mit den UI-Komponenten gearbeitet, besonders mit dem UI-Booking und dem UI-Input-Helper, und teilweise auch mit der Hotel UI, um die Nutzung möglichst benutzerfreundlich zu gestalten. Mein Fokus lag dabei stark auf der Frage: Was würde ich mir als Nutzer von einem Hotelreservierungssystem am meisten wünschen?
+
+#### Persönliche Reflexion
+Durch dieses Projekt habe ich wirklich viel gelernt – nicht nur fachlich, sondern auch persönlich. Ich habe verstanden, wie ich in einem solchen Projekt strukturiert vorgehen kann.
+
+Gleichzeitig habe ich auch gelernt, besser mit Frustration umzugehen. Wenn ein Fehler auftrat, den ich nicht sofort verstanden habe, bin ich konsequent Zeile für Zeile durchgegangen und habe mich gefragt: Was funktioniert hier nicht? Was macht der Code genau? Warum passiert das so? Diese Vorgehensweise hat mir geholfen, die wahren Ursachen zu erkennen.
+
+Diese Strategie hat mir letztlich nicht nur geholfen, konkrete Probleme zu lösen, sondern auch mein Verständnis für Python insgesamt deutlich zu vertiefen. Ich habe gemerkt: Mit Ausdauer, systematischem Denken und einer "gewissen" Ruhe lassen sich auch komplexe Herausforderungen meistern. Das hat mir Mut gemacht für dieses Projekt und für künftige Aufgaben.
+
+
 ## UML
 
 ![image](https://github.com/user-attachments/assets/4b941f4b-ab1e-47da-bd5d-bf659b77275c)
 
 Das UML haben wir mit Visual Paradigm erstellt und das UML bildet die Beziehung zwischen den Klassen Hotel, Booking, Invoice, Room, Guest, Address, Room Type und Facility. Wir sind nach dem gleichen Schema gegangen wie das von der Datenbank.
 
-Evtl. noch erklären 
 
 ![image](https://github.com/user-attachments/assets/88c00dcb-0977-4137-ad5d-8224df509808)
 
