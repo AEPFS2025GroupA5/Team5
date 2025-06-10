@@ -48,12 +48,13 @@ class GuestManager:
 
         return self.__guest_da.create_new_guest(first_name, last_name, email, address_id) 
 
-    def update_guest_by_last_name(self,
+    def update_guest_by_id(self,
                       guest_id:int, 
                       new_last_name:str
         ) -> None:
 
         guest= self.read_guest_by_id(guest_id)
+        print(f"Guest name: {guest.first_name} {guest.last_name}, Address: {guest.address.street}, {guest.address.city}, {guest.address.zip_code}")
         if new_last_name != guest.last_name:
             return self.__guest_da.update_guest_by_last_name(guest_id, new_last_name)
         else:

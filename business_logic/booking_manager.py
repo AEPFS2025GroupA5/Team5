@@ -94,7 +94,7 @@ class BookingManager:
         if room is None:
             raise ValueError("There is no such room")
         
-        available_rooms = self.read_all_av_rooms_by_hotel(room.hotel_id, check_out_date, check_in_date)
+        available_rooms = self.read_all_av_rooms_by_hotel(room.hotel.hotel_id, check_out_date, check_in_date)
         available_room_ids = [room.room_id for room in available_rooms]
 
         if room_id not in available_room_ids:
@@ -109,7 +109,6 @@ class BookingManager:
         num_nights = (check_out_date - check_in_date).days
         price = num_nights * room.price_per_night
     
-
         mwst_satz= 108.1
         verwaltungskosten_satz= 0.1
 
@@ -122,20 +121,21 @@ class BookingManager:
 
         seasonal= seasonal_per_night*num_nights
 
-        sub_total= float(round(total_amount-mwst_betrag, 2))
-
         booking= self.__booking_da.create_new_booking(room_id, check_in_date, check_out_date, guest_id, total_amount)
 
         if booking:
-            #Userfriendly Ausgabe für die erstellte Buchung mit Auszug aller Kosten und MWST Betrag -> Aus simplen Gründen haben wir 8.1% genommen
-            print(f"Thank you for your booking!")
-            print(f"   Base Price ({num_nights:.2f} nights at CHF {room.price_per_night:.2f} ): CHF {price:.2f} incl. VAT 8.1%")
-            print(f"   Seasonal Fee: CHF {seasonal}")
-            print(f"   Administrative Fee: CHF {verwaltungskosten:.2f} incl. VAT 8.1%")
-            print(f"-------------------------------------------")
-            print(f"   Subtotal: {sub_total:.2f}")
-            print(f"   VAT (8.1%): CHF {mwst_betrag:.2f} ")
-            print(f"   Total Amount: CHF {total_amount:.2f} ")
+            print("\n Thank you for your booking!")
+            print(f"{'-'*70}")
+            print(f"{'Stay duration:':<40}{num_nights:.0f} nights")
+            print(f"{'Price per night:':<40}CHF {room.price_per_night:>10.2f}")
+            print(f"{'Amount for stay:':<40}CHF {price:>10.2f}")
+            print(f"{'Seasonal surcharge:':<40}CHF {seasonal:>10.2f}")
+            print(f"{'Administrative fee:':<40}CHF {verwaltungskosten:>10.2f}")
+            print(f"{'-'*70}")
+            print(f"{'included VAT (8.1%):':<40}CHF {mwst_betrag:>10.2f}")
+            print(f"{'-'*70}")
+            print(f"{'💵 Total amount due:':<39}CHF {total_amount:>10.2f}")
+            print(f"{'-'*70}\n")
 
             return booking
         else:

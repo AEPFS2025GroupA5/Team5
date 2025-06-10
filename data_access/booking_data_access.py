@@ -53,8 +53,7 @@ class BookingDataAccess(BaseDataAccess):
                 hotel = model.Hotel(hotel_id, hotel_name, hotel_stars, address)
                 rt= self.__room_type_dao.read_room_type_by_id(room_type)
                 room_typ= model.RoomType(rt.type_id, rt.description, rt.max_guests)
-                room = model.Room(room_id, hotel.hotel_id, room_number, room_typ, price_per_night) #hier den ganzen Hotel rübergeben!
-                #room = model.Room(room_id, hotel, room_number, room_typ, price_per_night)
+                room = model.Room(room_id, hotel, room_number, room_typ, price_per_night)
                 guest = model.Guest(guest_id, guest_first_name, guest_last_name, guest_email, address)
                 
                 booking = model.Booking(
@@ -123,8 +122,7 @@ class BookingDataAccess(BaseDataAccess):
                 hotel_address = model.Address(hotel_addr_id, hotel_street, hotel_city, hotel_zip)
                 hotel = model.Hotel(hotel_id, hotel_name, hotel_stars, hotel_address)
                 room_type = self.__room_type_dao.read_room_type_by_id(room_type)
-                room = model.Room(room_id, hotel.hotel_id, room_number, room_type, price_per_night) #hier den ganzen Hotel Objekt rübergeben!
-                #room = model.Room(room_id, hotel, room_number, room_type, price_per_night)
+                room = model.Room(room_id, hotel, room_number, room_type, price_per_night)
 
                 #Objekt Booking erstellen
                 booking = model.Booking(
@@ -184,8 +182,7 @@ class BookingDataAccess(BaseDataAccess):
             hotel_address = model.Address(hotel_addr_id, hotel_street, hotel_city, hotel_zip)
             hotel = model.Hotel(hotel_id, hotel_name, hotel_stars, hotel_address)
             room_type = self.__room_type_dao.read_room_type_by_id(room_type_id)
-            room = model.Room(room_id, hotel.hotel_id, room_number, room_type, price_per_night) #hier ganzen Hotel Objekt rübergeben
-            #room = model.Room(room_id, hotel, room_number, room_type, price_per_night)
+            room = model.Room(room_id, hotel, room_number, room_type, price_per_night)
 
             booking = model.Booking(
                 booking_id=booking_id,
@@ -251,10 +248,9 @@ class BookingDataAccess(BaseDataAccess):
 
                 address = model.Address(address_id=address_id, street=street, city=city, zip_code=zip_code)
                 hotel = model.Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address)
-                room_t_obj = self.__room_type_dao.read_room_type_by_id(type_id)
+                room_type_obj = self.__room_type_dao.read_room_type_by_id(type_id)
                 
-                av_room = model.Room(room_id, hotel.hotel_id, room_number, room_t_obj, price_per_night) #hier ganzen Hotel Objekt rübergeben
-                #av_room = model.Room(room_id, hotel, room_number, room_type, price_per_night)
+                av_room = model.Room(room_id, hotel, room_number, room_type_obj, price_per_night)
                 all_av_rooms.append(av_room)
 
             return all_av_rooms
@@ -262,13 +258,10 @@ class BookingDataAccess(BaseDataAccess):
         return None
 
     def read_all_av_rooms_by_hotel(self, hotel_id: int, check_out_date: date, check_in_date: date) -> list[model.Room]: #Ändern
-    #def read_all_av_rooms_by_hotel(self, hotel_id: model.Hotel, check_out_date: date, check_in_date: date) -> list[model.Room]: #Ändern
         if not hotel_id:
             raise ValueError("Hotel ID is required")
         if not isinstance(hotel_id, int):
             raise ValueError("Hotel ID has to be an integer")
-        #if not isinstance(hotel_id, Hotel):
-            # raise ValueError("Hotel ID has to be an Hotel object")
         if not check_out_date:
             raise ValueError("Check Out Date is required")
         if not isinstance(check_out_date, date):
@@ -310,8 +303,7 @@ class BookingDataAccess(BaseDataAccess):
                 hotel = model.Hotel(hotel_id, hotel_name, stars, address)
                 room_type = self.__room_type_dao.read_room_type_by_id(type_id)
 
-                room = model.Room(room_id, hotel.hotel_id, room_number, room_type, price_per_night) #hier Hotel objekt rübergeben!
-                #room = model.Room(room_id, hotel, room_number, room_type, price_per_night) 
+                room = model.Room(room_id, hotel, room_number, room_type, price_per_night) 
                 all_av_rooms.append(room)
 
             return all_av_rooms
@@ -364,8 +356,7 @@ class BookingDataAccess(BaseDataAccess):
                 address = model.Address(address_id=address_id, street=street, city=city, zip_code=zip_code)
                 hotel = model.Hotel(hotel_id=hotel_id, name=name, stars=stars, address=address)
                 room_type = self.__room_type_dao.read_room_type_by_id(type_id)
-                av_room = model.Room(room_id, hotel.hotel_id, room_number, room_type, price_per_night) #hier den ganzen Hotel Objekt übergeben!
-                #av_room = model.Room(room_id, hotel, room_number, room_type, price_per_night)
+                av_room = model.Room(room_id, hotel, room_number, room_type, price_per_night)
                 all_av_rooms.append(av_room)
             
             return all_av_rooms

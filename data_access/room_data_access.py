@@ -36,9 +36,9 @@ class RoomDataAccess(BaseDataAccess):
           row = self.fetchone(sql, (room_id,))
           if row:
                 room_id, hotel_id, room_number, type_id, price = row
-                room_type = self.__room_type_dao.read_room_type_by_id(type_id)
+                room_type_obj = self.__room_type_dao.read_room_type_by_id(type_id)
                 hotel = self.__hotel_dao.read_hotel_by_id(hotel_id)
-                return model.Room(room_id, hotel, room_number, room_type, price)
+                return model.Room(room_id, hotel, room_number, room_type_obj, price)
           return None
 
     def read_hotel_by_roomId(self,
