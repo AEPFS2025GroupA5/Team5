@@ -208,7 +208,7 @@ class BookingDataAccess(BaseDataAccess):
         
         return None
     
-    def read_av_rooms(self, check_out_date: date, check_in_date: date) -> list[model.Room]: #Ändern
+    def read_av_rooms(self, check_out_date: date, check_in_date: date) -> list[model.Room]: 
         if not check_out_date:
             raise ValueError("Check Out Date is required")
         if not isinstance(check_out_date, date):
@@ -257,7 +257,7 @@ class BookingDataAccess(BaseDataAccess):
         
         return None
 
-    def read_all_av_rooms_by_hotel(self, hotel_id: int, check_out_date: date, check_in_date: date) -> list[model.Room]: #Ändern
+    def read_all_av_rooms_by_hotel(self, hotel_id: int, check_out_date: date, check_in_date: date) -> list[model.Room]: 
         if not hotel_id:
             raise ValueError("Hotel ID is required")
         if not isinstance(hotel_id, int):
@@ -310,7 +310,7 @@ class BookingDataAccess(BaseDataAccess):
 
         return []
 
-    def read_av_rooms_city(self, city: str, check_out_date: date, check_in_date: date) -> list[model.Room]: #Ändern
+    def read_av_rooms_city(self, city: str, check_out_date: date, check_in_date: date) -> list[model.Room]: 
         if not city:
             raise ValueError("City is required")
         if not isinstance(city, str):

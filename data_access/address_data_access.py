@@ -23,7 +23,7 @@ class AddressDataAccess(BaseDataAccess):
            return model.Address(address_id, street, city, zip_code)
         return None
     
-    def get_address_id_by_city(self, city: str) -> int: #Ändern!
+    def get_address_id_by_city(self, city: str) -> int: 
         sql = "SELECT address_id, street, city, zip_code FROM address WHERE city LIKE ?"
         like = f"%{city}%"
         rows = self.fetchall(sql, (like,))
