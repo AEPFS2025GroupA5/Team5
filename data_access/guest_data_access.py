@@ -9,6 +9,7 @@ class GuestDataAccess(BaseDataAccess):
     super().__init__(db_path)
     self.__address_dao= AddressDataAccess()
 
+#Read Functions
   def read_all_guest(self) -> list[model.Guest]:
     sql = """
     SELECT guest_id, first_name, last_name, email, address_id FROM guest
@@ -69,6 +70,7 @@ class GuestDataAccess(BaseDataAccess):
     else:
       return None
 
+#Admin Functions
   def create_new_guest(self,
                           first_name: str,
                           last_name: str,

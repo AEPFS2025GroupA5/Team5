@@ -19,6 +19,7 @@ class BookingDataAccess(BaseDataAccess):
         self.__guest_dao = data_access.guest_data_access.GuestDataAccess()
         self.__room_dao = data_access.room_data_access.RoomDataAccess()
 
+#Read Functions
     def read_all_bookings(self) -> list[model.Booking]:
         sql = """
         SELECT 
@@ -207,7 +208,8 @@ class BookingDataAccess(BaseDataAccess):
             return booking
         
         return None
-    
+
+#Read all available Rooms    
     def read_av_rooms(self, check_out_date: date, check_in_date: date) -> list[model.Room]: 
         if not check_out_date:
             raise ValueError("Check Out Date is required")
@@ -362,6 +364,7 @@ class BookingDataAccess(BaseDataAccess):
             return all_av_rooms
         return None
 
+#Admin Functions
     def create_new_booking(self, room_id:int, check_in_date:date, check_out_date:date, guest_id:int, total_amount:float) -> model.Booking: 
         if not room_id:
             raise ValueError("Room ID is required")

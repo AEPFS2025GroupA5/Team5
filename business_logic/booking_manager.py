@@ -83,7 +83,7 @@ class BookingManager:
         return self.__booking_da.read_av_rooms_city(city, check_out_date, check_in_date)
 
 
-    #Manipulate Data Function
+    #Admin Function
     def create_new_booking(self, room_id:int, check_in_date:date, check_out_date:date, guest_id:int):
         if check_in_date >= check_out_date:
             raise ValueError("Check-out date must be after check-in date.")

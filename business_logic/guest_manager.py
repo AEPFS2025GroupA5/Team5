@@ -26,7 +26,7 @@ class GuestManager:
         ) -> model.Guest:
         return self.__guest_da.read_guest_by_name(last_name)
 
-    #Manipulate Data Functions
+    #Admin Functions
     def create_new_guest(self,
                             first_name: str,
                             last_name: str,

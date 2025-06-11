@@ -5,6 +5,7 @@ class AddressDataAccess(BaseDataAccess):
     def __init__(self, db_path: str = None):
         super().__init__(db_path)
 
+#Read Functions
     def read_all_addresses(self) -> list[model.Address]:
         sql = """
         SELECT address_id, street, city, zip_code FROM address
@@ -35,6 +36,7 @@ class AddressDataAccess(BaseDataAccess):
             return addresses
         return None
 
+#Admin Functions
     def create_new_address(self, street: str, city: str, zip_code: str) -> model.Address:
         sql = "INSERT INTO address (street, city, zip_code) VALUES (?, ?, ?)"
         params = (street, city, zip_code)

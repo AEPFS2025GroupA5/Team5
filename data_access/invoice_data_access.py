@@ -8,7 +8,8 @@ class InvoiceDataAccess(BaseDataAccess):
                  db_path: str = None
         ):
         super().__init__(db_path)
-    
+
+#Read Functions    
     def read_all_invoice(self) -> list[model.Invoice]:
         sql = """
         SELECT invoice_id, booking_id, issue_date, total_amount FROM invoice
@@ -65,7 +66,7 @@ class InvoiceDataAccess(BaseDataAccess):
             return invoices
         return None   
 
-
+#Admin Functions
     def create_new_invoice(self,
                            booking_id: int,
                            issue_date: date,

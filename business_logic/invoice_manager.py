@@ -29,7 +29,7 @@ class InvoiceManager:
             return self.__invoice_da.read_invoices_by_guest(guest_id)
 
     
-    #Manipulate Data Functions
+    #Admin Functions
     def create_new_invoice(self,
                            booking_id: int,
                            issue_date: date,
