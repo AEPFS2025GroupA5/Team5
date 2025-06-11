@@ -4,7 +4,7 @@ Wie in den Projektrichtlinien beschrieben, verwenden wir verschiedene Werkzeuge,
 - Visual Paradigm für das Klassendiagramm
 - SQLite für die Datenbank
 - Jupyter Notebook für die Dokumentation sowie Ausführung der Codes
-- GitHub für die Versions Controlle und Projekt Management
+- GitHub für die Versions Controlle und Projekt Management (Kanban)
 
 ## How to use
 ### Voraussetzungen:
@@ -59,6 +59,8 @@ Die Aufgaben wurden entsprechend dieser Aufteilung im Team verteilt. Zum Coden h
 Für die Organisation und Kommunikation haben wir hauptsächlich unseren WhatsApp-Gruppenchat genutzt. Darüber haben wir besprochen, bis wann welche Teile fertiggestellt werden sollen, und regelmässig Herausforderungen und offene Fragen diskutiert. Zusätzlich haben wir uns in regelmässigen online oder vor Ort ausgetauscht.
 Im Verlauf des Projekts haben wir ausserdem entdeckt, dass GitHub ein integriertes Kanban-Board anbietet. Dieses haben wir gegen Ende des Projektabschnitts ergänzend verwendet, um Aufgaben visuell zu organisieren und den Fortschritt besser nachverfolgen zu können.
 
+Hierzu den Link zum Kanban: https://github.com/orgs/AEPFS2025GroupA5/projects/1/views/1
+
 Insgesamt haben wir also ein **hybrides** Planungssystem verwendet – bestehend aus WhatsApp-Kommunikation für schnelle Absprachen und GitHub Kanban für strukturierte Aufgabenverteilung.
 
 ## Projektüberblick und Teamdynamik:
@@ -106,7 +108,7 @@ Ich hätte gerne mehr und tiefer mit modernen Libaries wie pandas und SQLAlchemy
 
 
 
-### Anna Müller - *Architektin des Gasterlebnisses*
+### Anna Nikita Müller - *Architektin des Gasterlebnisses*
 <br> Zugeteilte Klassen in Model, Data Access, Business Logic und UI Layer umgesetzt:
 - `Booking`
 - `Invoice`
