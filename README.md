@@ -6,6 +6,11 @@ Wie in den Projektrichtlinien beschrieben, verwenden wir verschiedene Werkzeuge,
 - Jupyter Notebook für die Dokumentation sowie Ausführung der Codes
 - GitHub für die Versions Controlle und Projekt Management (Kanban)
 
+## Unsere Video-Präsentation
+https://youtu.be/kF0M6G9Py-g
+
+In unserer Video-Präsentation stellen wir jeweils eine User Story vor, die wir als persönlichen Meilenstein betrachtet haben. Dabei zeigen wir sowohl die Benutzerführung als auch technische Besonderheiten, die wir im Rahmen des Projekts umgesetzt haben.
+
 ## How to use
 ### Voraussetzungen:
 - VS Code oder Pycharm als Applikation
