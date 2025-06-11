@@ -117,6 +117,7 @@ Ich hätte gerne mehr und tiefer mit modernen Libaries wie pandas und SQLAlchemy
 - 1.4
 - 2.2
 - 4 - 8
+- 11.2 - 11.3
 <br>
 
 #### Technische Umsetzung
@@ -134,6 +135,8 @@ Durch dieses Projekt habe ich wirklich viel gelernt – nicht nur fachlich, sond
 Gleichzeitig habe ich auch gelernt, besser mit Frustration umzugehen. Wenn ein Fehler auftrat, den ich nicht sofort verstanden habe, bin ich konsequent Zeile für Zeile durchgegangen und habe mich gefragt: Was funktioniert hier nicht? Was macht der Code genau? Warum passiert das so? Diese Vorgehensweise hat mir geholfen, die wahren Ursachen zu erkennen.
 
 Diese Strategie hat mir letztlich nicht nur geholfen, konkrete Probleme zu lösen, sondern auch mein Verständnis für Python insgesamt deutlich zu vertiefen. Ich habe gemerkt: Mit Ausdauer, systematischem Denken und einer "gewissen" Ruhe lassen sich auch komplexe Herausforderungen meistern. Das hat mir Mut gemacht für dieses Projekt und für künftige Aufgaben.
+
+
 
 
 ## UML
