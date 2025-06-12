@@ -120,6 +120,7 @@ class RoomDataAccess(BaseDataAccess):
         last_row_id, _ = self.execute(sql, params)
         new_room = model.Room(last_row_id, hotel, room_number, room_type, price_per_night)
         print (f"Created new Room with ID: {new_room.room_id}")
+        return new_room
 
     
     def delete_room (self,

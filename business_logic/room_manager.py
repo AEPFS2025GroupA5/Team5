@@ -24,11 +24,10 @@ class RoomManager:
         return room
     
     def get_room_details_for_hotel(self, hotel_id: int) -> list[model.Room]:
+        self.refresh_all_rooms()
         result = []
         for room in self._all_rooms:
             if room.hotel.hotel_id == hotel_id:
-                # RoomType Daten laden
-                room.room_type = self.__room_type_da.read_room_type_by_id(room.room_type.type_id)
                 result.append(room)
         return result
     
@@ -63,22 +62,8 @@ class RoomManager:
         new_room = self.__room_da.create_new_room(hotel, room_number, room_type, price_per_night)
         self.refresh_all_rooms()
         return new_room
-    
-    def update_room(self,
-                    room_id: int,
-                    hotel: model.Hotel,
-                    room_number: str,
-                    room_type: model.RoomType,
-                    price_per_night: float
-        ) -> None:
-         #Business Logic
-         if price_per_night <= 0:
-            raise ValueError("Price per night must be a positive number")
-         room = model.Room(room_id, hotel, room_number, room_type, price_per_night)
-         self.__room_da.update_room(room)
-         self.refresh_all_rooms()
 
-    def update_room_by_object(self,
+    def update_room(self,
                             room: model.Room
         ) -> None:
         if not isinstance(room, model.Room):
@@ -114,7 +99,7 @@ class RoomManager:
             print(f"Hotel: {room.hotel.name}")
             print(f"Room ID: {room.room_id}")
             print(f"Room Number: {room.room_number}")
-            print(f"Room Type: {room.room_type._description}")
+            print(f"Room Type: {room.room_type.description}")
             print(f"Max Guests: {room.room_type.max_guests}")
             print(f"Facilities: {[facility.name for facility in facilities]}")
             print(f"Price per Night: {room.price_per_night}")

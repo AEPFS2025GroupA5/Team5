@@ -65,7 +65,7 @@ class Address:
             raise ValueError("New city is required")
         else:
             self._city = new_city
-            print("You have changed the city into {new_city}")
+            print(f"You have changed the city into {new_city}")
 
     @property
     def zip_code(self):
@@ -81,4 +81,4 @@ class Address:
             raise ValueError("A new zipcode has to be a string") 
         else: 
             self._zip_code = new_zip_code
-            print("You have changed the zipcode into {new_zip_code}")
+            print(f"You have changed the zipcode into {new_zip_code}")

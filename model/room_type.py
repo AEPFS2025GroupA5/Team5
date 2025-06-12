@@ -51,10 +51,12 @@ class RoomType:
     def description(self, description: str):
         if not isinstance(description, str):
             raise TypeError("description must be a string")
+        self._description = description
 
     @max_guests.setter
     def max_guests(self, max_guests: int):
         if not isinstance(max_guests, int):
             raise TypeError("max_guests must be an int")
+        self._max_guests = max_guests
 
   

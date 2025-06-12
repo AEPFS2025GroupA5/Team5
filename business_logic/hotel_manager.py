@@ -18,7 +18,6 @@ class HotelManager:
     # Dafür die Memory zu refreshen und gleichzeitig alle Hotels in der DB zu printen. Zb wenn man eine Änderung gemacht hat.
     def refresh_all_hotels(self) -> None:
         self._all_hotels = self.__hotel_da.read_all_hotels()
-        print (f"All Hotels in DB: {self._all_hotels}")
 
     def create_new_hotel(self,
                         name: str,
@@ -90,6 +89,7 @@ class HotelManager:
                                            max_guests: int
         ) -> list[model.Hotel]:
         result = []
+        self.refresh_all_hotels()
         for hotel in self._all_hotels:
             if city.lower() in hotel.address.city.lower():
                 rooms = self.__room_manager.get_room_details_for_hotel(hotel.hotel_id)
