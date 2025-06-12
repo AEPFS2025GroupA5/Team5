@@ -88,16 +88,14 @@ class HotelManager:
     def get_hotels_by_city_and_max_guests(self,
                                            city: str, 
                                            max_guests: int
-        ) -> list[tuple [model.Hotel, model.Room]]:
+        ) -> list[model.Hotel]:
         result = []
         for hotel in self._all_hotels:
             if city.lower() in hotel.address.city.lower():
                 rooms = self.__room_manager.get_room_details_for_hotel(hotel.hotel_id)
-                av_rooms= [room for room in rooms if room.max_guests >= max_guests]
+                av_rooms= [room for room in rooms if room.room_type.max_guests >= max_guests]
                 if av_rooms:
-                    hotel.__rooms = av_rooms
                     result.append(hotel)
-                
         return result
     
     def get_users_individual_wishes(self,

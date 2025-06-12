@@ -14,6 +14,7 @@ class RoomManager:
 
 ## Read Methods
     def read_all_rooms(self) -> list[model.Room]:
+        self.refresh_all_rooms()
         return self._all_rooms
     
     def get_room_by_id(self, 
@@ -26,6 +27,8 @@ class RoomManager:
         result = []
         for room in self._all_rooms:
             if room.hotel.hotel_id == hotel_id:
+                # RoomType Daten laden
+                room.room_type = self.__room_type_da.read_room_type_by_id(room.room_type.type_id)
                 result.append(room)
         return result
     
@@ -44,6 +47,10 @@ class RoomManager:
             print("-" * 40)
 
     ## Admin Methods
+
+    def refresh_all_rooms(self):
+        self._all_rooms = self.__room_da.read_all_rooms()
+
     def create_new_room(self,
                         hotel: model.Hotel,
                         room_number: str,
@@ -54,6 +61,7 @@ class RoomManager:
         if price_per_night <= 0:
             raise ValueError("Price per night must be a positive number")
         new_room = self.__room_da.create_new_room(hotel, room_number, room_type, price_per_night)
+        self.refresh_all_rooms()
         return new_room
     
     def update_room(self,
@@ -68,6 +76,7 @@ class RoomManager:
             raise ValueError("Price per night must be a positive number")
          room = model.Room(room_id, hotel, room_number, room_type, price_per_night)
          self.__room_da.update_room(room)
+         self.refresh_all_rooms()
 
     def update_room_by_object(self,
                             room: model.Room
@@ -75,6 +84,7 @@ class RoomManager:
         if not isinstance(room, model.Room):
             raise TypeError("Room must be a Room object")
         self.__room_da.update_room(room)
+        self.refresh_all_rooms()
 
     def delete_room(self,
                           room: model.Room
@@ -83,6 +93,7 @@ class RoomManager:
         if not room:
             raise ValueError(f"No room found")
         self.__room_da.delete_room(room)
+        self.refresh_all_rooms()
     
     def change_price_per_night(self,
                                room_id: int,
@@ -95,6 +106,7 @@ class RoomManager:
             raise ValueError("New price per night must be a positive number")
         room.price_per_night = new_price
         self.__room_da.update_room(room)
+        self.refresh_all_rooms()
 
     def get_rooms_for_admin(self) -> list[model.Room]:
         for room in self._all_rooms:
