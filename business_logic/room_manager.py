@@ -44,11 +44,6 @@ class RoomManager:
             print("-" * 40)
 
     ## Admin Methods
-    # Dafür die Memory zu refreshen und gleichzeitig alle Räume in der DB zu printen. Zb wenn man eine Änderung gemacht hat.
-    def refresh_all_rooms(self) -> None:
-        self._all_rooms = self.__room_da.read_all_rooms()
-        print (f"All Rooms in DB: {self._all_rooms}")
-
     def create_new_room(self,
                         hotel: model.Hotel,
                         room_number: str,
@@ -59,7 +54,6 @@ class RoomManager:
         if price_per_night <= 0:
             raise ValueError("Price per night must be a positive number")
         new_room = self.__room_da.create_new_room(hotel, room_number, room_type, price_per_night)
-        self.refresh_all_rooms()
         return new_room
     
     def update_room(self,
@@ -73,7 +67,6 @@ class RoomManager:
          if price_per_night <= 0:
             raise ValueError("Price per night must be a positive number")
          room = model.Room(room_id, hotel, room_number, room_type, price_per_night)
-         self.refresh_all_rooms()
          self.__room_da.update_room(room)
 
     def update_room_by_object(self,
@@ -81,7 +74,6 @@ class RoomManager:
         ) -> None:
         if not isinstance(room, model.Room):
             raise TypeError("Room must be a Room object")
-        self.refresh_all_rooms()
         self.__room_da.update_room(room)
 
     def delete_room(self,
@@ -90,7 +82,6 @@ class RoomManager:
         room = self.__room_da.read_room_by_id(room.room_id)
         if not room:
             raise ValueError(f"No room found")
-        self.refresh_all_rooms()
         self.__room_da.delete_room(room)
     
     def change_price_per_night(self,
@@ -103,7 +94,6 @@ class RoomManager:
         if new_price <= 0:
             raise ValueError("New price per night must be a positive number")
         room.price_per_night = new_price
-        self.refresh_all_rooms()
         self.__room_da.update_room(room)
 
     def get_rooms_for_admin(self) -> list[model.Room]:

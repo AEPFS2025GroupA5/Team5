@@ -87,3 +87,4 @@ class Room:
         ) -> None:
         if not isinstance(price_per_night, (int, float)):
             raise TypeError("price_per_night must be a number")
+        self.__price_per_night = price_per_night
