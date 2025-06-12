@@ -65,7 +65,7 @@ def get_userfriendly_booking(booking:model.Booking)-> str:
     h= hotelman.read_hotel_by_id(r.hotel.hotel_id)
     b= bookingman.read_booking_by_id(booking.booking_id)
 
-    return f"Booking ID: {b.booking_id}, Check- In: {b.check_in_date}, Check-Out: {b.check_out_date}, Total Amount: {b.total_amount}, Cancelled: {b.is_cancelled}, Booked in: {h.name} Room: {r.room_number}, Invoice: {b.invoice.booking_id if b.invoice else 'No Invoice'}"
+    return f"Booking ID: {b.booking_id}, Check- In: {b.check_in_date}, Check-Out: {b.check_out_date}, Total Amount: {b.total_amount}, Cancelled: {b.is_cancelled}, Booked in: {h.name} Room: {r.room_number}, Invoice ID: {b.invoice.booking_id if b.invoice else 'No Invoice'}"
 
 def get_userfriendly_invoice(i:model.Invoice)-> str:
     return f"Invoice ID: {i.invoice_id}, Booking ID: {i.booking_id}, Issue Date: {i.issue_date}, Amount to pay:{i.total_amount}"
