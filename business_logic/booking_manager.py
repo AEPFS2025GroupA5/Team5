@@ -1,5 +1,5 @@
 import os
-
+import pandas as pd
 import model
 from model.invoice import Invoice
 import data_access
@@ -32,6 +32,10 @@ class BookingManager:
             raise ValueError(f"You cannot change a total amount of a booking where there is already an invoice")
 
         self.__booking_da.update_booking_price_for_guest(price_to_set, booking_id)
+
+# Data Visualization
+    def read_roomtype_by_occupation(self, hotel_id: int) -> pd.DataFrame:
+        return self.__booking_da.read_roomtype_by_occupation(hotel_id)
 
 ## Guest Function
     #Read Functions

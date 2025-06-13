@@ -1,5 +1,6 @@
 from data_access.base_data_access import BaseDataAccess
 import data_access
+import pandas as pd
 from datetime import date
 import model
 from model.booking import Booking
@@ -18,6 +19,26 @@ class BookingDataAccess(BaseDataAccess):
         self.__room_type_dao = data_access.room_type_access.RoomTypeDataAccess()
         self.__guest_dao = data_access.guest_data_access.GuestDataAccess()
         self.__room_dao = data_access.room_data_access.RoomDataAccess()
+
+#Data Visualization
+    def read_roomtype_by_occupation(self, hotel_id: int) -> pd.DataFrame:
+        sql = """
+        SELECT 
+            Room_Type.type_id,
+            Hotel.name AS hotel,
+            Room_Type.description AS zimmertyp,
+            COUNT(DISTINCT Room.room_id) AS anzahl_zimmer,
+            COUNT(DISTINCT Booking.booking_id) AS anzahlBuchungen
+        FROM Room
+        JOIN Room_Type ON Room.type_id = Room_Type.type_id
+        JOIN Hotel ON Room.hotel_id = Hotel.hotel_id
+        JOIN Booking ON Booking.room_id = Room.room_id
+        WHERE Hotel.hotel_id = ?
+        GROUP BY Room_Type.type_id, Hotel.name, Room_Type.description
+        """
+
+        params = (hotel_id,)
+        return pd.read_sql(sql, self._connect(), params=params)
 
 #Read Functions
     def read_all_bookings(self) -> list[model.Booking]:
