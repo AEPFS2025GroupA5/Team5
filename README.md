@@ -10,9 +10,6 @@ Wie in den Projektrichtlinien beschrieben, verwenden wir verschiedene Werkzeuge,
 ## Unsere Video-Präsentation
 https://youtu.be/kF0M6G9Py-g
 
-## Unser DeepNote
-
-
 In unserer Video-Präsentation stellen wir jeweils eine User Story vor, die wir als persönlichen Meilenstein betrachtet haben. Dabei zeigen wir sowohl die Benutzerführung als auch technische Besonderheiten, die wir im Rahmen des Projekts umgesetzt haben.
 
 ## How to use
