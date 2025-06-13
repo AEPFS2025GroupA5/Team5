@@ -5,9 +5,13 @@ Wie in den Projektrichtlinien beschrieben, verwenden wir verschiedene Werkzeuge,
 - SQLite für die Datenbank
 - Jupyter Notebook für die Dokumentation sowie Ausführung der Codes
 - GitHub für die Versions Controlle und Projekt Management (Kanban)
+- DeepNote für die Datenvisualisierung
 
 ## Unsere Video-Präsentation
 https://youtu.be/kF0M6G9Py-g
+
+## Unser DeepNote
+
 
 In unserer Video-Präsentation stellen wir jeweils eine User Story vor, die wir als persönlichen Meilenstein betrachtet haben. Dabei zeigen wir sowohl die Benutzerführung als auch technische Besonderheiten, die wir im Rahmen des Projekts umgesetzt haben.
 
@@ -154,6 +158,30 @@ Das UML haben wir mit Visual Paradigm erstellt und das UML bildet die Beziehung 
 
 
 ![image](https://github.com/user-attachments/assets/88c00dcb-0977-4137-ad5d-8224df509808)
+
+## Datenvisualisierung auf DeepNote
+
+Für die optionalen User Stories der Datenvisualisierung haben wir DeepNote genutzt. Wie man das Notebook benutzen soll ist dort beschrieben. Wir haben allen Coaches des Moduls vorher Zugang per E-Mail zum "Executen" gegeben.
+
+### Anna User Story
+
+### Individuelle User Story:
+Ich möchte in der Lage sein, die durchschnittlichen Raumpreise pro Stadt und pro Hotel zu sehen.
+Ich habe hierführ eine neue Funktion im Hotel Data Access und Hotel Manager gemacht welche den Hotel Namen, die City und den price per night aus dem Raum holt gejoined mit hotel und address. Diese werden dann als pd.read_sql von der libary pandas returned. Die Funktion wird dann im DeepNote aufgerufen und visualisiert. 
+![grafik](https://github.com/user-attachments/assets/066ef091-5d11-45b5-a77c-e683812534ee)
+
+Die erste Visualisierung zeigt den durchschnittlichen Raumpreis pro Hotel:
+![grafik](https://github.com/user-attachments/assets/586bc5ad-ae83-4946-832f-b5a9b8199677)
+
+Die zweite zeigt den durchschnittlichen Raumpreis pro Stadt:
+![grafik](https://github.com/user-attachments/assets/40ae0971-7edb-4c7b-9c32-ded186415aac)
+
+Diese Visualisierungen funktionieren ebenfalls mit einer veränderten Database (z.B neues Hotel mit Räumen):
+![grafik](https://github.com/user-attachments/assets/79a473fe-a8a8-4862-b690-8b9db406fe60)
+
+![grafik](https://github.com/user-attachments/assets/b4347600-a16d-4465-b8de-0eb7a90ff30d)
+
+Dies Funktioniert jedoch nur wenn man auch dei veränderte Database in Deepnote hochläd oder sie ins Github Repo pushed und das DeepNote dann synchronisiert.
 
 ## Abschluss
 Die Umsetzung dieses Projekts ermöglichte es uns, unsere Kenntnisse in Python und objektorientierter Programmierung praxisnah zu vertiefen – gleichzeitig war es auch eine wertvolle Lernerfahrung in Bezug auf Teamarbeit, Kommunikation und Projektorganisation.
