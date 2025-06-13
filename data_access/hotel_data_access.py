@@ -1,6 +1,7 @@
 from data_access.base_data_access import BaseDataAccess
 from data_access.address_data_access import AddressDataAccess
 import model
+import pandas as pd
 
 class HotelDataAccess(BaseDataAccess):
         def __init__(self, 
@@ -114,6 +115,17 @@ class HotelDataAccess(BaseDataAccess):
                 sql = "DELETE FROM hotel WHERE hotel_id = ?"
                 self.execute(sql, (hotel_id,))
                 print(f"Hotel with ID: {hotel_id} deleted successfully.")
+
+        ## Optionale User Story
+
+        def price_analytics(self) -> pd.DataFrame:
+                sql = """
+                SELECT h.name, a.city, r.price_per_night
+                FROM room r
+                JOIN hotel h ON r.hotel_id = h.hotel_id
+                JOIN address a ON h.address_id = a.address_id
+                """
+                return pd.read_sql(sql, self._connect())
         
         
 

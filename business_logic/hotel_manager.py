@@ -3,6 +3,7 @@ from datetime import date
 import model
 import data_access
 import business_logic
+import pandas as pd
 
 class HotelManager:
     def __init__(self):
@@ -150,3 +151,7 @@ class HotelManager:
 
     def get_user_frendly_hotel_info_short(hotel: model.Hotel):
         return f"Hotel ID: {hotel.hotel_id}, Name: {hotel.name}, Stars: {hotel.stars}, Address: {hotel.address.city}, {hotel.address.street}"
+    
+## Datenvisualisierung
+    def price_analytics(self) -> pd.DataFrame:
+        return self.__hotel_da.price_analytics()
