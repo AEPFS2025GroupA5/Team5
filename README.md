@@ -25,12 +25,12 @@ python -m venv ./.venv
 2. ### Script aktivieren
 #### Windows:
 ```
-.\.venv\Scripts\activate
+.\.venv\Scripts\Activate
 ```
 
 #### MacOS:
 ```
-source .venv/bin/activate
+source .venv/bin/Activate
 ```
 
 
