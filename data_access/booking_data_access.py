@@ -440,8 +440,6 @@ class BookingDataAccess(BaseDataAccess):
         """
         self.execute(sql, (booking_id,))
 
-        pass
-
     def update_booking_price_for_guest(self, price_to_set:float, booking_id:int)-> None:
         if not price_to_set:
             raise ValueError("The price to set is required")
