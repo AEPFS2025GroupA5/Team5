@@ -1,5 +1,5 @@
 import os
-
+import pandas as pd
 import model
 import data_access
 
@@ -108,3 +108,8 @@ class GuestManager:
             raise ValueError("There is no such guest ID in our system.")
 
         return self.__guest_da.delete_guest_by_id(guest_id)
+    
+
+    def city_of_guests(self) -> pd.DataFrame:
+        return self.__guest_da.city_of_guests()
+        

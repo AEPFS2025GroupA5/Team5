@@ -1,5 +1,6 @@
 from data_access.base_data_access import BaseDataAccess
 import model
+import pandas as pd
 from data_access.address_data_access import AddressDataAccess
 
 class GuestDataAccess(BaseDataAccess):
@@ -178,3 +179,18 @@ class GuestDataAccess(BaseDataAccess):
       ) -> None:
     sql = "DELETE FROM guest WHERE guest_id = ?"
     self.execute(sql, (guest_id,))
+
+#Data Visualization
+  def city_of_guests(self) -> pd.DataFrame:
+    sql= """
+    SELECT 
+    Count(city) as anzahlPersonen,
+    city
+    from Guest
+    Join Address on Address.address_id=Guest.address_id
+    GROUP BY city
+    """
+
+    params = tuple()
+    return pd.read_sql(sql, self._connect(), params=params)
+        
