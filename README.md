@@ -4,7 +4,7 @@ Wie in den Projektrichtlinien beschrieben, verwenden wir verschiedene Werkzeuge,
 - Visual Paradigm für das Klassendiagramm
 - SQLite für die Datenbank
 - Jupyter Notebook für die Dokumentation sowie Ausführung der Codes
-- GitHub für die Versions Controlle und Projekt Management (Kanban)
+- GitHub für die Versionskontrolle und Projektmanagement (Kanban)
 - DeepNote für die Datenvisualisierung
 
 ## Unsere Video-Präsentation
@@ -67,7 +67,7 @@ Im Verlauf des Projekts haben wir ausserdem entdeckt, dass GitHub ein integriert
 
 Hierzu den Link zum Kanban: https://github.com/orgs/AEPFS2025GroupA5/projects/1/views/1
 
-Insgesamt haben wir also ein **hybrides** Planungssystem verwendet – bestehend aus WhatsApp-Kommunikation für schnelle Absprachen und GitHub Kanban für strukturierte Aufgabenverteilung.
+Insgesamt haben wir also ein **hybrides** Planungssystem verwendet – Die interne Kommunikation erfolgte über WhatsApp, ergänzt durch regelmäßige Meetings. GitHub Kanban wurde für eine strukturierte Aufgabenverteilung genutzt.
 
 ## Projektüberblick und Teamdynamik:
 Im Laufe des Projekts zeigte sich , dass zwei Teammitglieder aus unterschiedlichen Gründen nicht aktiv zum Projekt beitrugen. Nach Rücksprache mit den Dozierenden wurde gemeinsam entschieden, das Projekt im verbleibenden kleineren Team weiterzuführen. Diese Entscheidung war nicht nur notwendig, sondern auch eine wertvolle Lernerfahrung im Hinblick auf Eigenverantwortung, Projektorganisation und Kommunikation im Team.
@@ -167,7 +167,7 @@ Dafür habe ich im Booking Data Access Layer und Business Logic Layer eine neue 
 
 <img width="731" alt="image" src="https://github.com/user-attachments/assets/b937daa6-df22-47cf-8503-f8383cc938ed" />
 
-Diese Visualisierung zeigt wie viele Buchungen je Zimmertypen insgesamt vorgenommen wurden für das Hotel Baur au Lac (Hotel ID: 1):
+Diese Visualisierung zeigt, wie viele Buchungen je Zimmertypen insgesamt vorgenommen wurden für das Hotel Baur au Lac (Hotel ID: 1):
 
 <img width="465" alt="image" src="https://github.com/user-attachments/assets/0581c39d-cb78-42f9-82b4-40c832169587" />
 
@@ -203,7 +203,7 @@ Diese Visualisierungen funktionieren ebenfalls mit einer veränderten Database (
 
 ![grafik](https://github.com/user-attachments/assets/b4347600-a16d-4465-b8de-0eb7a90ff30d)
 
-Dies funktioniert jedoch nur wenn man auch die veränderte Database in Deepnote hochläd oder sie ins Github Repo pushed und das DeepNote dann synchronisiert.
+Dies funktioniert jedoch nur wenn man auch die veränderte Database in Deepnote hochlädt oder sie ins Github Repo pushed und das DeepNote dann synchronisiert.
 
 ## Abschluss
 Die Umsetzung dieses Projekts ermöglichte es uns, unsere Kenntnisse in Python und objektorientierter Programmierung praxisnah zu vertiefen – gleichzeitig war es auch eine wertvolle Lernerfahrung in Bezug auf Teamarbeit, Kommunikation und Projektorganisation.
@@ -212,7 +212,7 @@ Zu Beginn hatten wir Schwierigkeiten, überhaupt in das Projekt hineinzufinden. 
 
 Erst als wir gemeinsam beschlossen, eine feste Struktur zu definieren und Rollen aufzuteilen, kam das Projekt in Bewegung. Durch die Erstellung eines Klassendiagramms gewannen wir Klarheit über die Architektur und konnten die Aufgaben sinnvoll aufteilen. Ab der Verbindung der Datenbank mit dem Projekt hatten wir unser "Aha" Moment und der Stein begann zu rollen.
 
-Die Trennung in zwei Verantwortungsbereiche – Hotelstruktur und Gastprozess – ermöglichte es uns, effizient und parallel zu arbeiten. Trotzdem wurde schnell klar, dass eine enge Abstimmung notwendig war, da viele Klassen miteinander interagieren. Regelmässige Meetings, kontinuierliche Kommunikation über WhatsApp sowie spätere Organisation über ein GitHub-Kanban-Board haben sich dabei als sehr hilfreich erwiesen.
+Die Trennung in zwei Verantwortungsbereiche – Struktur der Hotelobjekte & Abläufe im Gasterlebnis – ermöglichte es uns, effizient und parallel zu arbeiten. Trotzdem wurde schnell klar, dass eine enge Abstimmung notwendig war, da viele Klassen miteinander interagieren. Regelmässige Meetings, kontinuierliche Kommunikation über WhatsApp sowie spätere Organisation über ein GitHub-Kanban-Board haben sich dabei als sehr hilfreich erwiesen.
 
 Technisch konnten wir durch die Arbeit mit mehrschichtigen Strukturen (Model, Data Access, Business Logic, UI) ein tiefes Verständnis für modulare Programmierung entwickeln. Besonders herausfordernd war die saubere Fehlerbehandlung und Validierung der Eingaben – Themen, die wir im Laufe des Projekts stark verbessern konnten.
 
