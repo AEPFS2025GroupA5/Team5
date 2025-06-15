@@ -162,7 +162,7 @@ Für die optionalen User Stories der Datenvisualisierung haben wir DeepNote genu
 Zur Sicherheit hier nochmals der Link zum unserem DeepNote: https://deepnote.com/workspace/Saliou-b72a0290-6dfb-450d-ad32-14343ffcec1f/project/FS25BAIAEPA5-64f16146-d429-49fd-9904-ee05299fb3c1/notebook/e84b3302969144669075ae3b5d08443f
 
 ### User Story
-Als Admin möchte ich die Belegungsraten für jeden Zimmertyp in meinem Hotel sehen, damit ich weiss, welche Zimmer am beliebtesten sind un ich meine Buchungsstrategien optimieren kann.
+#### Als Admin möchte ich die Belegungsraten für jeden Zimmertyp in meinem Hotel sehen, damit ich weiss, welche Zimmer am beliebtesten sind un ich meine Buchungsstrategien optimieren kann.
 Dafür habe ich im Booking Data Access Layer und Business Logic Layer eine neue Funktion namens "read_roomtype_by_occupation" erstellt. Da habe ich den RoomType, Hotel und Booking miteinander "gejoined" und im "SELECT" Anzahl Zimmer sowie Anzahl Buchungen mit einem "COUNT" gezählt und mit einem "DISTINCT" sichergestellt, dass es keine Doppelzählungen gibt. Anschliessen habe ich im "WHERE" noch die Hotel ID eingegeben, damit man die Belegrate pro Hotel sehen kann. Es wird dann als pd.read_sql von der library pandas returned.
 
 <img width="731" alt="image" src="https://github.com/user-attachments/assets/b937daa6-df22-47cf-8503-f8383cc938ed" />
@@ -171,7 +171,7 @@ Diese Visualisierung zeigt wie viele Buchungen je Zimmertypen insgesamt vorgenom
 
 <img width="465" alt="image" src="https://github.com/user-attachments/assets/0581c39d-cb78-42f9-82b4-40c832169587" />
 
-Als Admin möchte ich eine Aufschlüsselung der geografischen Merkmale meiner Gäste sehen, damit ich gezieltes Marketing planen kann. 
+#### Als Admin möchte ich eine Aufschlüsselung der geografischen Merkmale meiner Gäste sehen, damit ich gezieltes Marketing planen kann. 
 Dafür habe ich im Guest Data Access Layer und Business Logic Layer eine neue Funktion namens "city_of_guests" erstellt. Hierbei habe im "SELECT"-Statement nach Städte gezählt und es über pd.read_sql zurückgegeben.
 
 Wir haben die Variable df2 verwendet, da beim Plotten versehentlich falsche Daten aus einer anderen Zelle genutzt wurden. Mit df2 stellen wir sicher, dass die richtigen Daten verwendet werden.
@@ -185,7 +185,7 @@ Diese Visualisierung zeigt uns an, von welchen Städten unsere Gäste kommen.
 
 
 ### Individuelle User Story:
-Ich möchte in der Lage sein, die durchschnittlichen Raumpreise pro Stadt und pro Hotel zu sehen.
+#### Ich möchte in der Lage sein, die durchschnittlichen Raumpreise pro Stadt und pro Hotel zu sehen.
 Ich habe hierführ eine neue Funktion im Hotel Data Access und Hotel Manager gemacht welche den Hotel Namen, die City und den price per night aus dem Raum holt gejoined mit hotel und address. Diese werden dann als pd.read_sql von der libary pandas returned. Die Funktion wird dann im DeepNote aufgerufen und visualisiert. 
 ![grafik](https://github.com/user-attachments/assets/066ef091-5d11-45b5-a77c-e683812534ee)
 
