@@ -168,12 +168,14 @@ Dafür habe ich im Booking Data Access Layer und Business Logic Layer eine neue 
 <img width="731" alt="image" src="https://github.com/user-attachments/assets/b937daa6-df22-47cf-8503-f8383cc938ed" />
 
 Diese Visualisierung zeigt wie viele Buchungen je Zimmertypen insgesamt vorgenommen wurden für das Hotel Baur au Lac (Hotel ID: 1):
+
 <img width="465" alt="image" src="https://github.com/user-attachments/assets/0581c39d-cb78-42f9-82b4-40c832169587" />
 
 Als Admin möchte ich eine Aufschlüsselung der geografischen Merkmale meiner Gäste sehen, damit ich gezieltes Marketing planen kann. 
 Dafür habe ich im Guest Data Access Layer und Business Logic Layer eine neue Funktion namens "city_of_guests" erstellt. Hierbei habe im "SELECT"-Statement nach Städte gezählt und es über pd.read_sql zurückgegeben.
 
 Wir haben die Variable df2 verwendet, da beim Plotten versehentlich falsche Daten aus einer anderen Zelle genutzt wurden. Mit df2 stellen wir sicher, dass die richtigen Daten verwendet werden.
+
 <img width="724" alt="image" src="https://github.com/user-attachments/assets/b326e4e7-cd02-432e-8887-b63c86bf1ec0" />
 
 Diese Visualisierung zeigt uns an, von welchen Städten unsere Gäste kommen.
@@ -188,17 +190,20 @@ Ich habe hierführ eine neue Funktion im Hotel Data Access und Hotel Manager gem
 ![grafik](https://github.com/user-attachments/assets/066ef091-5d11-45b5-a77c-e683812534ee)
 
 Die erste Visualisierung zeigt den durchschnittlichen Raumpreis pro Hotel:
+
 ![grafik](https://github.com/user-attachments/assets/586bc5ad-ae83-4946-832f-b5a9b8199677)
 
 Die zweite zeigt den durchschnittlichen Raumpreis pro Stadt:
+
 ![grafik](https://github.com/user-attachments/assets/40ae0971-7edb-4c7b-9c32-ded186415aac)
 
 Diese Visualisierungen funktionieren ebenfalls mit einer veränderten Database (z.B neues Hotel mit Räumen):
+
 ![grafik](https://github.com/user-attachments/assets/79a473fe-a8a8-4862-b690-8b9db406fe60)
 
 ![grafik](https://github.com/user-attachments/assets/b4347600-a16d-4465-b8de-0eb7a90ff30d)
 
-Dies Funktioniert jedoch nur wenn man auch dei veränderte Database in Deepnote hochläd oder sie ins Github Repo pushed und das DeepNote dann synchronisiert.
+Dies funktioniert jedoch nur wenn man auch die veränderte Database in Deepnote hochläd oder sie ins Github Repo pushed und das DeepNote dann synchronisiert.
 
 ## Abschluss
 Die Umsetzung dieses Projekts ermöglichte es uns, unsere Kenntnisse in Python und objektorientierter Programmierung praxisnah zu vertiefen – gleichzeitig war es auch eine wertvolle Lernerfahrung in Bezug auf Teamarbeit, Kommunikation und Projektorganisation.
