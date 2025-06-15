@@ -7,6 +7,12 @@ Wie in den Projektrichtlinien beschrieben, verwenden wir verschiedene Werkzeuge,
 - GitHub für die Versionskontrolle und Projektmanagement (Kanban)
 - DeepNote für die Datenvisualisierung
 
+## Team-Mitglieder
+- Fenlin Chirakkal - inaktiv
+- Saliou Dieng
+- Anna Nikita Müller
+- Ivan Seidel - inaktiv
+  
 ### Python Versionen
 - Jupyter Notebook Python Version 3.13.2
 - DeepNote Python Version 3.10
@@ -164,6 +170,10 @@ Das UML haben wir mit Visual Paradigm erstellt und das UML bildet die Beziehung 
 ## Datenvisualisierung auf DeepNote
 
 DeepNote: https://deepnote.com/workspace/Saliou-b72a0290-6dfb-450d-ad32-14343ffcec1f/project/FS25BAIAEPA5-64f16146-d429-49fd-9904-ee05299fb3c1/notebook/e84b3302969144669075ae3b5d08443f
+
+Wir haben den Zugriff auf das DeepNote folgenden Personen gewährt:
+
+![image](https://github.com/user-attachments/assets/17187ee4-a6f5-4818-8c07-c8fe948b8c37)
 
 #### 1. Als Admin möchte ich die Belegungsraten für jeden Zimmertyp in meinem Hotel sehen, damit ich weiss, welche Zimmer am beliebtesten sind un ich meine Buchungsstrategien optimieren kann.
 Dafür habe ich im Booking Data Access Layer und Business Logic Layer eine neue Funktion namens "read_roomtype_by_occupation" erstellt. Da habe ich den RoomType, Hotel und Booking miteinander "gejoined" und im "SELECT" Anzahl Zimmer sowie Anzahl Buchungen mit einem "COUNT" gezählt und mit einem "DISTINCT" sichergestellt, dass es keine Doppelzählungen gibt. Anschliessen habe ich im "WHERE" noch die Hotel ID eingegeben, damit man die Belegrate pro Hotel sehen kann. Es wird dann als pd.read_sql von der library pandas returned.
