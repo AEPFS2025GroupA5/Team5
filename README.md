@@ -7,6 +7,11 @@ Wie in den Projektrichtlinien beschrieben, verwenden wir verschiedene Werkzeuge,
 - GitHub für die Versionskontrolle und Projektmanagement (Kanban)
 - DeepNote für die Datenvisualisierung
 
+### Python Versionen
+- Jupyter Notebook Python Version 3.13.2
+- DeepNote Python Version 3.10
+- Wir haben auf unterschiedliche Python Version gearbeitet (Saliou= 3.11.9 und Anna = 3.13.2)
+
 ## Unsere Video-Präsentation
 https://youtu.be/kF0M6G9Py-g
 
