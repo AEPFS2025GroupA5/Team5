@@ -163,11 +163,9 @@ Das UML haben wir mit Visual Paradigm erstellt und das UML bildet die Beziehung 
 
 ## Datenvisualisierung auf DeepNote
 
-Für die optionalen User Stories der Datenvisualisierung haben wir DeepNote genutzt. Wie man das Notebook benutzen soll ist dort beschrieben. Wir haben allen Coaches des Moduls vorher Zugang per E-Mail zum "Executen" gegeben. 
-Zur Sicherheit hier nochmals der Link zum unserem DeepNote: https://deepnote.com/workspace/Saliou-b72a0290-6dfb-450d-ad32-14343ffcec1f/project/FS25BAIAEPA5-64f16146-d429-49fd-9904-ee05299fb3c1/notebook/e84b3302969144669075ae3b5d08443f
+DeepNote: https://deepnote.com/workspace/Saliou-b72a0290-6dfb-450d-ad32-14343ffcec1f/project/FS25BAIAEPA5-64f16146-d429-49fd-9904-ee05299fb3c1/notebook/e84b3302969144669075ae3b5d08443f
 
-### User Story
-#### Als Admin möchte ich die Belegungsraten für jeden Zimmertyp in meinem Hotel sehen, damit ich weiss, welche Zimmer am beliebtesten sind un ich meine Buchungsstrategien optimieren kann.
+#### 1. Als Admin möchte ich die Belegungsraten für jeden Zimmertyp in meinem Hotel sehen, damit ich weiss, welche Zimmer am beliebtesten sind un ich meine Buchungsstrategien optimieren kann.
 Dafür habe ich im Booking Data Access Layer und Business Logic Layer eine neue Funktion namens "read_roomtype_by_occupation" erstellt. Da habe ich den RoomType, Hotel und Booking miteinander "gejoined" und im "SELECT" Anzahl Zimmer sowie Anzahl Buchungen mit einem "COUNT" gezählt und mit einem "DISTINCT" sichergestellt, dass es keine Doppelzählungen gibt. Anschliessen habe ich im "WHERE" noch die Hotel ID eingegeben, damit man die Belegrate pro Hotel sehen kann. Es wird dann als pd.read_sql von der library pandas returned.
 
 <img width="731" alt="image" src="https://github.com/user-attachments/assets/b937daa6-df22-47cf-8503-f8383cc938ed" />
@@ -176,7 +174,7 @@ Diese Visualisierung zeigt, wie viele Buchungen je Zimmertypen insgesamt vorgeno
 
 <img width="465" alt="image" src="https://github.com/user-attachments/assets/0581c39d-cb78-42f9-82b4-40c832169587" />
 
-#### Als Admin möchte ich eine Aufschlüsselung der geografischen Merkmale meiner Gäste sehen, damit ich gezieltes Marketing planen kann. 
+#### 2. Als Admin möchte ich eine Aufschlüsselung der geografischen Merkmale meiner Gäste sehen, damit ich gezieltes Marketing planen kann. 
 Dafür habe ich im Guest Data Access Layer und Business Logic Layer eine neue Funktion namens "city_of_guests" erstellt. Hierbei habe im "SELECT"-Statement nach Städte gezählt und es über pd.read_sql zurückgegeben.
 
 Wir haben die Variable df2 verwendet, da beim Plotten versehentlich falsche Daten aus einer anderen Zelle genutzt wurden. Mit df2 stellen wir sicher, dass die richtigen Daten verwendet werden.
@@ -190,7 +188,7 @@ Diese Visualisierung zeigt uns an, von welchen Städten unsere Gäste kommen.
 
 
 ### Individuelle User Story:
-#### Ich möchte in der Lage sein, die durchschnittlichen Raumpreise pro Stadt und pro Hotel zu sehen.
+#### 3. Ich möchte in der Lage sein, die durchschnittlichen Raumpreise pro Stadt und pro Hotel zu sehen.
 Ich habe hierführ eine neue Funktion im Hotel Data Access und Hotel Manager gemacht welche den Hotel Namen, die City und den price per night aus dem Raum holt gejoined mit hotel und address. Diese werden dann als pd.read_sql von der libary pandas returned. Die Funktion wird dann im DeepNote aufgerufen und visualisiert. 
 ![grafik](https://github.com/user-attachments/assets/066ef091-5d11-45b5-a77c-e683812534ee)
 
@@ -211,20 +209,7 @@ Diese Visualisierungen funktionieren ebenfalls mit einer veränderten Database (
 Dies funktioniert jedoch nur wenn man auch die veränderte Database in Deepnote hochlädt oder sie ins Github Repo pushed und das DeepNote dann synchronisiert.
 
 ## Abschluss
-Die Umsetzung dieses Projekts ermöglichte es uns, unsere Kenntnisse in Python und objektorientierter Programmierung praxisnah zu vertiefen – gleichzeitig war es auch eine wertvolle Lernerfahrung in Bezug auf Teamarbeit, Kommunikation und Projektorganisation.
-
-Zu Beginn hatten wir Schwierigkeiten, überhaupt in das Projekt hineinzufinden. Es fiel uns nicht leicht, die ersten Schritte zu machen, da vieles neu und komplex wirkte. Zusätzlich gab es technische Hürden: Wir begannen in Deepnote, hatten jedoch anfangs grosse Schwierigkeiten, dies korrekt auf GitHub zu pushen. Das führte zu Unsicherheiten und Zeitverlust.
-
-Erst als wir gemeinsam beschlossen, eine feste Struktur zu definieren und Rollen aufzuteilen, kam das Projekt in Bewegung. Durch die Erstellung eines Klassendiagramms gewannen wir Klarheit über die Architektur und konnten die Aufgaben sinnvoll aufteilen. Ab der Verbindung der Datenbank mit dem Projekt hatten wir unser "Aha" Moment und der Stein begann zu rollen.
-
-Die Trennung in zwei Verantwortungsbereiche – Struktur der Hotelobjekte & Abläufe im Gasterlebnis – ermöglichte es uns, effizient und parallel zu arbeiten. Trotzdem wurde schnell klar, dass eine enge Abstimmung notwendig war, da viele Klassen miteinander interagieren. Regelmässige Meetings, kontinuierliche Kommunikation über WhatsApp sowie spätere Organisation über ein GitHub-Kanban-Board haben sich dabei als sehr hilfreich erwiesen.
-
-Technisch konnten wir durch die Arbeit mit mehrschichtigen Strukturen (Model, Data Access, Business Logic, UI) ein tiefes Verständnis für modulare Programmierung entwickeln. Besonders herausfordernd war die saubere Fehlerbehandlung und Validierung der Eingaben – Themen, die wir im Laufe des Projekts stark verbessern konnten.
-
-Auch die Verwendung von Jupyter Notebook zur Dokumentation hat sich als äusserst nützlich erwiesen. Es ermöglichte uns, unsere Gedanken, Zwischenschritte und Testläufe direkt im Code zu dokumentieren, was sowohl bei der Zusammenarbeit als auch beim späteren Reflektieren sehr hilfreich war.
-
-Abschliessend können wir sagen, dass uns dieses Projekt nicht nur fachlich weitergebracht hat, sondern uns auch gezeigt hat, wie wichtig klare Kommunikation, strukturierte Planung und Teamzusammenhalt für den Projekterfolg sind.
-Wir sind stolz auf das Ergebnis – und würden bei zukünftigen Projekten definitiv wieder auf eine ähnliche Arbeitsweise setzen: mit noch mehr Voraussicht, technischer Klarheit und agilem Mindset.
+Die Umsetzung dieses Projekts ermöglichte es uns, unsere Kenntnisse in Python und objektorientierter Programmierung praxisnah zu vertiefen – gleichzeitig war es auch eine wertvolle Lernerfahrung in Bezug auf Teamarbeit, Kommunikation und Projektorganisation. Zu Beginn hatten wir Schwierigkeiten, überhaupt in das Projekt hineinzufinden. Es fiel uns nicht leicht, die ersten Schritte zu machen, da vieles neu und komplex wirkte. Zusätzlich gab es technische Hürden: Wir begannen in Deepnote, hatten jedoch anfangs grosse Schwierigkeiten, dies korrekt auf GitHub zu pushen. Das führte zu Unsicherheiten und Zeitverlust. Erst als wir gemeinsam beschlossen, eine feste Struktur zu definieren und Rollen aufzuteilen, kam das Projekt in Bewegung. Durch die Erstellung eines Klassendiagramms gewannen wir Klarheit über die Architektur und konnten die Aufgaben sinnvoll aufteilen. Ab der Verbindung der Datenbank mit dem Projekt hatten wir unser "Aha" Moment und der Stein begann zu rollen. Die Trennung in zwei Verantwortungsbereiche – Struktur der Hotelobjekte & Abläufe im Gasterlebnis – ermöglichte es uns, effizient und parallel zu arbeiten. Trotzdem wurde schnell klar, dass eine enge Abstimmung notwendig war, da viele Klassen miteinander interagieren. Regelmässige Meetings, kontinuierliche Kommunikation über WhatsApp sowie spätere Organisation über ein GitHub-Kanban-Board haben sich dabei als sehr hilfreich erwiesen. Technisch konnten wir durch die Arbeit mit mehrschichtigen Strukturen (Model, Data Access, Business Logic, UI) ein tiefes Verständnis für modulare Programmierung entwickeln. Besonders herausfordernd war die saubere Fehlerbehandlung und Validierung der Eingaben – Themen, die wir im Laufe des Projekts stark verbessern konnten. Auch die Verwendung von Jupyter Notebook zur Dokumentation hat sich als äusserst nützlich erwiesen. Es ermöglichte uns, unsere Gedanken, Zwischenschritte und Testläufe direkt im Code zu dokumentieren, was sowohl bei der Zusammenarbeit als auch beim späteren Reflektieren sehr hilfreich war. Abschliessend können wir sagen, dass uns dieses Projekt nicht nur fachlich weitergebracht hat, sondern uns auch gezeigt hat, wie wichtig klare Kommunikation, strukturierte Planung und Teamzusammenhalt für den Projekterfolg sind. Wir sind stolz auf das Ergebnis – und würden bei zukünftigen Projekten definitiv wieder auf eine ähnliche Arbeitsweise setzen: mit noch mehr Voraussicht, technischer Klarheit und agilem Mindset.
 
 ### Verwendung von ChatGPT
 ChatGPT wurde in unseren Projekt unterstützend eingesetzt. Es diente dazu, unsere Lösungen gegen die Aufgabenstellung abzugleichen und sicherzustellen, dass alle Anforderungen erfüllt wurden. Vor allem nutzten wir das Tool, um sprachliche Fehler zu vermeiden und eine präziseren, klareren Schreibstil in unserer Dokumentation zu erreichen.
